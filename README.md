@@ -6,4 +6,12 @@ If you import lots of music into your iTunes library and you want your track dat
 [Email me](mailto:dylanchongit@gmail.com?Subject=iTunes%20AppleScripts%3A) any script requests here.
 
 Feel free to use and modify yourself! Just keep them free to use.<br>
-but **be careful - please backup your track data before using**
+but **be careful - please backup your music before using**
+
+<h2> Instructions for Use </h2>
+1. Download a script (to a Mac with your iTunes library)
+2. Make a copy of the tracks you want to apply the script to
+3. Select the tracks in iTunes
+3. Double click the script (opens the Script Editor)
+4. Click the run button (the triangle)
+5. Done!
