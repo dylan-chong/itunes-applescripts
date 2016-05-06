@@ -83,6 +83,8 @@ Example Result:
 
 (function() {
 
+	// ******* Constants *******
+
 	// The text to put in between the original
 	// track name, and a piece of data
 	var DATA_PREFIX = " - ";

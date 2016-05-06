@@ -60,7 +60,7 @@ Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - I. Allegro
 
 (function() {
 
-	// *************************
+	// ******* Constants *******
 
 	var INITIAL_DISK_NUMBER = 1;
 	var DELIMITER = "-";
