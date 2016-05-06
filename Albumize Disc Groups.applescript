@@ -7,7 +7,9 @@ Description:
 	Inspired by 'Albumize Selection' by Doug Adams:
 	http://dougscripts.com/itunes/scripts/ss.php?sp=albumizeselection
 	
-	Note: The disc count of the tracks may not be set
+	Note: The disc count of the tracks is sometimes not set to all tracks. You may have to
+	run the script twice to get it to work (keeping iTunes in the foreground may help).
+	
 
 Example Selection:
 	Disc Number: 24, Name: Joseph - Symphony No. 024 in D major - 1. Allegro 
