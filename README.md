@@ -14,7 +14,7 @@ but **be careful - please backup your music before using**
 1. Select the tracks in iTunes
 1. Double click the script (opens the Script Editor)
 1. Set language to JavaScript (from AppleScript) at the top left of the editor
-1. Change the constants (if there are any in the script)
+1. Change the constants if there are any in the script (press Command+F and then search for the word "constants")
 1. Click the square, with three horizontal lines, in it at the bottom of the editor, and then click messages
 1. Click the run button (the triangle) and see the results that appear in the console
 1. If the results are good, then uncomment the one or two lines of code that applies the changes to the tracks, and then run the script again (for real this time)
