@@ -1,5 +1,7 @@
 /*
 
+Remember to set the language from AppleScript to Javascript!
+
 Description:
 	Takes groups of discs and sets an incremental track number for each track in each disc.
 	Inspired by 'Albumize Selection' by Doug Adams:
@@ -42,8 +44,11 @@ Example Result:
 			var track = group[t];
 			var num = t+1;
 			var count = group.length;
-			//track.trackCount.set(count);
-			//track.trackNumber.set(num);
+			
+			// Code that applies the changes:
+			// track.trackCount.set(count);
+			// track.trackNumber.set(num);
+			
 			this.console.log("Track: " + num + " of " + count + ", Name: " + track.name());
 		}
 	}

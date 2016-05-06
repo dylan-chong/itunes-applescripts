@@ -1,5 +1,7 @@
 /*
 
+Remember to set the language from AppleScript to Javascript!
+
 Description:
 	Adds the item from DATA onto the the end of each track name
 	(with the DATA_PREFIX in between).
@@ -131,7 +133,9 @@ Example Result:
 		var currentTrackName = currentTrack.name();
 		var newTrackName = getNewName(currentTrackName);
 		
-		currentTrack.name.set(newTrackName);
+		// Code that applies the changes:
+		// currentTrack.name.set(newTrackName);
+		
 		this.console.log(newTrackName);
 	}
 	return "Done";

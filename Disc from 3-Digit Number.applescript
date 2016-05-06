@@ -1,5 +1,7 @@
 /*
 
+Remember to set the language from AppleScript to Javascript!
+
 Description:
 	Finds a 3-digit number in the track name and sets the
 	disc number to that number (if it exists).
@@ -67,7 +69,8 @@ Example Result:
 		var discNumber = get3DigitNumber(numbers);
 		if (!discNumber) continue;
 		
-		track.discNumber.set(discNumber);
+		// Code that applies the changes:
+		// track.discNumber.set(discNumber);
 	}
 	return "Done";
 	

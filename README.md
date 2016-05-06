@@ -10,9 +10,11 @@ but **be careful - please backup your music before using**
 
 <h2> Instructions for Use </h2>
 1. Download a script (to a Mac with your iTunes library)
-2. Make a copy of the tracks you want to apply the script to
-3. Select the tracks in iTunes
-3. Double click the script (opens the Script Editor)
-4. Set language to JavaScript (from AppleScript) at the top left of the editor
-5. Click the run button (the triangle)
-6. Done!
+1. Make a copy of the tracks you want to apply the script to
+1. Select the tracks in iTunes
+1. Double click the script (opens the Script Editor)
+1. Set language to JavaScript (from AppleScript) at the top left of the editor
+1. Click the square, with three horizontal lines, in it at the bottom of the editor, and then click messages
+1. Click the run button (the triangle) and see the results that appear in the console
+1. If the results are good, then uncomment the one or two lines of code that applies the changes to the tracks, and then run the script again (for real this time)
+1. Done!

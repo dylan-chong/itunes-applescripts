@@ -1,5 +1,7 @@
 /* 
 
+Remember to set the language from AppleScript to Javascript!
+
 Description:
 	Takes the selection and checks whether then next should be part of the same disk
 	as the previous by checking the track name before the first DELIMITER (a hyphen
@@ -84,7 +86,9 @@ Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - I. Allegro
 		
 		previousTrackName = currentTrackName;
 		
-		//currentTrack.discNumber.set(discNumber);
+		// Code that applies the changes:
+		// currentTrack.discNumber.set(discNumber);
+		
 		this.console.log(currentTrackName + ": " + discNumber + "\n");
 	}
 	return "Done";
