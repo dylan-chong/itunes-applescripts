@@ -13,5 +13,6 @@ but **be careful - please backup your music before using**
 2. Make a copy of the tracks you want to apply the script to
 3. Select the tracks in iTunes
 3. Double click the script (opens the Script Editor)
-4. Click the run button (the triangle)
-5. Done!
+4. Set language to JavaScript (from AppleScript) at the top left of the editor
+5. Click the run button (the triangle)
+6. Done!
