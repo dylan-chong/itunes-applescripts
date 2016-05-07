@@ -94,7 +94,7 @@ Example Result:
 			var discNumber = track.discNumber();
 			
 			// TODO fix out of range errors
-			var discObj = discObjects[discNumber];
+			var discObj = discObjects[discNumber-1];
 			discObj.tracks.push(track);
 			discObj.trackCount = track.trackCount();
 		}
