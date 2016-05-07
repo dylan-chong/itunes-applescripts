@@ -32,7 +32,7 @@ Example Result:
 	var discObjects = getSortedSelection(selection);
 	
 	for (var d = 0; d < discObjects.length; d++) {
-		this.console.log(discObjects[d].getString());
+		this.console.log(discObjToString(discObjects[d]));
 	}
 	
 	return;
@@ -60,32 +60,28 @@ Example Result:
 				// so it's just for debugging
 				tracks: [],
 				trackCount: -1,
-				getString: discObjToString 
-				// Script Editor crashes if you override toString()
 			});
 		}
 		
 		return numbers;
+	}
+	
+	function discObjToString(discObj) {
+		var ret = "Disc number: " + discObj.discNumber + ",\n";
+		ret += "\tTrack count: " + discObj.trackCount + ",\n";
+		ret += "\tTracks:\n";
 		
-		function discObjToString() {
-			//return "test";
-			var ret = "Disc number: " + this.discNumber + ",\n";
-			ret += "\tTrack count: " + this.trackCount + ",\n";
-			ret += "\tTracks:\n";
+		for (var t = 0; t < discObj.tracks.length; t++) {
+			var track = discObj.tracks[t];
+			var line = "\t\t";
 			
-			for (var t = 0; t < this.tracks.length; t++) {
-				var track = this.tracks;
-				var line = "\t\t";
-				
-				// Crashes here: track seems to be null?
-				line += track.trackNumber() + " of " + track.trackCount();
-				line += " " + track.name();
-				
-				ret += line + "\n";
-			}
-			
-			return ret;
+			line += track.trackNumber() + " of " + track.trackCount();
+			line += " " + track.name();
+		
+			ret += line + "\n";
 		}
+		
+		return ret;
 	}
 	
 	// Note: the tracks aren't necessarily added to each discObj's tracks
