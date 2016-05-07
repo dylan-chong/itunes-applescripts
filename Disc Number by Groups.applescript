@@ -33,7 +33,7 @@ Example Selection:
 	Concerto Grosso Op.3 No.6 in D major - II. Allegro
 
 Example Result:
-Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - I. Allegro
+	Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - I. Allegro
 	Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - II. Largo
 	Disc Number: 1, Name: Concerto Grosso Op.3 No.1 in B flat major - III. Allegro
 	Disc Number: 2, Name: Concerto Grosso Op.3 No.2 in B flat major - I. Vivace
