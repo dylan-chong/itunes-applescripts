@@ -73,10 +73,10 @@ Example Result:
 		
 		for (var t = 0; t < discObj.tracks.length; t++) {
 			var track = discObj.tracks[t];
-			var line = "\t\t";
+			var line = "\t\tTrack: ";
 			
 			line += track.trackNumber() + " of " + track.trackCount();
-			line += " " + track.name();
+			line += ", Name: " + track.name();
 		
 			ret += line + "\n";
 		}
