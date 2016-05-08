@@ -34,11 +34,7 @@ Example Result:
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log("Completely missing discs: " + missingDiscs);
 	
-	
-	
-	return;
-
-	// TODO go through discObjects
+	// TODO log partially missing discs (need for loop)
 	
 	
 	return "Done";
