@@ -135,8 +135,14 @@ Example Result:
 			missingTrackNumbers: []
 		};
 		
-		// TODO go each track number and see if there is a missing track
+		var missing = [];
+		// TODO add the ideal track numbers
 		//for (var a = 1; a <= 
+		
+						
+		// TODO remove the existing track numbers
+		
+
 		
 		return obj;
 	}
