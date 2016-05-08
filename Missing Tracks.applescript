@@ -31,9 +31,7 @@ Example Result:
 	var selection = window.selection();
 	var discObjects = getSortedSelection(selection);
 	
-	for (var d = 0; d < discObjects.length; d++) {
-		this.console.log(discObjToString(discObjects[d]));
-	}
+	logDiscObjects(this.console, discObjects);
 	
 	return;
 
@@ -74,6 +72,12 @@ Example Result:
 		}
 		
 		return ret;
+	}
+	
+	function logDiscObjects(console, discObjects) {
+		for (var d = 0; d < discObjects.length; d++) {
+			console.log(discObjToString(discObjects[d]));
+		}
 	}
 	
 	// Note: the tracks aren't necessarily added to each discObj's tracks
