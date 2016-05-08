@@ -35,6 +35,7 @@ Example Result:
 	
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log(missingDiscs);
+	// TODO LOG MISSING
 	
 	return;
 
@@ -132,17 +133,30 @@ Example Result:
 		
 		var obj = {
 			idealTrackCount: discObj.trackCount,
-			missingTrackNumbers: []
+			missingTrackNumbers: null,
+			extraTracks: null,
 		};
 		
 		var missing = [];
-		// TODO add the ideal track numbers
-		//for (var a = 1; a <= 
+		var extra = [];
 		
-						
-		// TODO remove the existing track numbers
+		// Add the ideal track numbers
+		for (var a = 0; a < obj.idealTrackCount; a++) {
+			missing.push(a + 1);
+		}
 		
-
+		// Remove the existing track numbers
+		for (var a = 0; a < discObj.tracks.length; a++) {
+			var track = discObj.tracks[a];
+			if (missing.contains(track.trackNumber())) {
+				missing = missing.remove(missing.indexOf(track.trackNumber(), 1));
+			} else {
+				extra.push(track);
+			}
+		}
+		
+		obj.missingTrackNumbers = missing;
+		obj.extraTracks = extra;
 		
 		return obj;
 	}
