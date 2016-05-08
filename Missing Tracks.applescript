@@ -33,6 +33,9 @@ Example Result:
 	
 	logDiscObjects(this.console, discObjects);
 	
+	var missingDiscs = getMissingDiscs(discObjects);
+	this.console.log(missingDiscs);
+	
 	return;
 
 	// TODO go through discObjects
@@ -96,6 +99,21 @@ Example Result:
 		}
 		
 		return discObjects;
+	}
+	
+	function getMissingDiscs(discObjects) {
+		var missingDiscNumbers = [];
+	
+		for (var a = 0; a < discObjects.length; a++) {
+			var discObj = discObjects[a];
+			if (discObj.trackCount == -1) {
+				missingDiscNumbers.push(discObj.discNumber);
+				continue;
+			}
+			// TODO
+		}
+		
+		return missingDiscNumbers;
 	}
 
 })();
