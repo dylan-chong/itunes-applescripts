@@ -20,7 +20,7 @@ Example Result:
 	// ******* Constants *******
 
 	var FIRST_DISC_NUMBER = 1;
-	var LAST_DISC_NUMBER = 210;
+	var LAST_DISC_NUMBER = 10;
 	
 	// *************************
 	
@@ -31,7 +31,7 @@ Example Result:
 	var selection = window.selection();
 	var discObjects = getSortedSelection(selection);
 	
-	logDiscObjects(this.console, discObjects);
+	//logDiscObjects(this.console, discObjects);
 	
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log(missingDiscs);
@@ -92,6 +92,9 @@ Example Result:
 			var track = selection[s];
 			var discNumber = track.discNumber();
 			
+			if (discNumber > LAST_DISC_NUMBER) continue;
+			if (discNumber < FIRST_DISC_NUMBER) continue;
+			
 			// TODO fix out of range errors
 			var discObj = discObjects[discNumber-1];
 			discObj.tracks.push(track);
@@ -110,10 +113,32 @@ Example Result:
 				missingDiscNumbers.push(discObj.discNumber);
 				continue;
 			}
-			// TODO
 		}
 		
 		return missingDiscNumbers;
+	}
+	
+	function getMissingTracks(discObjects) {
+		var missingTrackObjects = [];
+	
+		for (var a = 0; a < discObjects.length; a++) { 
+			var missingTrackObj = getMissingTrackObjectForDiscObject(discObjects);
+			if (missingTrackObj) missingTrackObjects.push(missingTrackObj);
+		}
+	}
+	
+	function getMissingTrackObjectForDiscObject(discObj) {
+		if (discObj.trackCount == discObj.tracks.length) return null;
+		
+		var obj = {
+			idealTrackCount: discObj.trackCount,
+			missingTrackNumbers: []
+		};
+		
+		// TODO go each track number and see if there is a missing track
+		//for (var a = 1; a <= 
+		
+		return obj;
 	}
 
 })();
