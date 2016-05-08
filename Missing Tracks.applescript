@@ -36,16 +36,8 @@ Example Result:
 	}
 	
 	return;
-	
-	// TODO sort selection into discObjects
-	
-	// TODO go through discObjects
 
-	
-	
-	for (var a = 0; a < selection.length; a++) {
-		var currentTrack = selection[a];
-	}
+	// TODO go through discObjects
 	
 	
 	return "Done";
@@ -102,4 +94,4 @@ Example Result:
 		return discObjects;
 	}
 
-})()
+})();
