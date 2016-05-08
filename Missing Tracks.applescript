@@ -31,11 +31,10 @@ Example Result:
 	var selection = window.selection();
 	var discObjects = getSortedSelection(selection);
 	
-	//logDiscObjects(this.console, discObjects);
-	
 	var missingDiscs = getMissingDiscs(discObjects);
-	this.console.log(missingDiscs);
-	// TODO LOG MISSING
+	this.console.log("Completely missing discs: " + missingDiscs);
+	
+	
 	
 	return;
 
@@ -129,8 +128,6 @@ Example Result:
 	}
 	
 	function getMissingTrackObjectForDiscObject(discObj) {
-		if (discObj.trackCount == discObj.tracks.length) return null;
-		
 		var obj = {
 			idealTrackCount: discObj.trackCount,
 			missingTrackNumbers: null,
@@ -154,6 +151,8 @@ Example Result:
 				extra.push(track);
 			}
 		}
+		
+		if (missing.length == 0) return null;
 		
 		obj.missingTrackNumbers = missing;
 		obj.extraTracks = extra;
