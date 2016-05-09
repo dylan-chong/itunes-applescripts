@@ -133,6 +133,7 @@ Example Result:
 	
 	function getMissingTrackObjectForDiscObject(discObj) {
 		var obj = {
+			discNumber: discObj.discNumber,
 			idealTrackCount: discObj.trackCount,
 			missingTrackNumbers: null,
 			extraTracks: null,
@@ -165,7 +166,12 @@ Example Result:
 	}
 	
 	function missingTrackObjectToString(obj) {
-		// todo
+		var str = "Disc Number: " + obj.disc;
+		str += "\n\t" + "Ideal Track Count: " + obj.idealTrackCount;
+		str += "\n\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
+		if (obj.extraTracks.length > 0) 
+			str += "\n\t" + "Extra Track Numbers: " + obj.extraTracks.toString();
+		return str;
 	}
 
 })();
