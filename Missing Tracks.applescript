@@ -31,6 +31,13 @@ Example Result:
 	var selection = window.selection();
 	var discObjects = getSortedSelection(selection);
 	
+	// DEBUGGING
+	var obj = discObjects[2];
+	var partiallyMissing = getMissingTrackObjectForDiscObject(obj);
+	this.console.log(missingTrackObjectToString(partiallyMissing));
+	return;
+	// ---------
+	
 	// Completely Missing
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log("Completely missing discs: " + missingDiscs);
@@ -171,8 +178,8 @@ Example Result:
 		var str = "Disc Number: " + obj.disc;
 		str += "\n\t" + "Ideal Track Count: " + obj.idealTrackCount;
 		str += "\n\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
-		if (obj.extraTracks.length > 0) 
-			str += "\n\t" + "Extra Track Numbers: " + obj.extraTracks.toString();
+		if (obj.extraTrackNumbers.length > 0) 
+			str += "\n\t" + "Extra Track Numbers: " + obj.extraTrackNumbers;
 		return str;
 	}
 
