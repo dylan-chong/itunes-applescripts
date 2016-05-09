@@ -34,6 +34,14 @@ Example Result:
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log("Completely missing discs: " + missingDiscs);
 	
+	for (var a = 0; a < discObjects.length; a++) {
+		var obj = getMissingTrackObjectForDiscObject(dicsObjects[a]);
+		if (!obj) continue;
+		
+		this.console.log(missingTrackObjectToString(obj));
+	}
+	
+	
 	// TODO log partially missing discs (need for loop)
 	
 	
@@ -154,6 +162,10 @@ Example Result:
 		obj.extraTracks = extra;
 		
 		return obj;
+	}
+	
+	function missingTrackObjectToString(obj) {
+		// todo
 	}
 
 })();
