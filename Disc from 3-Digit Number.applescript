@@ -54,6 +54,13 @@ Example Result:
 */
 
 (function() {
+
+	// ******* Constants *******
+
+	var NUMBER_LENGTH = 2;
+	
+	// *************************
+
 	var app = Application('iTunes');
 	app.includeStandardAdditions = true;
 	var window = app.windows[0];
@@ -77,7 +84,7 @@ Example Result:
 	function get3DigitNumber(arrayOfNums) {
 		for (var a = 0; a < arrayOfNums.length; a++) {
 			var n = arrayOfNums[a]
-			if ((n + "").length === 3) {
+			if ((n + "").length === NUMBER_LENGTH) {
 				return n;
 			}
 		}
