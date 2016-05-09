@@ -34,7 +34,10 @@ Example Result:
 	// DEBUGGING
 	var obj = discObjects[2];
 	var partiallyMissing = getMissingTrackObjectForDiscObject(obj);
-	this.console.log(missingTrackObjectToString(partiallyMissing));
+	
+	this.console.log(partiallyMissing);
+	
+	//this.console.log(missingTrackObjectToString(partiallyMissing));
 	return;
 	// ---------
 	
@@ -165,6 +168,9 @@ Example Result:
 				extra.push(track.trackNumber());
 			}
 		}
+		
+		// TODO LATER remove
+		return missing; // TODO NEXT: this returns missing = [1]
 		
 		if (missing.length == 0) return null;
 		
