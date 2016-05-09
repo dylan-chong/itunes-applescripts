@@ -58,7 +58,7 @@ Example Result:
 
 	// ******* Constants *******
 
-	var NUMBER_LENGTH = 2;
+	var NUMBER_LENGTH = 3;
 	
 	// *************************
 
