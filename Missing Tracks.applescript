@@ -131,7 +131,7 @@ Example Result:
 		}
 	}
 	
-	function getMissingTrackObjectForDiscObject(discObj) {
+	function getMissingTrackObjectForDiscObject(discObj) { // TODO fix bugs in here
 		var obj = {
 			discNumber: discObj.discNumber,
 			idealTrackCount: discObj.trackCount,
@@ -151,7 +151,7 @@ Example Result:
 		for (var a = 0; a < discObj.tracks.length; a++) {
 			var track = discObj.tracks[a];
 			if (missing.indexOf(track.trackNumber()) != -1) {
-				missing = missing.splice(missing.indexOf(track.trackNumber(), 1));
+				missing.splice(missing.indexOf(track.trackNumber(), 1));
 			} else {
 				extra.push(track);
 			}
