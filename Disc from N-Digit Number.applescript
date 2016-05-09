@@ -71,12 +71,14 @@ Example Result:
 	for (var a = 0; a < selection.length; a++) {
 		var track = selection[a];
 		
-		var numbers = track.name().match(/\d{3}/g);
+		var regex = new RegExp("\\d{" + NUMBER_LENGTH + "}", "g");
+		var numbers = track.name().match(regex);
 		if (!numbers || numbers.length == 0) continue;
 		
 		var discNumber = get3DigitNumber(numbers);
 		if (!discNumber) continue;
 		
+		this.console.log("Disc: " + discNumber + ", Name: " + track.name());
 		// Code that applies the changes:
 		// track.discNumber.set(discNumber);
 	}
