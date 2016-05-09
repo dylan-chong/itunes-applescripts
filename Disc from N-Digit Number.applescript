@@ -3,8 +3,9 @@
 Remember to set the language from AppleScript to Javascript!
 
 Description:
-	Finds a 3-digit number in the track name and sets the
-	disc number to that number (if it exists).
+	When NUMBER_LENGTH is set to 3, this script finds a 
+	3-digit number in the track name and sets the disc 
+	number to that number (if it exists).
 
 Example Selection:
 	Name: Divertimento in E flat major KV 113 - Allegro
