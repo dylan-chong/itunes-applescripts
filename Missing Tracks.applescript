@@ -35,7 +35,7 @@ Example Result:
 	this.console.log("Completely missing discs: " + missingDiscs);
 	
 	for (var a = 0; a < discObjects.length; a++) {
-		var obj = getMissingTrackObjectForDiscObject(dicsObjects[a]);
+		var obj = getMissingTrackObjectForDiscObject(discObjects[a]);
 		if (!obj) continue;
 		
 		this.console.log(missingTrackObjectToString(obj));
@@ -150,8 +150,8 @@ Example Result:
 		// Remove the existing track numbers
 		for (var a = 0; a < discObj.tracks.length; a++) {
 			var track = discObj.tracks[a];
-			if (missing.contains(track.trackNumber())) {
-				missing = missing.remove(missing.indexOf(track.trackNumber(), 1));
+			if (missing.indexOf(track.trackNumber()) != -1) {
+				missing = missing.splice(missing.indexOf(track.trackNumber(), 1));
 			} else {
 				extra.push(track);
 			}
