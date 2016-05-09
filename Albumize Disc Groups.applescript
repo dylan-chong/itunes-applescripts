@@ -1,4 +1,4 @@
-w/*
+/*
 
 Remember to set the language from AppleScript to Javascript!
 
