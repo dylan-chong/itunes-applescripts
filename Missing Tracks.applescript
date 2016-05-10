@@ -9,9 +9,34 @@ Description:
 	that needs to be uncommented to run.
 
 Example Selection:
+	Track: 2 of 7, Disc: 7, Name: BWV 7 - Aria (Bass) - Merkt und hort, ihr Menschenkinder
+	Track: 3 of 7, Disc: 7, Name: BWV 7 - Recitative (Tenor) - Dies hat Gott klar
+	Track: 4 of 7, Disc: 7, Name: BWV 7 - Aria (Tenor) - Des Vaters Stimme lieb sich horen
+	Track: 5 of 7, Disc: 7, Name: BWV 7 - Recitative (Bass) - Als Jesus dort nach seinen Leiden
+	Track: 6 of 7, Disc: 7, Name: BWV 7 - Aria (Alto) - Menschen, glaubt doch dieser Gnade
+	Track: 7 of 7, Disc: 7, Name: BWV 7 - Choral - Das Aug allein das Wasser sieht
+	Track: 1 of 6, Disc: 8, Name: [Chorus] (Erste Fassung). Liebster Gott, wenn werd ich sterben?...
+	Track: 2 of 6, Disc: 8, Name: Aria (Tenore). Was willst du dich, mein Geist, entsetzen...
+	Track: 3 of 6, Disc: 8, Name: Recitativo accompagnato (Alto). Zwar fuhlt mein schwaches Herz...
+	Track: 4 of 6, Disc: 8, Name: Aria (Basso). Doch weichet, ihr tollen, vergeblich Sorgen!...
+	Track: 5 of 6, Disc: 8, Name: Recitativo (Soprano). Behalte nur, o Welt, das Meine!...
+	Track: 6 of 6, Disc: 8, Name: Choral. Herrscher uber Tod und Leben...
+	Track: 1 of 7, Disc: 10, Name: BWV 10 - Chorus, Meine Seel erhebt den Herren
+	Track: 2 of 7, Disc: 10, Name: BWV 10 - Aria (soprano), Herr, der du stark und machtig bist
+	Track: 3 of 7, Disc: 10, Name: BWV 10 - Recitativo (tenor), Des Hochsten Gut und Treu
+	Track: 4 of 7, Disc: 10, Name: BWV 10 - Aria (bass), Gwaltige sto?t Gott vom Stuhl
+	Track: 5 of 7, Disc: 10, Name: BWV 10 - Duetto e Corale (alto, tenor), Er denket der Barmherzigkeit
+	Track: 6 of 7, Disc: 10, Name: BWV 10 - Recitativo (tenor), Was Gott den Vatern alter Zeiten
+	Track: 7 of 7, Disc: 10, Name: BWV 10 - Choral, Lob und Preis sei Gott dem Vater und dem Sohn
+
+
+Example Constants:
+	var FIRST_DISC_NUMBER = 7;
+	var LAST_DISC_NUMBER = 10;
 
 
 Example Result:
+	
 	
 */
 
@@ -19,7 +44,7 @@ Example Result:
 
 	// ******* Constants *******
 
-	var FIRST_DISC_NUMBER = 1;
+	var FIRST_DISC_NUMBER = 7;
 	var LAST_DISC_NUMBER = 10;
 	
 	// *************************
@@ -36,6 +61,8 @@ Example Result:
 	this.console.log("Completely missing discs: " + missingDiscs);
 	
 	// Partially Missing
+	this.console.log("Partially missing discs: ");
+	
 	for (var a = 0; a < discObjects.length; a++) {
 		var obj = getMissingTrackObjectForDiscObject(discObjects[a]);
 		if (!obj) continue;
@@ -101,13 +128,23 @@ Example Result:
 			if (discNumber > LAST_DISC_NUMBER) continue;
 			if (discNumber < FIRST_DISC_NUMBER) continue;
 			
-			// TODO fix out of range errors
-			var discObj = discObjects[discNumber-1];
+			var discObj = getDiscObjectForDiscNumber(discObjects, discNumber);
+			if (discObj == null) continue;
+			
 			discObj.tracks.push(track);
 			discObj.trackCount = track.trackCount();
 		}
 		
 		return discObjects;
+	}
+	
+	function getDiscObjectForDiscNumber(array, discNum) {
+		for (var a = 0; a < array.length; a++) {
+			if (array[a].discNumber == discNum)
+				return array[a];
+		}
+		
+		return null;
 	}
 	
 	function getMissingDiscs(discObjects) {
