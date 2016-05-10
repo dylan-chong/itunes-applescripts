@@ -31,16 +31,6 @@ Example Result:
 	var selection = window.selection();
 	var discObjects = getSortedSelection(selection);
 	
-	// DEBUGGING
-	var obj = discObjects[2];
-	var partiallyMissing = getMissingTrackObjectForDiscObject(obj);
-	
-	this.console.log(partiallyMissing);
-	
-	//this.console.log(missingTrackObjectToString(partiallyMissing));
-	return;
-	// ---------
-	
 	// Completely Missing
 	var missingDiscs = getMissingDiscs(discObjects);
 	this.console.log("Completely missing discs: " + missingDiscs);
@@ -151,6 +141,7 @@ Example Result:
 			extraTrackNumbers: null,
 		};
 		
+		var tracks = discObj.tracks;
 		var missing = [];
 		var extra = [];
 		
@@ -159,20 +150,21 @@ Example Result:
 			missing.push(a + 1);
 		}
 		
-		// Remove the existing track numbers
-		for (var a = 0; a < discObj.tracks.length; a++) {
-			var track = discObj.tracks[a];
-			if (missing.indexOf(track.trackNumber()) != -1) {
-				missing.splice(missing.indexOf(track.trackNumber(), 1));
+		// Remove the existing track numbers from missing
+		for (var a = 0; a < tracks.length; a++) {
+			var track = tracks[a];
+			var trackNumber = track.trackNumber();
+			var index = missing.indexOf(trackNumber);
+			
+			if (index != -1) {
+				missing.splice(index, 1);
 			} else {
-				extra.push(track.trackNumber());
+				extra.push(trackNumber);
 			}
+
 		}
 		
-		// TODO LATER remove
-		return missing; // TODO NEXT: this returns missing = [1]
-		
-		if (missing.length == 0) return null;
+		if (missing.length == 0 && extra.length == 0) return null;
 		
 		obj.missingTrackNumbers = missing;
 		obj.extraTrackNumbers = extra;
