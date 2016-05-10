@@ -79,6 +79,7 @@ Example Result:
 		if (!discNumber) continue;
 		
 		this.console.log("Disc: " + discNumber + ", Name: " + track.name());
+		
 		// Code that applies the changes:
 		// track.discNumber.set(discNumber);
 	}
