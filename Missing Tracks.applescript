@@ -38,7 +38,7 @@ Example Constants:
 Example Result:
 	Completely missing discs: 9 
 	Partially missing discs:  
-	Disc Number: 7
+	 Disc Number: 7
 		Ideal Track Count: 7
 		Existing Track Numbers: 2,3,4,5,6,7
 		Missing Track Numbers: 1
@@ -215,13 +215,13 @@ Example Result:
 	}
 	
 	function missingTrackObjectToString(obj) {
-		var str = "Disc Number: " + obj.discNumber;
-		str += "\n\t" + "Ideal Track Count: " + obj.idealTrackCount;
-				str += "\n\t" + "Existing Track Numbers: " +obj.existingTrackNumbers;
+		var str = "\tDisc Number: " + obj.discNumber;
+		str += "\n\t\t" + "Ideal Track Count: " + obj.idealTrackCount;
+				str += "\n\t\t" + "Existing Track Numbers: " +obj.existingTrackNumbers;
 		if (obj.missingTrackNumbers.length > 0) 
-			str += "\n\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
+			str += "\n\t\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
 		if (obj.extraTrackNumbers.length > 0) 
-			str += "\n\t" + "Extra Track Numbers: " + obj.extraTrackNumbers;
+			str += "\n\t\t" + "Extra Track Numbers: " + obj.extraTrackNumbers;
 		return str;
 	}
 
