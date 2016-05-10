@@ -49,8 +49,8 @@ Example Result:
 
 	// ******* Constants *******
 
-	var FIRST_DISC_NUMBER = 7;
-	var LAST_DISC_NUMBER = 10;
+	var FIRST_DISC_NUMBER = 1;
+	var LAST_DISC_NUMBER = 210;
 	
 	// *************************
 	
