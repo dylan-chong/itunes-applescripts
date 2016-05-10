@@ -137,13 +137,15 @@ Example Result:
 		var obj = {
 			discNumber: discObj.discNumber,
 			idealTrackCount: discObj.trackCount,
-			missingTrackNumbers: null,
-			extraTrackNumbers: null,
+			missingTrackNumbers: [],
+			extraTrackNumbers: [],
+			existingTrackNumbers: [] 
 		};
 		
 		var tracks = discObj.tracks;
-		var missing = [];
-		var extra = [];
+		var missing = obj.missingTrackNumbers;
+		var extra = obj.extraTrackNumbers;
+		var existing = obj.existingTrackNumbers;
 		
 		// Add the ideal track numbers
 		for (var a = 0; a < obj.idealTrackCount; a++) {
@@ -161,21 +163,21 @@ Example Result:
 			} else {
 				extra.push(trackNumber);
 			}
-
+			
+			existing.push(trackNumber);
 		}
 		
 		if (missing.length == 0 && extra.length == 0) return null;
-		
-		obj.missingTrackNumbers = missing;
-		obj.extraTrackNumbers = extra;
 		
 		return obj;
 	}
 	
 	function missingTrackObjectToString(obj) {
-		var str = "Disc Number: " + obj.disc;
+		var str = "Disc Number: " + obj.discNumber;
 		str += "\n\t" + "Ideal Track Count: " + obj.idealTrackCount;
-		str += "\n\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
+				str += "\n\t" + "Existing Track Numbers: " +obj.existingTrackNumbers;
+		if (obj.missingTrackNumbers.length > 0) 
+			str += "\n\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
 		if (obj.extraTrackNumbers.length > 0) 
 			str += "\n\t" + "Extra Track Numbers: " + obj.extraTrackNumbers;
 		return str;
