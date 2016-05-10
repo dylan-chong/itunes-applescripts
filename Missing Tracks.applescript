@@ -36,7 +36,12 @@ Example Constants:
 
 
 Example Result:
-	
+	Completely missing discs: 9 
+	Partially missing discs:  
+	Disc Number: 7
+		Ideal Track Count: 7
+		Existing Track Numbers: 2,3,4,5,6,7
+		Missing Track Numbers: 1
 	
 */
 
