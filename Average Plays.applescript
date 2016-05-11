@@ -117,11 +117,7 @@ Example Result:
 			var track = tracks[t];
 			var c = tracks.playedCount();
 			
-			if (!min) {
-				min = c;
-			} else if (c < min) {
-				min = c;
-			}
+			if (!min || c < min) min = c;
 		}
 	}
 	
