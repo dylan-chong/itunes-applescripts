@@ -27,9 +27,6 @@ Example Result:
 	
 	var groups = getGroupsOfTracks(selection);
 	
-	// TODO LATER remove debugging
-	logTracks(groups[0], this.console);
-	
 	for (var g = 0; g < groups.length; g++) {
 		var group = groups[g];
 		
@@ -104,16 +101,6 @@ Example Result:
 		return tracks[0].playedDate();
 	}
 	
-	function logTracks(tracks, console) {
-		console.log("Start log");
-		for (var t = 0; t < tracks.length; t++) {
-			var track = tracks[t];
-			console.log(track.playedCount());
-			console.log(track.playedDate());
-		}
-		console.log("End log");
-	}
-	
 	function getMinimumPlays(tracks) {
 		var min;
 		
@@ -125,6 +112,17 @@ Example Result:
 		}
 		
 		return min;
+	}
+	
+	// For debugging
+	function logTracks(tracks, console) {
+		console.log("Start log");
+		for (var t = 0; t < tracks.length; t++) {
+			var track = tracks[t];
+			console.log(track.playedCount());
+			console.log(track.playedDate());
+		}
+		console.log("End log");
 	}
 	
 })();
