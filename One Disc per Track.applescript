@@ -34,7 +34,7 @@ Example Result:
 		var disc = FIRST_DISC + a*INCREMENT;
 		
 		// Code that applies the changes:
-		// currentTrack.discNumber.set(newTrackName);
+		// track.discNumber.set(disc);
 		
 		this.console.log("Disc: " + disc + ", Name: " + track.name());
 	}
