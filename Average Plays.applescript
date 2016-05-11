@@ -4,7 +4,9 @@ Remember to set the language from AppleScript to Javascript!
 
 Description:
 	Takes groups of discs, and sets each track to the disc's average play count,
-	and sets the last played date to the last played date of the first track.
+	and sets the last played date to the last played date of the first track. If
+	there are any tracks in a disc that has a play count of zero, the whole disc
+	will be skipped.
 	Note: It doesn't average the last played date, it only averages the play count.
 	
 
@@ -31,6 +33,10 @@ Example Result:
 	
 	for (var g = 0; g < groups.length; g++) {
 		var group = groups[g];
+		
+		var minimumPlays = getMinimumPlays(group);
+		if (minimumPlays == 0) continue;
+		
 		var averagePlays = getAveragePlays(group);
 		var lastPlayedDate = getLastPlayedDate(group);
 		
@@ -102,6 +108,21 @@ Example Result:
 			console.log(track.playedDate());
 		}
 		console.log("End log");
+	}
+	
+	function getMinimumPlays(tracks) {
+		var min;
+		
+		for (var t = 0; t < tracks.length; t++) {
+			var track = tracks[t];
+			var c = tracks.playedCount();
+			
+			if (!min) {
+				min = c;
+			} else if (c < min) {
+				min = c;
+			}
+		}
 	}
 	
 })();
