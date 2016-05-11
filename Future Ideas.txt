@@ -1,4 +1,3 @@
 Ideas for more AppleScripts
-- Average plays per disc and set last played
 - Set Rating to Highest in Disc
 - Nicely formatted tracks (with track number, disc, and name) from selection
