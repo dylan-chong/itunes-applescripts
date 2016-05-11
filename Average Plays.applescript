@@ -44,8 +44,8 @@ Example Result:
 			var track = group[t];
 			
 			// Code that applies the changes:
-			track.playedCount.set(averagePlays);
-			track.playedDate.set(lastPlayedDate);
+			// track.playedCount.set(averagePlays);
+			// track.playedDate.set(lastPlayedDate);
 			
 			var log = "Play Count: " + averagePlays;
 			log += ", Last Played: " + lastPlayedDate;
