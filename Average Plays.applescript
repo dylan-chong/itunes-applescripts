@@ -123,6 +123,8 @@ Example Result:
 			
 			if (!min || c < min) min = c;
 		}
+		
+		return min;
 	}
 	
 })();
