@@ -29,7 +29,6 @@ Example Result:
 	
 	// TODO LATER remove debugging
 	logTracks(groups[0], this.console);
-	return;
 	
 	for (var g = 0; g < groups.length; g++) {
 		var group = groups[g];
@@ -93,7 +92,7 @@ Example Result:
 		
 		for (var t = 0; t < tracks.length; t++) {
 			var track = tracks[t];
-			totalPlays += tracks.playedCount();	
+			totalPlays += track.playedCount();	
 		}
 		
 		var average = totalPlays / tracks.length;
@@ -120,7 +119,7 @@ Example Result:
 		
 		for (var t = 0; t < tracks.length; t++) {
 			var track = tracks[t];
-			var c = tracks.playedCount();
+			var c = track.playedCount();
 			
 			if (!min || c < min) min = c;
 		}
