@@ -11,7 +11,7 @@ but **be careful - please backup your music before using**
 <h2> Instructions for Use </h2>
 1. Download a script (to a Mac with your iTunes library)
 1. Make a copy of the tracks you want to apply the script to
-1. Select the tracks in iTunes
+1. Select the tracks in iTunes. Make sure your tracks are in sequential order (each disc is grouped together, and tracks are in the right order)order
 1. Double click the script (opens the Script Editor)
 1. Set language to JavaScript (from AppleScript) at the top left of the editor
 1. Change the constants if there are any in the script (press Command+F and then search for the word "constants")
