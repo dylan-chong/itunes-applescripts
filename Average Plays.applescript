@@ -32,14 +32,14 @@ Example Result:
 	for (var g = 0; g < groups.length; g++) {
 		var group = groups[g];
 		var averagePlays = getAveragePlays(group);
-		var averageLastPlayedDate = getLastPlayedDate(group);
+		var lastPlayedDate = getLastPlayedDate(group);
 		
 		for (var t = 0; t < group.length; t++) {
 			var track = group[t];
 			
 			// Code that applies the changes:
 			//track.playedCount.set(averagePlays);
-			//track.playedDate.set(averageLastPlayedDate);
+			//track.playedDate.set(lastPlayedDate);
 			
 		}
 	}
@@ -78,7 +78,16 @@ Example Result:
 	}
 	
 	function getAveragePlays(tracks) {
-		// TODO
+		var totalPlays = 0;
+		
+		for (var t = 0; t < tracks.length; t++) {
+			var track = tracks[t];
+			totalPlays += tracks.playedCount();	
+		}
+		
+		var average = totalPlays / tracks.length;
+		average = Math.round(average);
+		return average;
 	}
 	
 	function getLastPlayedDate(tracks) {
