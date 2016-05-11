@@ -4,7 +4,7 @@ Remember to set the language from AppleScript to Javascript!
 
 Description:
 	Takes groups of discs, and sets each track to the disc's average play count,
-	and sets the last played date to the average last played date.
+	and sets the last played date to the last played date of the first track.
 	
 
 Example Selection:
@@ -24,10 +24,14 @@ Example Result:
 	
 	var groups = getGroupsOfTracks(selection);
 	
+	// TODO LATER remove debugging
+	logTracks(groups[0], this.console);
+	return;
+	
 	for (var g = 0; g < groups.length; g++) {
 		var group = groups[g];
 		var averagePlays = getAveragePlays(group);
-		var averageLastPlayedDate = getAverageLastPlayedDate(group);
+		var averageLastPlayedDate = getLastPlayedDate(group);
 		
 		for (var t = 0; t < group.length; t++) {
 			var track = group[t];
@@ -76,12 +80,18 @@ Example Result:
 		// TODO
 	}
 	
-	function getAverageLastPlayedDate(tracks) {
-		// TODO
+	function getLastPlayedDate(tracks) {
+	
 	}
 	
-	function logTracks(tracks) {
-		// TODO NEXT
+	function logTracks(tracks, console) {
+		console.log("Start log");
+		for (var t = 0; t < tracks.length; t++) {
+			var track = tracks[t];
+			console.log(track.playedCount());
+			console.log(track.playedDate());
+		}
+		console.log("End log");
 	}
 	
 })();
