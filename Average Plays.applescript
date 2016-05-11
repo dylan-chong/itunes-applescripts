@@ -7,7 +7,11 @@ Description:
 	and sets the last played date to the last played date of the first track. If
 	there are any tracks in a disc that has a play count of zero, the whole disc
 	will be skipped.
-	Note: It doesn't average the last played date, it only averages the play count.
+	
+	Note: 
+		- It doesn't average the last played date, it only averages the play count.
+		- It assumes there are disc numbers set (so please make sure all tracks
+			have disc numbers)
 	
 
 Example Selection:
@@ -40,15 +44,17 @@ Example Result:
 			var track = group[t];
 			
 			// Code that applies the changes:
-			//track.playedCount.set(averagePlays);
-			//track.playedDate.set(lastPlayedDate);
+			track.playedCount.set(averagePlays);
+			track.playedDate.set(lastPlayedDate);
 			
 			var log = "Play Count: " + averagePlays;
 			log += ", Last Played: " + lastPlayedDate;
-			log += ", Name: " + track.name();
+			log += ",\n\t\t\tName: " + track.name() + "\n";
 			
 			this.console.log(log);
 		}
+		
+		this.console.log("\n\n")
 	}
 	
 	return "Done";
