@@ -31,20 +31,17 @@ Example Result:
 		
 		for (var t = 0; t < group.length; t++) {
 			var track = group[t];
-			var num = t+1;
-			var count = group.length;
 			
 			// Code that applies the changes:
+			//track.playedCount.set(averagePlays);
+			//track.playedDate.set(averageLastPlayedDate);
 			
-			
-			this.console.log("Track: " + num + " of " + count + ", Name: " + track.name());
 		}
 	}
 	
 	return "Done";
 	
 	// TODO externalise the below method?
-	
 	function getGroupsOfTracks(originalTracksArray) {
 		if (originalTracksArray == null || originalTracksArray.length == 0) 
 			return null;
@@ -81,6 +78,10 @@ Example Result:
 	
 	function getAverageLastPlayedDate(tracks) {
 		// TODO
+	}
+	
+	function logTracks(tracks) {
+		// TODO NEXT
 	}
 	
 })();
