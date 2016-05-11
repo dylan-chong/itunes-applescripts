@@ -1,4 +1,0 @@
-Ideas for more AppleScripts
-- Set Rating to Highest in Disc
-- Nicely formatted tracks (with track number, disc, and name) from selection
-- One disc per track
