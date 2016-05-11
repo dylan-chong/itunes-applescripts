@@ -47,6 +47,11 @@ Example Result:
 			//track.playedCount.set(averagePlays);
 			//track.playedDate.set(lastPlayedDate);
 			
+			var log = "Play Count: " + averagePlays;
+			log += ", Last Played: " + lastPlayedDate;
+			log += ", Name: " + track.name();
+			
+			this.console.log(log);
 		}
 	}
 	
