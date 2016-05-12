@@ -47,14 +47,11 @@ Example Result:
 			// track.playedCount.set(averagePlays);
 			// track.playedDate.set(lastPlayedDate);
 			
-			var log = "Play Count: " + averagePlays;
-			log += ", Last Played: " + lastPlayedDate;
-			log += ",\n\t\t\tName: " + track.name() + "\n";
-			
-			this.console.log(log);
+			logTrackDetails(averagePlays, lastPlayedDate,
+				track.name(), this.console);
 		}
 		
-		this.console.log("\n\n")
+		this.console.log("\n")
 	}
 	
 	return "Done";
@@ -120,15 +117,31 @@ Example Result:
 		return min;
 	}
 	
+	function logGroupsOfTracks(groups, console) {
+		for (var g = 0; g < groups.length; g++) {
+			logTracks(groups[g], this.console);
+		}
+	}
+	
 	// For debugging
 	function logTracks(tracks, console) {
-		console.log("Start log");
 		for (var t = 0; t < tracks.length; t++) {
 			var track = tracks[t];
-			console.log(track.playedCount());
-			console.log(track.playedDate());
+			logTrack(track, console);
 		}
-		console.log("End log");
+	}
+	
+	function logTrack(track, console) {
+		logTrackDetails(track.playedCount(),
+			track.playedDate(), track.name(),
+			console);
+	}
+	
+	function logTrackDetails(playCount, playedDate, name, console) {
+		var log = "Play Count: " + playCount;
+		log += ", Last Played: " + playedDate;
+		log += ",\n\t\t\tName: " + name + "\n";
+		console.log(log);
 	}
 	
 })();
