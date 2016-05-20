@@ -81,7 +81,7 @@ Example Result:
 		this.console.log("Disc: " + discNumber + ", Name: " + track.name());
 		
 		// Code that applies the changes:
-		// track.discNumber.set(discNumber);
+		 track.discNumber.set(discNumber);
 	}
 	return "Done";
 	
