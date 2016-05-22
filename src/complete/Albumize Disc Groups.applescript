@@ -47,9 +47,9 @@ Example Result:
 			var num = t+1;
 			var count = group.length;
 			
-			// Code that applies the changes:
-			// track.trackCount.set(count);
 			for (var a = 0; a < 2; a++) {
+				// Code that applies the changes:
+			 	// track.trackCount.set(count);
 				// track.trackNumber.set(num);
 			}
 			
