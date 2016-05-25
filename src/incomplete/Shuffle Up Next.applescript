@@ -67,8 +67,14 @@ Example Result:
 	}
 	
 	function logDiscGroup(group, console) {
-		s = "DNum: " + group[0].discNumber() + " of " + group[0].discCount() + ", ";
-		s += "Alb: " + group[0].album();
+		var discNum = group[0].discNumber() + '';
+		
+		while (discNum.length < 3) {
+			discNum = ' ' + discNum;
+		}
+		
+		s = 'DNum: ' + discNum + ', ';
+		s += 'Alb: ' + group[0].album();
 		console.log(s);
 	}
 	
