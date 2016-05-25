@@ -123,7 +123,7 @@ Example Result:
 				if (indexInAlbum == -1) {
 					albumsEmpty++;
 					console.log("already empty");
-					break;
+					continue;
 				}
 
 				var discGroup = albumGroups[a][indexInAlbum];
