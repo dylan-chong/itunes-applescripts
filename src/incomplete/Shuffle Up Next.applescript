@@ -27,8 +27,7 @@ Example Result:
 	
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
-
-	logAllDiscGroups(shuffledDiscs);
+	reorderPlaylist(shuffledDiscs);
 	
 	return "Done";
 	
@@ -140,6 +139,10 @@ Example Result:
 		}
 		
 		return shuffled;
+	}
+	
+	function reorderPlaylist(discGroups) {
+		// TODO
 	}
 	
 	// **************** Debug ****************
