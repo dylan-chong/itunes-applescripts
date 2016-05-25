@@ -19,6 +19,8 @@ Example Result:
 	var app = Application('iTunes');
 	app.includeStandardAdditions = true;
 	var window = app.windows[0];
+	var console = this.console;
+	
 	var selection = window.selection();
 	var groups = getGroupsOfTracks(selection);
 	
@@ -101,13 +103,13 @@ Example Result:
 	
 	// **************** Debug ****************
 	
-	function logAllDiscGroups(groups, console, tabSpaces) {
+	function logAllDiscGroups(groups, tabSpaces) {
 		for (var a = 0; a < groups.length; a++) {
-			logDiscGroup(groups[a], console, tabSpaces);
+			logDiscGroup(groups[a], tabSpaces);
 		}
 	}
 	
-	function logDiscGroup(group, console, tabSpaces) {
+	function logDiscGroup(group, tabSpaces) {
 		var discNum = group[0].discNumber() + '';
 		
 		while (discNum.length < 3) {
@@ -122,10 +124,10 @@ Example Result:
 		console.log(s);
 	}
 	
-	function logAlbumGroups(albumGroups, console) {
+	function logAlbumGroups(albumGroups) {
 		for (var a = 0; a < albumGroups.length; a++) {
 			console.log("Album " + (a + 1));
-			logAllDiscGroups(albumGroups[a], console, 1);
+			logAllDiscGroups(albumGroups[a], 1);
 		}
 	}
 	
