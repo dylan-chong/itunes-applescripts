@@ -3,8 +3,9 @@
 Remember to set the language from AppleScript to Javascript!
 
 Description:
-	Shuffles the disks in the playlist called "Up Next" but keeps the tracks
-	in each disk grouped together
+	Shuffles the discs in the playlist called "Up Next" but keeps the tracks
+	in each disk grouped together. The discs in each album will be 
+	distributed evenly over time.
 	
 
 Example Selection:
