@@ -73,8 +73,8 @@ Example Result:
 			discNum = ' ' + discNum;
 		}
 		
-		s = 'DNum: ' + discNum + ', ';
-		s += 'Alb: ' + group[0].album();
+		s = 'Disc: ' + discNum + ', ';
+		s += 'Album: ' + group[0].album();
 		console.log(s);
 	}
 	
