@@ -103,10 +103,43 @@ Example Result:
 		}
 	}
 	
+	// NOTE: This doesn't shuffle them evenly for now
 	function getShuffledDiscs(albumGroups) {
+		// Array to track which disc we have added
+		var currentAlbumGroupIndexes = [];
+		for (var a = 0; a < albumGroups.length; a++) {
+			currentAlbumGroupIndexes.push(0);
+		}
+		
 		var shuffled = []; // disc groups
 		
-		var lowestCommonFactor; // TODO
+		// Add one disc, to shuffled, from each album group
+		while (true) {
+			var albumsEmpty = 0;
+			for (var a = 0; a < albumGroups.length; a++) {
+				var indexInAlbum = currentAlbumGroupIndexes[a];
+				console.log("a=" + a + ", indexInAlbum=" + indexInAlbum);
+				
+				if (indexInAlbum == -1) {
+					albumsEmpty++;
+					console.log("already empty");
+					break;
+				}
+
+				var discGroup = albumGroups[a][indexInAlbum];
+				shuffled.push(discGroup);
+				currentAlbumGroupIndexes[a]++;
+				console.log("adding album");
+				
+				if (indexInAlbum == albumGroups[a].length) {
+					currentAlbumGroupIndexes[a] = -1;
+					albumsEmpty++;
+					console.log("now empty");
+				}
+			}
+			
+			if (albumsEmpty == albumGroups.length) break;
+		}
 		
 		return shuffled;
 	}
