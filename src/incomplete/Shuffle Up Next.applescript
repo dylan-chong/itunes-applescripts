@@ -24,7 +24,7 @@ Example Result:
 	
 	var groups = getGroupsOfTracks(selection);
 	
-	
+	logAllDiscGroups(groups, this.console);
 	
 	return "Done";
 	
@@ -57,4 +57,19 @@ Example Result:
 	
 		return groups;
 	}
+	
+	// **************** Debug ****************
+	
+	function logAllDiscGroups(groups, console) {
+		for (var a = 0; a < groups.length; a++) {
+			logDiscGroup(groups[a], console);
+		}
+	}
+	
+	function logDiscGroup(group, console) {
+		s = "DNum: " + group[0].discNumber() + " of " + group[0].discCount() + ", ";
+		s += "Alb: " + group[0].album();
+		console.log(s);
+	}
+	
 })();
