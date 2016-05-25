@@ -27,6 +27,7 @@ Example Result:
 	
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
+
 	logAllDiscGroups(shuffledDiscs);
 	
 	return "Done";
@@ -118,23 +119,20 @@ Example Result:
 			var albumsEmpty = 0;
 			for (var a = 0; a < albumGroups.length; a++) {
 				var indexInAlbum = currentAlbumGroupIndexes[a];
-				console.log("a=" + a + ", indexInAlbum=" + indexInAlbum);
 				
 				if (indexInAlbum == -1) {
 					albumsEmpty++;
-					console.log("already empty");
 					continue;
 				}
 
 				var discGroup = albumGroups[a][indexInAlbum];
 				shuffled.push(discGroup);
+
 				currentAlbumGroupIndexes[a]++;
-				console.log("adding album");
 				
-				if (indexInAlbum == albumGroups[a].length) {
+				if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
 					currentAlbumGroupIndexes[a] = -1;
 					albumsEmpty++;
-					console.log("now empty");
 				}
 			}
 			
