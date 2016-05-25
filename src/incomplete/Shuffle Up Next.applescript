@@ -26,7 +26,8 @@ Example Result:
 	var groups = getGroupsOfTracks(selection);
 	
 	var albumGroups = getSortedGroups(groups);
-	logAlbumGroups(albumGroups, this.console);
+	var shuffledDiscs = getShuffledDiscs(albumGroups);
+	logAllDiscGroups(shuffledDiscs);
 	
 	return "Done";
 	
@@ -100,6 +101,14 @@ Example Result:
 		function getArtistGroups(discGroups) {
 			// TODO LATER
 		}
+	}
+	
+	function getShuffledDiscs(albumGroups) {
+		var shuffled = []; // disc groups
+		
+		var lowestCommonFactor; // TODO
+		
+		return shuffled;
 	}
 	
 	// **************** Debug ****************
