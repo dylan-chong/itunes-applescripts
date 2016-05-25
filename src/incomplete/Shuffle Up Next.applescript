@@ -22,7 +22,8 @@ Example Result:
 	var selection = window.selection();
 	var groups = getGroupsOfTracks(selection);
 	
-	logAllDiscGroups(groups, this.console, 1);
+	var albumGroups = getSortedGroups(groups);
+	logAlbumGroups(albumGroups, this.console);
 	
 	return "Done";
 	
@@ -119,6 +120,13 @@ Example Result:
 		s += 'Disc: ' + discNum + ', ';
 		s += 'Album: ' + group[0].album();
 		console.log(s);
+	}
+	
+	function logAlbumGroups(albumGroups, console) {
+		for (var a = 0; a < albumGroups.length; a++) {
+			console.log("Album " + (a + 1));
+			logAllDiscGroups(albumGroups[a], console, 1);
+		}
 	}
 	
 })();
