@@ -65,11 +65,11 @@ Example Result:
 		
 		function getAlbumGroups(discGroups) {
 			var albumGroups = [];
-			
-			for (var d = 0; d < discGroups; d++) {
+
+			for (var d = 0; d < discGroups.length; d++) {
 				var discGroup = discGroups[d];
-				var index = getIndexOfSameAlbum(discGroup[0]);
-				
+				var index = getIndexOfSameAlbum(discGroup);
+
 				if (index == -1) {
 					albumGroups.push([discGroup]);
 					continue;
