@@ -28,6 +28,7 @@ Example Result:
 	
 	return "Done";
 	
+	// Returns an array of array of tracks
 	function getGroupsOfTracks(originalTracksArray) {
 		if (originalTracksArray == null || originalTracksArray.length == 0) 
 			return null;
