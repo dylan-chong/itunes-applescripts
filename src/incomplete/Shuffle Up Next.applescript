@@ -83,7 +83,7 @@ Example Result:
 			function getIndexOfSameAlbum(discGroup) {
 				for (var a = 0; a < albumGroups.length; a++) {
 					// first track in the first disc of the album group
-					var groupTrack = albumGroups[a][0];
+					var groupTrack = albumGroups[a][0][0];
 					var discTrack = discGroup[0];
 					
 					if (discTrack.album() !== groupTrack.album()) continue;
