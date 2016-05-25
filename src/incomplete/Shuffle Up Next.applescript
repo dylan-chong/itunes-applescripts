@@ -22,7 +22,7 @@ Example Result:
 	var selection = window.selection();
 	var groups = getGroupsOfTracks(selection);
 	
-	logAllDiscGroups(groups, this.console);
+	logAllDiscGroups(groups, this.console, 1);
 	
 	return "Done";
 	
@@ -100,20 +100,23 @@ Example Result:
 	
 	// **************** Debug ****************
 	
-	function logAllDiscGroups(groups, console) {
+	function logAllDiscGroups(groups, console, tabSpaces) {
 		for (var a = 0; a < groups.length; a++) {
-			logDiscGroup(groups[a], console);
+			logDiscGroup(groups[a], console, tabSpaces);
 		}
 	}
 	
-	function logDiscGroup(group, console) {
+	function logDiscGroup(group, console, tabSpaces) {
 		var discNum = group[0].discNumber() + '';
 		
 		while (discNum.length < 3) {
 			discNum = ' ' + discNum;
 		}
 		
-		s = 'Disc: ' + discNum + ', ';
+		var s = '';
+		for (var a = 0; a < tabSpaces; a++) s += '\t';
+		
+		s += 'Disc: ' + discNum + ', ';
 		s += 'Album: ' + group[0].album();
 		console.log(s);
 	}
