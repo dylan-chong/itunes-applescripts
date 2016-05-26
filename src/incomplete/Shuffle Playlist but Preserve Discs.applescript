@@ -49,18 +49,6 @@ Example Playlist (After running script):
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
 	
-	// TODO find out how to move tracks or change array
-	return (function () {
-		var track = playlist.tracks()[0];
-		console.log(track.name());
-		
-		var x = track.duplicate({to:playlist});
-		
-		console.log(x);
-		return x;
-	})();
-	
-	
 	reorderPlaylist(shuffledDiscs, playlist);
 	
 	return 'Done';
@@ -88,7 +76,12 @@ Example Playlist (After running script):
 	}
 	
 	function reorderPlaylist(discGroups, playlist) {
-		// TODO
+		for (var d = 0; d < discGroups.length; d++) {
+			var disc = discGroups[d];
+			for (var t = 0; t < disc.length; t++) {
+				disc[t].move({to: playlist});
+			}
+		}
 	}
 	
 	// **************** Grouping and Shuffling ****************
