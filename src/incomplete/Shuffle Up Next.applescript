@@ -20,7 +20,8 @@ Example Result:
 	
 	// ******* Constants *******
 
-	var PLAYLIST_NAME = "Up Next"; // Make sure there are no name conflicts
+	var PLAYLIST_NAME = 'Up Next'; // Make sure there are no name conflicts
+	var PLAYLIST_IS_SMART = true;
 	
 	// *************************
 	
@@ -30,18 +31,24 @@ Example Result:
 	var console = this.console;
 	
 	var selection = window.selection();
+
+	var playlist;
 	
+	try {
+		playlist = getDefaultPlaylist();
+	} catch (e) {
+		return 'There are multiple playlists of the name "'
+			+ PLAYLIST_NAME + '"';
+	}
+
+
 	var groups = getGroupsOfTracks(selection);
 	
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
 //	reorderPlaylist(shuffledDiscs);
 	
-	var x = getDefaultPlaylist().name();
-	console.log(x);
-	return x;
-	
-	return "Done";
+	return 'Done';
 	
 	// **************** Playlists ****************
 	
@@ -53,7 +60,8 @@ Example Result:
 			var playlist = userPlaylists[a];
 
 			if (playlist.name() !== PLAYLIST_NAME) continue;
-			
+			if (playlist.smart() !== PLAYLIST_IS_SMART) continue;
+
 			return playlist;
 		}
 
