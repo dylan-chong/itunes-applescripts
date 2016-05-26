@@ -51,13 +51,13 @@ Example Playlist (After running script):
 	
 	// TODO find out how to move tracks or change array
 	return (function () {
-	
-	
-		var tracks = playlist.tracks();
-		//tracks.push(tracks[0]);
-		var x = playlist.tracks().push(tracks[0]);
-		var x = playlist.tracks().push(tracks[3]);
-		//var x = tracks[0].move("end");
+		var anotherPlaylist = getPlaylistByNameAndIsSmart('Primary Playlist', true);
+		var extraTrack = anotherPlaylist.tracks()[0];
+		console.log(extraTrack.name());
+		
+		var defaultPlaylist = playlist;
+		var x = defaultPlaylist.tracks().push(extraTrack);
+		
 		console.log(x);
 		return x;
 	})();
