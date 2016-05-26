@@ -8,10 +8,10 @@ Description:
 	distributed evenly over time.
 	
 
-Example Selection:
+Example Playlist (Before running script):
 	
 	
-Example Result:
+Example Playlist (After running script):
 	
 	
 */
