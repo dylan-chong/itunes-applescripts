@@ -35,6 +35,8 @@ Example Playlist (After running script):
 	try {
 		playlist = getDefaultPlaylist();
 	} catch (e) {
+		// Note: An error is not always thrown if there
+		// are name duplicates.
 		return 'There are multiple playlists of the name "'
 			+ PLAYLIST_NAME + '"';
 	}
