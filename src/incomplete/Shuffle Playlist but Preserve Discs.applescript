@@ -7,6 +7,9 @@ Description:
 	in each disk grouped together. The discs in each album will be 
 	distributed evenly over time.
 	
+	Note: The tracks in each disc should be grouped together and in order
+	in order for the script to work properly.
+	
 
 Example Playlist (Before running script):
 	
