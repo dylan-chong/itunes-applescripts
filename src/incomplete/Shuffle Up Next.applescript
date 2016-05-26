@@ -29,8 +29,6 @@ Example Result:
 	app.includeStandardAdditions = true;
 	var window = app.windows[0];
 	var console = this.console;
-	
-	var selection = window.selection();
 
 	var playlist;
 	
@@ -41,12 +39,11 @@ Example Result:
 			+ PLAYLIST_NAME + '"';
 	}
 
-
-	var groups = getGroupsOfTracks(selection);
+	var groups = getGroupsOfTracks(playlist.tracks());
 	
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
-//	reorderPlaylist(shuffledDiscs);
+	reorderPlaylist(shuffledDiscs, playlist);
 	
 	return 'Done';
 	
@@ -68,7 +65,7 @@ Example Result:
 		return null;
 	}
 	
-	function reorderPlaylist(discGroups) {
+	function reorderPlaylist(discGroups, playlist) {
 		// TODO
 	}
 	
