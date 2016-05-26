@@ -37,8 +37,8 @@ Example Playlist (After running script):
 	} catch (e) {
 		// Note: An error is not always thrown if there
 		// are name duplicates.
-		return 'There are multiple playlists of the name "'
-			+ PLAYLIST_NAME + '"';
+		return 'There are multiple playlists of the name \''
+			+ PLAYLIST_NAME + '\'';
 	}
 	
 	if (!playlist)
@@ -70,18 +70,22 @@ Example Playlist (After running script):
 	// **************** Playlists ****************
 	
 	function getDefaultPlaylist() {
+		return getPlaylistByNameAndIsSmart(PLAYLIST_NAME, PLAYLIST_IS_SMART);
+	}
+	
+	function getPlaylistByNameAndIsSmart(name, isSmart) {
 		var playlistArrays = app.sources.playlists();
 		var userPlaylists = playlistArrays[0];
 		
 		for (var a = 0; a < userPlaylists.length; a++) {
 			var playlist = userPlaylists[a];
 
-			if (playlist.name() !== PLAYLIST_NAME) continue;
-			if (playlist.smart() !== PLAYLIST_IS_SMART) continue;
+			if (playlist.name() !== name) continue;
+			if (playlist.smart() !== isSmart) continue;
 
 			return playlist;
 		}
-
+		
 		return null;
 	}
 	
