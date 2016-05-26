@@ -20,8 +20,7 @@ Example Result:
 	
 	// ******* Constants *******
 
-	var PLAYLIST_NAME = "Up Next";
-	var PLAYLIST_IS_SMART = true;
+	var PLAYLIST_NAME = "Up Next"; // Make sure there are no name conflicts
 	
 	// *************************
 	
@@ -31,6 +30,7 @@ Example Result:
 	var console = this.console;
 	
 	var selection = window.selection();
+	
 	var groups = getGroupsOfTracks(selection);
 	
 	var albumGroups = getSortedGroups(groups);
@@ -48,8 +48,16 @@ Example Result:
 	function getDefaultPlaylist() {
 		var playlistArrays = app.sources.playlists();
 		var userPlaylists = playlistArrays[0];
+		
+		for (var a = 0; a < userPlaylists.length; a++) {
+			var playlist = userPlaylists[a];
 
-		// TODO find the playlsit by name
+			if (playlist.name() !== PLAYLIST_NAME) continue;
+			
+			return playlist;
+		}
+
+		return null;
 	}
 	
 	function reorderPlaylist(discGroups) {
