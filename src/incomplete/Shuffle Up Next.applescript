@@ -20,7 +20,7 @@ Example Playlist (After running script):
 	
 	// ******* Constants *******
 
-	var PLAYLIST_NAME = 'Up Next'; // Make sure there are no name conflicts
+	var PLAYLIST_NAME = 'Test Reorder'; // Make sure there are no name conflicts
 	var PLAYLIST_IS_SMART = true;
 	
 	// *************************
