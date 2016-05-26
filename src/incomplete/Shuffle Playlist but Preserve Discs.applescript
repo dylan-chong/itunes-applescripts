@@ -11,11 +11,59 @@ Description:
 	in order for the script to work properly.
 	
 
-Example Playlist (Before running script):
+Example Playlist Disc Order (Before running script):
+	Disc:   6, Album: Bach - Brandenburg Concertos
+	Disc:   1, Album: Bach - Canatas
+	Disc: 156, Album: Bach - Canatas
+	Disc: 157, Album: Bach - Canatas
+	Disc: 174, Album: Bach - Canatas
+	Disc: 176, Album: Bach - Canatas
+	Disc: 177, Album: Bach - Canatas
+	Disc:   2, Album: Bach - Sonatas and Partitas for Solo Violin
+	Disc:   1, Album: Handel - Faramondo
+	Disc:   2, Album: Handel - Faramondo
+	Disc:   3, Album: Handel - Faramondo
+	Disc: 267, Album: Mozart - Dances
+	Disc: 300, Album: Mozart - Dances
+	Disc: 363, Album: Mozart - Dances
+	Disc: 461, Album: Mozart - Dances
+	Disc: 462, Album: Mozart - Dances
+	Disc: 463, Album: Mozart - Dances
+	Disc: 196, Album: Mozart - Other Operas
+	Disc: 151, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 152, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 155, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 156, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 159, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 161, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 164, Album: Vivaldi - Concertos and Symphonies for Strings
 	
-	
-Example Playlist (After running script):
-	
+Example Playlist Disc Order (After running script):
+	Disc:   6, Album: Bach - Brandenburg Concertos
+	Disc:   1, Album: Bach - Canatas
+	Disc:   2, Album: Bach - Sonatas and Partitas for Solo Violin
+	Disc:   1, Album: Handel - Faramondo
+	Disc: 267, Album: Mozart - Dances
+	Disc: 196, Album: Mozart - Other Operas
+	Disc: 151, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 156, Album: Bach - Canatas
+	Disc:   2, Album: Handel - Faramondo
+	Disc: 300, Album: Mozart - Dances
+	Disc: 152, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 157, Album: Bach - Canatas
+	Disc:   3, Album: Handel - Faramondo
+	Disc: 363, Album: Mozart - Dances
+	Disc: 155, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 174, Album: Bach - Canatas
+	Disc: 461, Album: Mozart - Dances
+	Disc: 156, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 176, Album: Bach - Canatas
+	Disc: 462, Album: Mozart - Dances
+	Disc: 159, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 177, Album: Bach - Canatas
+	Disc: 463, Album: Mozart - Dances
+	Disc: 161, Album: Vivaldi - Concertos and Symphonies for Strings
+	Disc: 164, Album: Vivaldi - Concertos and Symphonies for Strings
 	
 */
 
@@ -48,7 +96,7 @@ Example Playlist (After running script):
 		return 'No playlists found';
 	
 	var groups = getGroupsOfTracks(playlist.tracks());
-	
+
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
 	
