@@ -21,7 +21,7 @@ Example Playlist (After running script):
 	// ******* Constants *******
 
 	var PLAYLIST_NAME = 'Test Reorder'; // Make sure there are no name conflicts
-	var PLAYLIST_IS_SMART = true;
+	var PLAYLIST_IS_SMART = false;
 	
 	// *************************
 	
@@ -40,7 +40,10 @@ Example Playlist (After running script):
 		return 'There are multiple playlists of the name "'
 			+ PLAYLIST_NAME + '"';
 	}
-
+	
+	if (!playlist)
+		return 'No playlists found';
+	
 	var groups = getGroupsOfTracks(playlist.tracks());
 	
 	var albumGroups = getSortedGroups(groups);
