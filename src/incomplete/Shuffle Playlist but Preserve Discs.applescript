@@ -51,8 +51,7 @@ Example Playlist (After running script):
 	
 	// TODO find out how to move tracks or change array
 	return (function () {
-		var anotherPlaylist = getPlaylistByNameAndIsSmart('Primary Playlist', true);
-		var track = anotherPlaylist.tracks()[0];
+		var track = playlist.tracks()[0];
 		console.log(track.name());
 		
 		var x = track.duplicate({to:playlist});
