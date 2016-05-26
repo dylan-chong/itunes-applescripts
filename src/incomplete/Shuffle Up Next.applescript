@@ -17,6 +17,14 @@ Example Result:
 */
 
 (function() {
+	
+	// ******* Constants *******
+
+	var PLAYLIST_NAME = "Up Next";
+	var PLAYLIST_IS_SMART = true;
+	
+	// *************************
+	
 	var app = Application('iTunes');
 	app.includeStandardAdditions = true;
 	var window = app.windows[0];
@@ -27,9 +35,28 @@ Example Result:
 	
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
-	reorderPlaylist(shuffledDiscs);
+//	reorderPlaylist(shuffledDiscs);
+	
+	var x = getDefaultPlaylist().name();
+	console.log(x);
+	return x;
 	
 	return "Done";
+	
+	// **************** Playlists ****************
+	
+	function getDefaultPlaylist() {
+		var playlistArrays = app.sources.playlists();
+		var userPlaylists = playlistArrays[0];
+
+		// TODO find the playlsit by name
+	}
+	
+	function reorderPlaylist(discGroups) {
+		// TODO
+	}
+	
+	// **************** Grouping and Shuffling ****************
 	
 	// Returns an array of array of tracks
 	function getGroupsOfTracks(originalTracksArray) {
@@ -139,10 +166,6 @@ Example Result:
 		}
 		
 		return shuffled;
-	}
-	
-	function reorderPlaylist(discGroups) {
-		// TODO
 	}
 	
 	// **************** Debug ****************
