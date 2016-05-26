@@ -52,7 +52,10 @@ Example Playlist (After running script):
 	var albumGroups = getSortedGroups(groups);
 	var shuffledDiscs = getShuffledDiscs(albumGroups);
 	
-	reorderPlaylist(shuffledDiscs, playlist);
+	logAllDiscGroups(shuffledDiscs);
+	
+	// Code that makes changes:
+	// reorderPlaylist(shuffledDiscs, playlist);
 	
 	return 'Done';
 	
