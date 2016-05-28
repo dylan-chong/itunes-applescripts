@@ -95,6 +95,9 @@ Example Playlist Disc Order (After running script):
 	if (!playlist)
 		return 'No playlists found';
 	
+	if (playlist.tracks().length == 0)
+		return 'No tracks in this playlist';
+	
 	var groups = getGroupsOfTracks(playlist.tracks());
 
 	var albumGroups = getSortedGroups(groups);
