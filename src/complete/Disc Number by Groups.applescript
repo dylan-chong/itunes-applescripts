@@ -4,7 +4,7 @@ Remember to set the language from AppleScript to Javascript!
 
 Description:
 	Takes the selection and checks whether then next should be part of the same disk
-	as the previous by checking the track name before the first DELIMITER (a hyphen
+	as the previous by checking the track name up to the first DELIMITER (a hyphen
 	in the below example). It sets the disc numbers starting from INITIAL_DISK_NUMBER,
 	increasing by one for each disk.
 
