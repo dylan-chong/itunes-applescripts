@@ -224,24 +224,33 @@ Example Playlist Disc Order (After running script):
 		}
 		
 		var shuffled = []; // disc groups
-		var discCount = getTotalDiscsInAlbumGroups(albumGroups);
 		
-		for (var a = 0; a < discCount; a++) {
+		// Add one disc, to shuffled, from each album group
+		while (true) {
+			var albumsEmpty = 0;
+			for (var a = 0; a < albumGroups.length; a++) {
+				var indexInAlbum = currentAlbumGroupIndexes[a];
+				
+				if (indexInAlbum == -1) {
+					albumsEmpty++;
+					continue;
+				}
+
+				var discGroup = albumGroups[a][indexInAlbum];
+				shuffled.push(discGroup);
+
+				currentAlbumGroupIndexes[a]++;
+				
+				if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
+					currentAlbumGroupIndexes[a] = -1;
+					albumsEmpty++;
+				}
+			}
 			
+			if (albumsEmpty == albumGroups.length) break;
 		}
-		
-		if (shuffled.length != discCount)
-			throw "Incorrect disc count";
 		
 		return shuffled;
-		
-		function getTotalDiscsInAlbumGroups(gps) {
-			var count = 0;
-			for (var a = 0; a < gps.length; a++) {
-				count += gps[a].length;
-			}
-			return count;
-		}
 	}
 	
 	// **************** Debug ****************
