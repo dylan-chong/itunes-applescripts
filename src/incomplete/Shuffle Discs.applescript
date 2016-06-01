@@ -10,6 +10,9 @@ Description:
 	Note: The tracks in each disc should be grouped together and in order
 	in order for the script to work properly.
 	
+	Note 2: This script doesn't work on smart playlists due to how iTunes
+	deals with smart playlists
+	
 
 Example Playlist Disc Order (Before running script):
 	Disc:   6, Album: Bach - Brandenburg Concertos
