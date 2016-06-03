@@ -20,7 +20,7 @@ Example Playlist After:
 	// Make sure there are no name conflicts
 	var PLAYLIST_NAME = 'Test Reorder';
 	
-	// If the track is played within the last RECENT_DAYS
+	// If the track was played within the last RECENT_DAYS
 	// days, it will be removed from the playlist
 	var RECENT_DAYS = 4;
 	
@@ -78,11 +78,21 @@ Example Playlist After:
 	// **************** Recent Tracks *******************
 	
 	function getRecentTracksFromPlaylist(playlist) {
-		var tracks = [];
+		var playlistTracks = playlist.tracks();
+		var recentTracks = [];
 		
-		// TODO 
+		for (var t = 0; t < playlistTracks.length; t++) {
+			if (trackIsRecent(playlistTracks[t]))
+				recentTracks.push(playlistTracks[t]);
+		}
 		
-		return tracks;
+		return recentTracks;
+		
+		function trackIsRecent(track) {
+			var lastPlayed; // TODO 
+			
+			return false;
+		}
 	}
 	
 	function removeTracksFromPlaylist(tracks, playlist) {
