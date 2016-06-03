@@ -56,7 +56,7 @@ Example Playlist After:
 	// **************** Playlists ****************
 	
 	function getDefaultPlaylist() {
-		return getPlaylistByNameAndIsSmart(PLAYLIST_NAME, PLAYLIST_IS_SMART);
+		return getPlaylistByNameAndIsSmart(PLAYLIST_NAME, false);
 	}
 	
 	function getPlaylistByNameAndIsSmart(name, isSmart) {
