@@ -16,8 +16,13 @@ Example Playlist After:
 	
 	// ******* Constants *******
 
-	var PLAYLIST_NAME = 'Test Reorder'; // Make sure there are no name conflicts
 	// Note: Currently doesn't work on smart playlists
+	// Make sure there are no name conflicts
+	var PLAYLIST_NAME = 'Test Reorder';
+	
+	// If the track is played within the last RECENT_DAYS
+	// days, it will be removed from the playlist
+	var RECENT_DAYS = 4;
 	
 	// *************************
 	
@@ -43,7 +48,8 @@ Example Playlist After:
 	if (playlist.tracks().length == 0)
 		return 'No tracks in this playlist';
 	
-	// TODO do stuff here
+	var recentTracks = getRecentTracksFromPlaylist(playlist);
+	removeTracksFromPlaylist(recentTracks, playlist);
 	
 	return 'Done';
 	
@@ -69,6 +75,18 @@ Example Playlist After:
 		return null;
 	}
 	
-	// **************** Grouping and Shuffling ****************
+	// **************** Recent Tracks *******************
+	
+	function getRecentTracksFromPlaylist(playlist) {
+		var tracks = [];
+		
+		// TODO 
+		
+		return tracks;
+	}
+	
+	function removeTracksFromPlaylist(tracks, playlist) {
+		// TODO
+	}
 	
 })();
