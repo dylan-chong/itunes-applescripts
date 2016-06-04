@@ -48,19 +48,8 @@ Example Playlist After:
 	if (playlist.tracks().length == 0)
 		return 'No tracks in this playlist';
 	
-	// test
-	var x;
-	
-	x = playlist.tracks()[4].playedDate();
-	console.log(x)
-	// TODO somehow get lastPlayed date
-	
-	return x;
-	// ----
-	
-	
 	var recentTracks = getRecentTracksFromPlaylist(playlist);
-	removeTracksFromPlaylist(recentTracks, playlist);
+	//removeTracksFromPlaylist(recentTracks, playlist);
 	
 	return 'Done';
 	
