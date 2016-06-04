@@ -87,14 +87,21 @@ Example Playlist After:
 		var recentTracks = [];
 		
 		for (var t = 0; t < playlistTracks.length; t++) {
-			if (trackIsRecent(playlistTracks[t]))
+			if (trackWasPlayedRecently(playlistTracks[t]))
 				recentTracks.push(playlistTracks[t]);
 		}
 		
 		return recentTracks;
 		
-		function trackIsRecent(track) {
-			var lastPlayed; // TODO 
+		function trackWasPlayedRecently(track) {
+			var lastPlayed = track.playedDate();
+			if (!lastPlayed) return false; // track is not played
+			
+			var lastTime = lastPlayed.getTime();
+				
+			// track was played within RECENT-DAYS 
+			if (lastTime > CURRENT_TIME - RECENT_DAYS * ONE_DAY)
+				return true;
 			
 			return false;
 		}
