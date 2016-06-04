@@ -78,6 +78,11 @@ Example Playlist After:
 	// **************** Recent Tracks *******************
 	
 	function getRecentTracksFromPlaylist(playlist) {
+		// Constants for trackIsRecent() method
+		var ONE_DAY = 1000 * 60 * 60 * 24;
+		var CURRENT_TIME = new Date().getTime();
+		
+		//
 		var playlistTracks = playlist.tracks();
 		var recentTracks = [];
 		
