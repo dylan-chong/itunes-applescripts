@@ -50,7 +50,7 @@ Example Playlist After:
 	
 	var recentTracks = getRecentTracksFromPlaylist(playlist);
 	logTrackNames(recentTracks);
-	//removeTracksFromPlaylist(recentTracks, playlist);
+	removeTracksFromPlaylist(recentTracks, playlist);
 	
 	return 'Done';
 	
@@ -100,7 +100,7 @@ Example Playlist After:
 			
 			var lastTime = lastPlayed.getTime();
 				
-			// track was played within RECENT-DAYS 
+			// track was played within RECENT_DAYS days
 			if (lastTime > CURRENT_TIME - RECENT_DAYS * ONE_DAY)
 				return true;
 			
@@ -109,7 +109,9 @@ Example Playlist After:
 	}
 	
 	function removeTracksFromPlaylist(tracks, playlist) {
-		// TODO
+		for (var t = 0; t < tracks.length; t++) {
+			tracks[t].delete({from: playlist});
+		}
 	}
 	
 	// **************** Logging ****************
