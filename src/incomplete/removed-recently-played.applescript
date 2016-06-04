@@ -3,12 +3,12 @@
 Remember to set the language from AppleScript to Javascript!
 
 Description:
+	Removes the tracks that have been played within the last
+	RECENT_DAYS number of days from the playlist with the
+	name PLAYLIST_NAME.
 	
-	
-
-Example Playlist Before:
-	
-Example Playlist After:
+	Note: It does not work on smart playlists due to
+	permissions errors.
 	
 */
 
@@ -16,7 +16,7 @@ Example Playlist After:
 	
 	// ******* Constants *******
 
-	// Note: Currently doesn't work on smart playlists
+	// Note: It can't work on smart playlists
 	// Make sure there are no name conflicts
 	var PLAYLIST_NAME = 'Test Reorder';
 	
@@ -50,7 +50,9 @@ Example Playlist After:
 	
 	var recentTracks = getRecentTracksFromPlaylist(playlist);
 	logTrackNames(recentTracks);
-	removeTracksFromPlaylist(recentTracks, playlist);
+	
+	// Code that makes changes:
+	// removeTracksFromPlaylist(recentTracks, playlist);
 	
 	return 'Done';
 	
