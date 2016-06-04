@@ -49,6 +49,7 @@ Example Playlist After:
 		return 'No tracks in this playlist';
 	
 	var recentTracks = getRecentTracksFromPlaylist(playlist);
+	logTrackNames(recentTracks);
 	//removeTracksFromPlaylist(recentTracks, playlist);
 	
 	return 'Done';
@@ -75,7 +76,7 @@ Example Playlist After:
 		return null;
 	}
 	
-	// **************** Recent Tracks *******************
+	// **************** Recent Tracks ****************
 	
 	function getRecentTracksFromPlaylist(playlist) {
 		// Constants for trackIsRecent() method
@@ -109,6 +110,14 @@ Example Playlist After:
 	
 	function removeTracksFromPlaylist(tracks, playlist) {
 		// TODO
+	}
+	
+	// **************** Logging ****************
+	
+	function logTrackNames(tracks) {
+		for (var t = 0; t < tracks.length; t++) {
+			console.log(tracks[t].name());
+		}
 	}
 	
 })();
