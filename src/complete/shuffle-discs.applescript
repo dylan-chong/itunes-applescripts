@@ -74,7 +74,7 @@ Example Playlist Disc Order (After running script):
 	
 	// ******* Constants *******
 
-	var PLAYLIST_NAME = 'Test Reorder'; // Make sure there are no name conflicts
+	var PLAYLIST_NAME = 'Source'; // Make sure there are no name conflicts
 	var PLAYLIST_IS_SMART = false; // Note: Currently doesn't work on smart playlists
 	
 	// *************************
