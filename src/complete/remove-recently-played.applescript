@@ -18,7 +18,7 @@ Description:
 
 	// Note: It can't work on smart playlists
 	// Make sure there are no name conflicts
-	var PLAYLIST_NAME = 'Test Reorder';
+	var PLAYLIST_NAME = 'Source';
 	
 	// If the track was played within the last RECENT_DAYS
 	// days, it will be removed from the playlist
