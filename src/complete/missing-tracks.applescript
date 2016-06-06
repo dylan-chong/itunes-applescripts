@@ -75,10 +75,6 @@ Example Result:
 		this.console.log(missingTrackObjectToString(obj));
 	}
 	
-	
-	// TODO log partially missing discs (need for loop)
-	
-	
 	return "Done";
 	
 	
@@ -175,7 +171,7 @@ Example Result:
 		}
 	}
 	
-	function getMissingTrackObjectForDiscObject(discObj) { // TODO fix bugs in here
+	function getMissingTrackObjectForDiscObject(discObj) {
 		var obj = {
 			discNumber: discObj.discNumber,
 			idealTrackCount: discObj.trackCount,
