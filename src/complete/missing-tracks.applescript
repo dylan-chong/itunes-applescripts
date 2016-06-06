@@ -51,6 +51,7 @@ Example Result:
 
 	var FIRST_DISC_NUMBER = 1;
 	var LAST_DISC_NUMBER = 210;
+	// TODO add separate ignore list for complete discs and incomplete discs
 	
 	// *************************
 	
