@@ -218,42 +218,20 @@ Example Playlist Disc Order (After running script):
 		}
 	}
 	
-	// NOTE: This doesn't shuffle them evenly for now
 	function getShuffledDiscs(albumGroups) {
-		// Array to track which disc we have added
-		var currentAlbumGroupIndexes = [];
-		for (var a = 0; a < albumGroups.length; a++) {
-			currentAlbumGroupIndexes.push(0);
-		}
-		
 		var shuffled = []; // disc groups
 		
-		// Add one disc, to shuffled, from each album group
-		while (true) {
-			var albumsEmpty = 0;
-			for (var a = 0; a < albumGroups.length; a++) {
-				var indexInAlbum = currentAlbumGroupIndexes[a];
-				
-				if (indexInAlbum == -1) {
-					albumsEmpty++;
-					continue;
-				}
+		var sortedAlbumGroups = getSortedAlbumGroups(albumGroups);
 
-				var discGroup = albumGroups[a][indexInAlbum];
-				shuffled.push(discGroup);
+		// TODO
 
-				currentAlbumGroupIndexes[a]++;
-				
-				if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
-					currentAlbumGroupIndexes[a] = -1;
-					albumsEmpty++;
-				}
-			}
-			
-			if (albumsEmpty == albumGroups.length) break;
-		}
-		
 		return shuffled;
+		
+		// Most dics in the first group,
+		// and the least in the last
+		function getSortedAlbumGroups(albumGroups) {
+			// TODO
+		}
 	}
 	
 	// **************** Debug ****************
