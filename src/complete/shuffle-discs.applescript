@@ -219,6 +219,8 @@ Example Playlist Disc Order (After running script):
 	}
 	
 	function getShuffledDiscs(albumGroups) {
+		// TODO implement the shuffle algorithm in the notes
+		
 		return doSimpleShuffle(albumGroups);
 		
 		function doSimpleShuffle(albumGroups) {
