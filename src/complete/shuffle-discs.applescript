@@ -219,9 +219,20 @@ Example Playlist Disc Order (After running script):
 	}
 	
 	function getShuffledDiscs(albumGroups) {
-		// TODO implement the shuffle algorithm in the notes
+		var sortedAlbumGroups = sortAlbumGroupsbySize(albumGroups);
+		sortedAlbumGroups = groupSmallerAlbumGroups(soredAlbumGroups);
 		
-		return doSimpleShuffle(albumGroups);
+		return doSimpleShuffle(sortedAlbumGroups);
+		
+		function sortAlbumGroupsbySize(albumGroups) {
+			// TODO sort by size in new array
+			return albumGroups;
+		}
+		
+		function groupSmallerAlbumGroups(albumGroups) {
+			// TODO group smaller ones, then simple shuffle the new groups
+			return albumGroups;
+		}
 		
 		function doSimpleShuffle(albumGroups) {
 			var currentAlbumGroupIndexes = [];
