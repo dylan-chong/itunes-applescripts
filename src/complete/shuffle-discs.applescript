@@ -218,42 +218,44 @@ Example Playlist Disc Order (After running script):
 		}
 	}
 	
-	// NOTE: This doesn't shuffle them evenly for now
 	function getShuffledDiscs(albumGroups) {
-		// Array to track which disc we have added
-		var currentAlbumGroupIndexes = [];
-		for (var a = 0; a < albumGroups.length; a++) {
-			currentAlbumGroupIndexes.push(0);
-		}
+		return doSimpleShuffle(albumGroups);
 		
-		var shuffled = []; // disc groups
-		
-		// Add one disc, to shuffled, from each album group
-		while (true) {
-			var albumsEmpty = 0;
+		function doSimpleShuffle(albumGroups) {
+			var currentAlbumGroupIndexes = [];
 			for (var a = 0; a < albumGroups.length; a++) {
-				var indexInAlbum = currentAlbumGroupIndexes[a];
-				
-				if (indexInAlbum == -1) {
-					albumsEmpty++;
-					continue;
-				}
-
-				var discGroup = albumGroups[a][indexInAlbum];
-				shuffled.push(discGroup);
-
-				currentAlbumGroupIndexes[a]++;
-				
-				if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
-					currentAlbumGroupIndexes[a] = -1;
-					albumsEmpty++;
-				}
+				currentAlbumGroupIndexes.push(0);
 			}
 			
-			if (albumsEmpty == albumGroups.length) break;
-		}
+			var shuffled = []; // disc groups
+			
+			// Add one disc, to shuffled, from each album group
+			while (true) {
+				var albumsEmpty = 0;
+				for (var a = 0; a < albumGroups.length; a++) {
+					var indexInAlbum = currentAlbumGroupIndexes[a];
+				
+					if (indexInAlbum == -1) {
+						albumsEmpty++;
+						continue;
+					}
+	
+					var discGroup = albumGroups[a][indexInAlbum];
+					shuffled.push(discGroup);
+	
+					currentAlbumGroupIndexes[a]++;
+					
+					if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
+						currentAlbumGroupIndexes[a] = -1;
+						albumsEmpty++;
+					}
+				}
+				
+				if (albumsEmpty == albumGroups.length) break;
+			}
 		
-		return shuffled;
+			return shuffled;
+		}
 	}
 	
 	// **************** Debug ****************
