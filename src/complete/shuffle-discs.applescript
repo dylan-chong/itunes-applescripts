@@ -219,9 +219,9 @@ Example Playlist Disc Order (After running script):
 	}
 	
 	function getShuffledDiscs(albumGroups) {
-		return recursiveShuffle(sortedAlbumGroups);
+		return recursiveShuffle(albumGroups);
 		
-		function recursiveShuffle(albumGroups) {
+		function recursiveShuffle(albumGroups) {	
 			if (albumGroups.length < 2) return albumGroups;
 			
 			if (albumGroups.length == 2) {
@@ -229,7 +229,7 @@ Example Playlist Disc Order (After running script):
 				return simpleShuffle(albumGroups);
 			}
 			
-			var sortedAlbumGroups = sortAlbumGroupsByLength(albumGroups);
+			var sortedAlbumGroups = sortAlbumGroupsbyLength(albumGroups);
 			var subAlbumGroups = albumGroups.slice(1);
 			var shuffledSubs = recursiveShuffle(subAlbumGroups);
 			// shuffledSubs will be a a single albumGroup
