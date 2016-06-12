@@ -220,9 +220,9 @@ Example Playlist Disc Order (After running script):
 	
 	function getShuffledDiscs(albumGroups) {
 		var sortedAlbumGroups = sortAlbumGroupsbySize(albumGroups);
-		sortedAlbumGroups = groupSmallerAlbumGroups(soredAlbumGroups);
+		sortedAlbumGroups = groupSmallerAlbumGroups(sortedAlbumGroups);
 		
-		return doSimpleShuffle(sortedAlbumGroups);
+		return simpleShuffle(sortedAlbumGroups);
 		
 		function sortAlbumGroupsbySize(albumGroups) {
 			// TODO sort by size in new array
@@ -234,7 +234,7 @@ Example Playlist Disc Order (After running script):
 			return albumGroups;
 		}
 		
-		function doSimpleShuffle(albumGroups) {
+		function simpleShuffle(albumGroups) {
 			var currentAlbumGroupIndexes = [];
 			for (var a = 0; a < albumGroups.length; a++) {
 				currentAlbumGroupIndexes.push(0);
