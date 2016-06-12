@@ -222,6 +222,12 @@ Example Playlist Disc Order (After running script):
 		return recursiveShuffle(albumGroups);
 		
 		function recursiveShuffle(albumGroups) {	
+			var logStr = '\n[';
+			for (var a = 0; a < albumGroups.length; a++) {
+				logStr += albumGroups[a].length + ' ,';
+			}
+			console.log(logStr + ']');
+				
 			if (albumGroups.length < 2) return albumGroups;
 			
 			if (albumGroups.length == 2) {
