@@ -222,14 +222,23 @@ Example Playlist Disc Order (After running script):
 		return recursiveShuffle(sortedAlbumGroups);
 		
 		function recursiveShuffle(albumGroups) {
+			if (albumGroups.length < 2) return albumGroups;
+			
 			if (albumGroups.length == 2) {
 				// Essentially combines two groups into one
 				return simpleShuffle(albumGroups);
 			}
-		
-			// TODO implement recursive shuffle
-		
-			function sortAlbumGroupsbySize(albumGroups) {
+			
+			var sortedAlbumGroups = sortAlbumGroupsByLength(albumGroups);
+			var subAlbumGroups = albumGroups.slice(1);
+			var shuffledSubs = recursiveShuffle(subAlbumGroups);
+			// shuffledSubs will be a a single albumGroup
+				
+			var twoAlbumGroups = [sortedAlbumGroups[0], shuffledSubs];
+			return simpleShuffle(twoAlbumGroups);
+			
+			// From largest to smallest
+			function sortAlbumGroupsbyLength(albumGroups) {
 				// TODO sort by size in new array
 				return albumGroups;
 			}
