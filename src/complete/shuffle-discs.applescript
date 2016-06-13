@@ -219,48 +219,43 @@ Example Playlist Disc Order (After running script):
 	}
 	
 	function getShuffledDiscs(albumGroups) {
-		var sorted = sortAlbumGroupsByLength(albumGroups);
-		logAlbumGroupLengthsAndNames(sorted);
-		return recursiveShuffle(sorted);
+		return pairShuffle(sorted);
 		
-		// From largest to smallest
-		function sortAlbumGroupsByLength(albumGroups) {
-			var copiedGroups = albumGroups.slice();
-			var sortedGroups = [];
+		function pairShuffle(albumGroups) {
+			var shuffled;
 			
-			while (copiedGroups.length > 0) {
-				var largestGroupIndex;
-				var largestGroupSize = -1;
-				for (var a = 0; a < copiedGroups.length; a++) {
-					if (copiedGroups[a].length > largestGroupSize) {
-						largestGroupIndex = a;
-						largestGroupSize = copiedGroups[a].length;
+			while (!shuffled && shuffled.length > 1) {
+				var sorted = sortAlbumGroupsByLength(shuffled);
+				logAlbumGroupLengthsAndNames(sorted);
+				
+				// TODO shuffle the two smallest and replace them
+				// in sorted with the result
+			}
+			
+			return shuffled[0];
+			
+			// From largest to smallest
+			function sortAlbumGroupsByLength(albumGroups) {
+				var copiedGroups = albumGroups.slice();
+				var sortedGroups = [];
+				
+				while (copiedGroups.length > 0) {
+					var largestGroupIndex;
+					var largestGroupSize = -1;
+					for (var a = 0; a < copiedGroups.length; a++) {
+						if (copiedGroups[a].length > largestGroupSize) {
+							largestGroupIndex = a;
+							largestGroupSize = copiedGroups[a].length;
+						}
 					}
+					
+					// removedItems always has length 1
+					var removedItems = copiedGroups.splice(largestGroupIndex, 1);
+					sortedGroups.push(removedItems[0]);
 				}
 				
-				// removedItems always has length 1
-				var removedItems = copiedGroups.splice(largestGroupIndex, 1);
-				sortedGroups.push(removedItems[0]);
+				return sortedGroups;
 			}
-			
-			return sortedGroups;
-		}
-		
-		function recursiveShuffle(albumGroups) {
-			if (albumGroups.length < 2) return albumGroups;
-			
-			if (albumGroups.length == 2) {
-				// Essentially combines two groups into one
-				return simpleShuffle(albumGroups);
-			}
-			
-			var subAlbumGroups = albumGroups.slice(1);
-			var shuffledSubs = recursiveShuffle(subAlbumGroups);
-			// shuffledSubs will be a a single albumGroup
-
-			var twoAlbumGroups = [albumGroups[0], shuffledSubs];
-			logAlbumGroupLengthsAndNames(twoAlbumGroups);
-			return simpleShuffle(twoAlbumGroups);
 		}
 		
 		function simpleShuffle(albumGroups) {
