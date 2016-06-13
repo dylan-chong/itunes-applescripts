@@ -220,7 +220,7 @@ Example Playlist Disc Order (After running script):
 	
 	function getShuffledDiscs(albumGroups) {
 		var sorted = sortAlbumGroupsByLength(albumGroups);
-		logAlbumGroupLengths(sorted);
+		logAlbumGroupLengthsAndNames(sorted);
 		return recursiveShuffle(sorted);
 		
 		// From largest to smallest
@@ -257,8 +257,9 @@ Example Playlist Disc Order (After running script):
 			var subAlbumGroups = albumGroups.slice(1);
 			var shuffledSubs = recursiveShuffle(subAlbumGroups);
 			// shuffledSubs will be a a single albumGroup
-				
+
 			var twoAlbumGroups = [albumGroups[0], shuffledSubs];
+			logAlbumGroupLengthsAndNames(twoAlbumGroups);
 			return simpleShuffle(twoAlbumGroups);
 		}
 		
@@ -298,12 +299,12 @@ Example Playlist Disc Order (After running script):
 			return shuffled;
 		}
 		
-		function logAlbumGroupLengths(albumGroups) {
-			var logStr = '\n[';
+		function logAlbumGroupLengthsAndNames(albumGroups) {
+			var logStr = '\n[\n';
 			for (var a = 0; a < albumGroups.length; a++) {
-				logStr += albumGroups[a].length + ' ,';
+				logStr += '\t' + albumGroups[a].length + ': ' + albumGroups[a][0][0].album() + ' ,\n';
 			}
-			console.log(logStr + ']');
+			console.log(logStr + '\n]');
 		}
 	}
 	
