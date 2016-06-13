@@ -237,7 +237,10 @@ Example Playlist Disc Order (After running script):
 						largestGroupSize = copiedGroups[a].length;
 					}
 				}
-				sortedGroups.push(copiedGroups.splice(largestGroupIndex, 1));
+				
+				// removedItems always has length 1
+				var removedItems = copiedGroups.splice(largestGroupIndex, 1);
+				sortedGroups.push(removedItems[0]);
 			}
 			
 			return sortedGroups;
