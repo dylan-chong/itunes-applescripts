@@ -219,7 +219,7 @@ Example Playlist Disc Order (After running script):
 	}
 	
 	function getShuffledDiscs(albumGroups) {
-		return pairShuffle(sorted);
+		return pairShuffle(albumGroups);
 		
 		function pairShuffle(albumGroups) {
 			var shuffled;
