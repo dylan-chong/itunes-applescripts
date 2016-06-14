@@ -222,14 +222,15 @@ Example Playlist Disc Order (After running script):
 		return pairShuffle(albumGroups);
 		
 		function pairShuffle(albumGroups) {
-			var shuffled;
+			var shuffled = albumGroups;
 			
-			while (!shuffled && shuffled.length > 1) {
-				var sorted = sortAlbumGroupsByLength(shuffled);
-				logAlbumGroupLengthsAndNames(sorted);
+			while (shuffled.length > 1) {
+				shuffled = sortAlbumGroupsByLength(shuffled);
+				logAlbumGroupLengthsAndNames(shuffled);
 				
-				// TODO shuffle the two smallest and replace them
-				// in sorted with the result
+				var smallest = shuffled.splice(shuffled.length - 2, 2);
+				var merged = simpleShuffle(smallest);
+				shuffled.push(merged);
 			}
 			
 			return shuffled[0];
