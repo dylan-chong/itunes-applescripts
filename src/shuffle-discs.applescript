@@ -218,42 +218,91 @@ Example Playlist Disc Order (After running script):
 		}
 	}
 	
-	// NOTE: This doesn't shuffle them evenly for now
 	function getShuffledDiscs(albumGroups) {
-		// Array to track which disc we have added
-		var currentAlbumGroupIndexes = [];
-		for (var a = 0; a < albumGroups.length; a++) {
-			currentAlbumGroupIndexes.push(0);
-		}
+		return pairShuffle(albumGroups);
 		
-		var shuffled = []; // disc groups
-		
-		// Add one disc, to shuffled, from each album group
-		while (true) {
-			var albumsEmpty = 0;
-			for (var a = 0; a < albumGroups.length; a++) {
-				var indexInAlbum = currentAlbumGroupIndexes[a];
+		function pairShuffle(albumGroups) {
+			// TODO first disc stays at top
+			var shuffled = albumGroups;
+			
+			while (shuffled.length > 1) {
+				shuffled = sortAlbumGroupsByLength(shuffled);
+				logAlbumGroupLengthsAndNames(shuffled);
 				
-				if (indexInAlbum == -1) {
-					albumsEmpty++;
-					continue;
-				}
-
-				var discGroup = albumGroups[a][indexInAlbum];
-				shuffled.push(discGroup);
-
-				currentAlbumGroupIndexes[a]++;
-				
-				if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
-					currentAlbumGroupIndexes[a] = -1;
-					albumsEmpty++;
-				}
+				var smallest = shuffled.splice(shuffled.length - 2, 2);
+				var merged = simpleShuffle(smallest);
+				shuffled.push(merged);
 			}
 			
-			if (albumsEmpty == albumGroups.length) break;
+			return shuffled[0];
+			
+			// From largest to smallest
+			function sortAlbumGroupsByLength(albumGroups) {
+				var copiedGroups = albumGroups.slice();
+				var sortedGroups = [];
+				
+				while (copiedGroups.length > 0) {
+					var largestGroupIndex;
+					var largestGroupSize = -1;
+					for (var a = 0; a < copiedGroups.length; a++) {
+						if (copiedGroups[a].length > largestGroupSize) {
+							largestGroupIndex = a;
+							largestGroupSize = copiedGroups[a].length;
+						}
+					}
+					
+					// removedItems always has length 1
+					var removedItems = copiedGroups.splice(largestGroupIndex, 1);
+					sortedGroups.push(removedItems[0]);
+				}
+				
+				return sortedGroups;
+			}
 		}
 		
-		return shuffled;
+		function simpleShuffle(albumGroups) {
+			var currentAlbumGroupIndexes = [];
+			for (var a = 0; a < albumGroups.length; a++) {
+				currentAlbumGroupIndexes.push(0);
+			}
+			
+			var shuffled = []; // disc groups
+			
+			// Add one disc, to shuffled, from each album group
+			while (true) {
+				var albumsEmpty = 0;
+				for (var a = 0; a < albumGroups.length; a++) {
+					var indexInAlbum = currentAlbumGroupIndexes[a];
+				
+					if (indexInAlbum == -1) {
+						albumsEmpty++;
+						continue;
+					}
+	
+					var discGroup = albumGroups[a][indexInAlbum];
+					shuffled.push(discGroup);
+	
+					currentAlbumGroupIndexes[a]++;
+					
+					if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
+						currentAlbumGroupIndexes[a] = -1;
+						albumsEmpty++;
+					}
+				}
+				
+				if (albumsEmpty == albumGroups.length) break;
+			}
+		
+			return shuffled;
+		}
+		
+		function logAlbumGroupLengthsAndNames(albumGroups) {
+			var logStr = '\n[\n';
+			for (var a = 0; a < albumGroups.length; a++) {
+				logStr += '\t' + albumGroups[a].length + ': ' + albumGroups[a][0][0].album() + ' ,\n';
+			}
+			console.log(logStr + '\n]');
+		}
 	}
 	
 	// **************** Debug ****************
