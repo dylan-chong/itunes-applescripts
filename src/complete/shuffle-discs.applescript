@@ -222,6 +222,7 @@ Example Playlist Disc Order (After running script):
 		return pairShuffle(albumGroups);
 		
 		function pairShuffle(albumGroups) {
+			// TODO first disc stays at top
 			var shuffled = albumGroups;
 			
 			while (shuffled.length > 1) {
