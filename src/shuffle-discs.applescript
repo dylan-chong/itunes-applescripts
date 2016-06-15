@@ -4,14 +4,17 @@ Remember to set the language from AppleScript to Javascript!
 
 Description:
 	Shuffles the discs in the playlist called "Up Next" but keeps the tracks
-	in each disk grouped together. The discs in each album will be 
+	in each disk grouped together. The discs in each album will be roughly 
 	distributed evenly over time.
 	
 	Note: The tracks in each disc should be grouped together and in order
 	in order for the script to work properly.
 	
 	Note 2: This script doesn't work on smart playlists due to how iTunes
-	deals with smart playlists
+	deals with smart playlists.
+	
+	Note 3: The script will run much faster if iTunes is not currently
+	viewing the playlist that is to be modified.
 	
 
 Example Playlist Disc Order (Before running script):
