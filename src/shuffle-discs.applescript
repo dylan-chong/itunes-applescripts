@@ -338,4 +338,9 @@ Example Playlist Disc Order (After running script):
 		}
 	}
 	
+	function logTime(msg) {
+		var date = new Date();
+		console.log(date.toString() + ' : ' + msg);
+	}
+	
 })();
