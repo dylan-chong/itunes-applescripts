@@ -230,7 +230,7 @@ Example Playlist Disc Order (After running script):
 			
 			while (shuffled.length > 1) {
 				shuffled = sortAlbumGroupsByLength(shuffled);
-				logAlbumGroupLengthsAndNames(shuffled);
+				// logAlbumGroupLengthsAndNames(shuffled);
 				
 				var smallest = shuffled.splice(shuffled.length - 2, 2);
 				var merged = simpleShuffle(smallest);
