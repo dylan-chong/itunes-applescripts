@@ -1,4 +1,4 @@
-/* 
+/*
 
 Remember to set the language from AppleScript to Javascript!
 
@@ -55,7 +55,7 @@ Example Result:
     Disc Number: 5, Name: Concerto Grosso Op.3 No.5 in D minor - V. Allegro
     Disc Number: 6, Name: Concerto Grosso Op.3 No.6 in D major - I. Vivace
     Disc Number: 6, Name: Concerto Grosso Op.3 No.6 in D major - II. Allegro
-    
+
 */
 
 (function() {
@@ -64,41 +64,41 @@ Example Result:
 
     var INITIAL_DISK_NUMBER = 1;
     var DELIMITER = "-";
-    
+
     // *************************
-    
+
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
-    
+
     var selection = window.selection();
-    
+
     var discNumber = INITIAL_DISK_NUMBER;
     var previousTrackName = null;
-    
-    
+
+
     for (var a = 0; a < selection.length; a++) {
         var currentTrack = selection[a];
         var currentTrackName = currentTrack.name();
-        
-        if (!shouldKeepSameDiscNumber(currentTrackName, previousTrackName)) 
+
+        if (!shouldKeepSameDiscNumber(currentTrackName, previousTrackName))
             discNumber++;
-        
+
         previousTrackName = currentTrackName;
-        
+
         // Code that applies the changes:
         // currentTrack.discNumber.set(discNumber);
-        
+
         this.console.log(currentTrackName + ": " + discNumber + "\n");
     }
     return "Done";
 
     function shouldKeepSameDiscNumber(trackName, previousTrackName) {
         if (!previousTrackName) return true;
-        
+
         var firstPrefix = trackName.split(DELIMITER)[0];
         var secondPrefix = previousTrackName.split(DELIMITER)[0];
-        
+
         if (firstPrefix == secondPrefix) return true;
         return false;
     }
