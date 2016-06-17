@@ -1,0 +1,8 @@
+{
+    "name": "iTunes AppleScripts",
+    "version": "0.1",
+    "devDependencies": {
+        "run-applescript": "^3.0.0",
+        "gulp": "^3.9.1"
+    }
+}
