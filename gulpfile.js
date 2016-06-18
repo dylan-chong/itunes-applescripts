@@ -4,8 +4,21 @@ const exec = require('child_process').exec;
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
-function log(tag, data) {
-    console.log('\n\n****** ' + tag + ' ******\n\n');
+function log(tag, priority, data) {
+    switch (priority) {
+        case 1:
+            console.log('\n\n****** ' + tag + ' ******\n\n');
+            break;
+        case 2:
+            console.log('\n\n** ' + tag + ' **\n\n');
+            break;
+        case 3:
+            console.log('** ' + tag + ' **');
+            break;
+        default:
+            console.error('Invalid priority: ' + priority);
+            break;
+    }
     if (data) console.log(data);
 }
 
@@ -30,20 +43,19 @@ gulp.task('default', function () {
 });
 
 gulp.task('watch', function () {
-    log('Executing script ' + SCRIPT_FILE);
+    log('Executing script ' + SCRIPT_FILE, 1);
 
     executeJavaScriptOsaFile(
         SCRIPT_FILE,
         (error, stdout, stderr) => {
             if (error && error.code) {
-                console.log('Error executing script (Code '
-                    + error.code + ')');
+                log('Error executing script (Code ' + error.code + ')', 3);
             }
             if (stderr) {
-                console.log('\nConsole:\n' + stderr);
+                log('Console:', 2, '\t' + stderr.replace(/\n/g, '\n\t'));
             }
             if (stdout) {
-                console.log('\nResult:\n' + stdout);
+                log('Result', 2, stdout);
             }
             /*
             for (var k in error) {
@@ -53,7 +65,7 @@ gulp.task('watch', function () {
             log('stdout ${stdout}', stdout);
             log('stderr ${stderr}', stderr);
             */
-            log('Finished executing script');
+            log('Finished executing script', 1);
         }
     );
 });
