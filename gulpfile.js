@@ -5,7 +5,8 @@ const exec = require('child_process').exec;
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
 function log(tag, data) {
-    console.log('\n\n ****** ' + tag + ' ****** \n\n', data);
+    console.log('\n\n****** ' + tag + ' ******\n\n');
+    if (data) console.log(data);
 }
 
 function executeJavaScriptOsaFile(filePath, callback) {
@@ -29,14 +30,30 @@ gulp.task('default', function () {
 });
 
 gulp.task('watch', function () {
-    log('watch called');
+    log('Executing script ' + SCRIPT_FILE);
 
     executeJavaScriptOsaFile(
         SCRIPT_FILE,
         (error, stdout, stderr) => {
+            if (error && error.code) {
+                console.log('Error executing script (Code '
+                    + error.code + ')');
+            }
+            if (stderr) {
+                console.log('\nConsole:\n' + stderr);
+            }
+            if (stdout) {
+                console.log('\nResult:\n' + stdout);
+            }
+            /*
+            for (var k in error) {
+            log(k, error[k]);
+            }
             log('Error', error);
-            log('stdout', stdout);
-            log('stderr', stderr);
+            log('stdout ${stdout}', stdout);
+            log('stderr ${stderr}', stderr);
+            */
+            log('Finished executing script');
         }
     );
 });
