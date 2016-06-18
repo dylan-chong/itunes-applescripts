@@ -21,8 +21,7 @@ function executeJavaScriptOsaFile(filePath, callback) {
 }
 
 function getWatchGlobs() {
-    // TODO 
-    return [];
+    return ['./src/*.js.applescript'];
 }
 
 gulp.task('default', function () {
