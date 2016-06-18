@@ -15,7 +15,6 @@ function executeJavaScriptOsaFile(filePath, callback) {
     function getCommand(scriptAsString) {
         var escapedScript = scriptAsString
             .replace(/"/g, '\\"')
-            .replace(/'/g, '\\\'')
             .replace(/\n/g, '" -e "');
         return 'osascript -l JavaScript -e "' + escapedScript + '"';
     }
