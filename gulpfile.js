@@ -8,14 +8,26 @@ function log(tag, data) {
     console.log('\n\n ****** ' + tag + ' ****** \n\n', data);
 }
 
-gulp.task('default', function () {
-    var scriptContents = fs.readFileSync(SCRIPT_FILE, 'utf8');
-    // log('Script Contents', scriptContents);
+function executeJavaScriptOsaFile(filePath, callback) {
+    var scriptContents = fs.readFileSync(filePath, 'utf8');
+    exec(getCommand(scriptContents), callback);
 
-    var TEST_BASH_COMMAND = 'osascript -l JavaScript -e "\'hi\'"';
-    exec(TEST_BASH_COMMAND, (error, stdout, stderr) => {
-        log('Error', error);
-        log('stdout', stdout);
-        log('stderr', stderr);
-    });
+    function getCommand(scriptAsString) {
+        var scriptLines = scriptAsString
+            .replace(/"/g, '\\"')
+            .replace(/'/g, '\\\'')
+            .replace(/\n/g, '" -e "');
+        return 'osascript -l JavaScript -e "' + scriptLines + '"';
+    }
+}
+
+gulp.task('default', function () {
+    executeJavaScriptOsaFile(
+        SCRIPT_FILE,
+        (error, stdout, stderr) => {
+            log('Error', error);
+            log('stdout', stdout);
+            log('stderr', stderr);
+        }
+    );
 });
