@@ -13,11 +13,11 @@ function executeJavaScriptOsaFile(filePath, callback) {
     exec(getCommand(scriptContents), callback);
 
     function getCommand(scriptAsString) {
-        var scriptLines = scriptAsString
+        var escapedScript = scriptAsString
             .replace(/"/g, '\\"')
             .replace(/'/g, '\\\'')
             .replace(/\n/g, '" -e "');
-        return 'osascript -l JavaScript -e "' + scriptLines + '"';
+        return 'osascript -l JavaScript -e "' + escapedScript + '"';
     }
 }
 
