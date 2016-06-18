@@ -20,13 +20,20 @@ function executeJavaScriptOsaFile(filePath, callback) {
     }
 }
 
+function getWatchGlobs() {
+    // TODO 
+    return [];
+}
+
 gulp.task('default', function () {
-    executeJavaScriptOsaFile(
-        SCRIPT_FILE,
-        (error, stdout, stderr) => {
-            log('Error', error);
-            log('stdout', stdout);
-            log('stderr', stderr);
-        }
-    );
+    gulp.watch(getWatchGlobs(), ['watch']);
+});
+
+gulp.task('watch', function () {
+    log('watch called');
+});
+
+gulp.task('execute-current', function () {
+    // TODO
+    log('execute-current called');
 });
