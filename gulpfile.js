@@ -30,9 +30,13 @@ gulp.task('default', function () {
 
 gulp.task('watch', function () {
     log('watch called');
-});
 
-gulp.task('execute-current', function () {
-    // TODO
-    log('execute-current called');
+    executeJavaScriptOsaFile(
+        SCRIPT_FILE,
+        (error, stdout, stderr) => {
+            log('Error', error);
+            log('stdout', stdout);
+            log('stderr', stderr);
+        }
+    );
 });
