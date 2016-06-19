@@ -4,12 +4,24 @@ const exec = require('child_process').exec;
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
+function executeJavaScriptOsaFile(filePath, callback) {
+    var scriptContents = fs.readFileSync(filePath, 'utf8');
+    exec(getCommand(scriptContents), callback);
+
+    function getCommand(scriptAsString) {
+        var escapedScript = scriptAsString
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, '" -e "');
+        return 'osascript -l JavaScript -e "' + escapedScript + '"';
+    }
+}
+
 function log(tag, priority, data) {
     switch (priority) {
         case 0:
             var lineCount = 3;
             var markCount = 6;
-            var marks = Array(markCount + 1).join('*');
+            var marks = Array(markCount + 1).join('*'); // repeats character
             var line = marks + Array(tag.length + 1 + 2).join('-') + marks;
             // + 1 because array.join creates one less copy of the string
             // than the count, and + 2 because of the spaces around the tag
@@ -33,50 +45,33 @@ function log(tag, priority, data) {
     if (data) console.log(data);
 }
 
-function executeJavaScriptOsaFile(filePath, callback) {
-    var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback);
-
-    function getCommand(scriptAsString) {
-        var escapedScript = scriptAsString
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '" -e "');
-        return 'osascript -l JavaScript -e "' + escapedScript + '"';
-    }
-}
-
-function getWatchGlobs() {
-    return ['./src/*.js.applescript'];
-}
-
 gulp.task('default', function () {
-    gulp.watch(getWatchGlobs(), ['watch']);
+    gulp.watch(['./src/*.js.applescript'], ['watch']);
 });
 
 gulp.task('watch', function () {
     log('Executing script ' + SCRIPT_FILE, 0);
 
-    executeJavaScriptOsaFile(
-        SCRIPT_FILE,
-        (error, stdout, stderr) => {
-            if (error && error.code) {
-                log('Error executing script (Code ' + error.code + ')', 3);
-            }
-            if (stderr) {
-                log('Console:', 2, '\t' + stderr.replace(/\n/g, '\n\t'));
-            }
-            if (stdout) {
-                log('Result', 2, stdout);
-            }
-            /*
-            for (var k in error) {
-            log(k, error[k]);
-            }
-            log('Error', error);
-            log('stdout ${stdout}', stdout);
-            log('stderr ${stderr}', stderr);
-            */
-            log('Finished executing script', 1);
+    executeJavaScriptOsaFile(SCRIPT_FILE, callback);
+
+    function callback (error, stdout, stderr) {
+        if (error && error.code) {
+            log('Error executing script (Code ' + error.code + ')', 3);
         }
-    );
+        if (stderr) {
+            log('Console:', 2, '\t' + stderr.replace(/\n/g, '\n\t'));
+        }
+        if (stdout) {
+            log('Result', 2, stdout);
+        }
+        /*
+        for (var k in error) {
+        log(k, error[k]);
+        }
+        log('Error', error);
+        log('stdout ${stdout}', stdout);
+        log('stderr ${stderr}', stderr);
+        */
+        log('Finished executing script', 1);
+    }
 });
