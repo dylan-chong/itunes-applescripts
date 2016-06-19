@@ -11,8 +11,9 @@ function log(tag, priority, data) {
             var LINE_COUNT = 3;
             var MARK_COUNT = 6;
             var marks = Array(MARK_COUNT + 1).join('*');
-            var obviousLine = marks + Array(tag.length + 1 + 2).join('-')
-                + marks;
+            var obviousLine = marks +
+                Array(tag.length + 1 + 2).join('-') +
+                marks;
             // + 1 because array.join creates one less copy of the string
             // than the count, and + 2 because of the spaces around the tag
             for (var a = 0; a < LINE_COUNT; a++) {
