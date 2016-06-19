@@ -104,17 +104,12 @@ Example Playlist Disc Order (After running script):
     if (playlist.tracks().length == 0)
         return 'No tracks in this playlist';
 
-    logTime('Loaded playlist');
     var groups = getGroupsOfTracks(playlist.tracks());
-    logTime('Loaded groups from playlist');
     var albumGroups = getSortedGroups(groups);
-    logTime('Sorted groups');
     var shuffledDiscs = getShuffledDiscs(albumGroups);
-    logTime('Shuffled discs');
-    //logAllDiscGroups(shuffledDiscs); // TODO LATER uncomment
+    logAllDiscGroups(shuffledDiscs);
     // Code that makes changes:
     // reorderPlaylist(shuffledDiscs, playlist);
-    logTime('Applied changes');
 
     return 'Done';
 
