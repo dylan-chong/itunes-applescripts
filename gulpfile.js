@@ -55,17 +55,13 @@ gulp.task('execute-js-osa-file', executeJsOsaFile);
 
 function executeJsOsaFile(filePath, callback) {
     var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback || defaultCallback);
+    exec(getCommand(scriptContents), callback || logExecuteResults);
 
     function getCommand(scriptAsString) {
         var escapedScript = scriptAsString
             .replace(/"/g, '\\"')
             .replace(/\n/g, '" -e "');
         return 'osascript -l JavaScript -e "' + escapedScript + '"';
-    }
-
-    function defaultCallback() {
-        logExecuteResults();
     }
 }
 
