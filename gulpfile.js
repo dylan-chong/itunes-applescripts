@@ -5,18 +5,6 @@ const fancyLog = require('fancy-log');
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
-function executeJavaScriptOsaFile(filePath, callback) {
-    var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback);
-
-    function getCommand(scriptAsString) {
-        var escapedScript = scriptAsString
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '" -e "');
-        return 'osascript -l JavaScript -e "' + escapedScript + '"';
-    }
-}
-
 function log(tag, priority, data) {
     switch (priority) {
         case 0:
@@ -59,7 +47,7 @@ gulp.task('default', function () {
 gulp.task('watch', function () {
     log('Executing script ' + SCRIPT_FILE, 0);
 
-    executeJavaScriptOsaFile(SCRIPT_FILE, callback);
+    executeJsOsaFile(SCRIPT_FILE, callback);
 
     function callback (error, stdout, stderr) {
         if (error && error.code) {
@@ -82,3 +70,16 @@ gulp.task('watch', function () {
         log('Finished executing script', 1);
     }
 });
+
+gulp.task('execute-js-osa-file', executeJsOsaFile);
+function executeJsOsaFile(filePath, callback) {
+    var scriptContents = fs.readFileSync(filePath, 'utf8');
+    exec(getCommand(scriptContents), callback);
+
+    function getCommand(scriptAsString) {
+        var escapedScript = scriptAsString
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, '" -e "');
+        return 'osascript -l JavaScript -e "' + escapedScript + '"';
+    }
+}
