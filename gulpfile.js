@@ -1,9 +1,18 @@
 const gulp = require('gulp');
 const fs = require('fs');
+
+const commandLineArgs = require('command-line-args');
+
 const exec = require('child_process').exec;
 const fancyLog = require('fancy-log');
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
+
+const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
+const optionDefinitions = [
+    { name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME, alias: 'e', type: String }
+];
+const options = commandLineArgs(optionDefinitions);
 
 function log(tag, priority, data) {
     switch (priority) {
@@ -42,6 +51,11 @@ function log(tag, priority, data) {
 }
 
 gulp.task('default', function () {
+    var commandLineArgFile = options[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
+    if (commandLineArgFile) {
+        executeJsOsaFile(commandLineArgFile);
+        return;
+    }
     gulp.watch(['./src/*.js.applescript'], ['watch']);
 });
 

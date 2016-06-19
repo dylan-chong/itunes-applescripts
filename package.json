@@ -4,6 +4,7 @@
     "devDependencies": {
         "gulp": "^3.9.1",
         "gulp-watch": "^4.3.6",
-        "fancy-log": "^1.2.0"
+        "fancy-log": "^1.2.0",
+        "command-line-args": "^3.0.0"
     }
 }
