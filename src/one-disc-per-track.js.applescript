@@ -57,7 +57,7 @@ Example Result:
         // Code that applies the changes:
         // track.discNumber.set(disc);
 
-        this.console.log("Disc: " + disc + ", Name: " + track.name());
+        this.console.log('Disc: ' + disc + ', Name: ' + track.name());
     }
-    return "Done";
+    return 'Done';
 })();

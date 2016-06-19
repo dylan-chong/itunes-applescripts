@@ -83,10 +83,10 @@ Example Result:
                 track.name(), this.console);
         }
 
-        this.console.log("\n")
+        this.console.log('\n')
     }
 
-    return "Done";
+    return 'Done';
 
     // TODO externalise the below method?
     function getGroupsOfTracks(originalTracksArray) {
@@ -170,9 +170,9 @@ Example Result:
     }
 
     function logTrackDetails(playCount, playedDate, name, console) {
-        var log = "Play Count: " + playCount;
-        log += ", Last Played: " + playedDate;
-        log += ",\n\t\t\tName: " + name + "\n";
+        var log = 'Play Count: ' + playCount;
+        log += ', Last Played: ' + playedDate;
+        log += ',\n\t\t\tName: ' + name + '\n';
         console.log(log);
     }
 

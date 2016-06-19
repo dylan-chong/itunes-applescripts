@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const fs = require('fs');
 const exec = require('child_process').exec;
+const fancyLog = require('fancy-log');
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
@@ -19,30 +20,36 @@ function executeJavaScriptOsaFile(filePath, callback) {
 function log(tag, priority, data) {
     switch (priority) {
         case 0:
-            var lineCount = 3;
-            var markCount = 6;
-            var marks = Array(markCount + 1).join('*'); // repeats character
-            var line = marks + Array(tag.length + 1 + 2).join('-') + marks;
+            var LINE_COUNT = 3;
+            var MARK_COUNT = 6;
+            var marks = Array(MARK_COUNT + 1).join('*');
+            var obviousLine = marks + Array(tag.length + 1 + 2).join('-')
+                + marks;
             // + 1 because array.join creates one less copy of the string
             // than the count, and + 2 because of the spaces around the tag
-            console.log(Array(lineCount + 1).join('\n' + line));
-            console.log(marks + ' ' + tag + ' ' + marks);
-            console.log(Array(lineCount + 1).join(line + '\n'));
+            for (var a = 0; a < LINE_COUNT; a++) {
+                fancyLog(obviousLine);
+            }
+            fancyLog(marks + ' ' + tag + ' ' + marks);
+            for (var a = 0; a < LINE_COUNT; a++) {
+                fancyLog(obviousLine);
+            }
             break;
         case 1:
-            console.log('\n\n****** ' + tag + ' ******\n\n');
+            fancyLog();
+            fancyLog('****** ' + tag + ' ******\n');
             break;
         case 2:
-            console.log('\n\n** ' + tag + ' **\n\n');
+            fancyLog('** ' + tag + ' **\n');
             break;
         case 3:
-            console.log('** ' + tag + ' **');
+            fancyLog('** ' + tag + ' **');
             break;
         default:
             console.error('Invalid priority: ' + priority);
             break;
     }
-    if (data) console.log(data);
+    if (data) console.log('\t' + data.toString().replace(/\n/g, '\n\t'));
 }
 
 gulp.task('default', function () {
@@ -59,7 +66,7 @@ gulp.task('watch', function () {
             log('Error executing script (Code ' + error.code + ')', 3);
         }
         if (stderr) {
-            log('Console:', 2, '\t' + stderr.replace(/\n/g, '\n\t'));
+            log('Console:', 2, stderr);
         }
         if (stdout) {
             log('Result', 2, stdout);

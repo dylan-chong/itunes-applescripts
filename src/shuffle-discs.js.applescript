@@ -330,7 +330,7 @@ Example Playlist Disc Order (After running script):
 
     function logAlbumGroups(albumGroups) {
         for (var a = 0; a < albumGroups.length; a++) {
-            console.log("Album " + (a + 1));
+            console.log('Album ' + (a + 1));
             logAllDiscGroups(albumGroups[a], 1);
         }
     }
