@@ -6,6 +6,17 @@ const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 
 function log(tag, priority, data) {
     switch (priority) {
+        case 0:
+            var lineCount = 3;
+            var markCount = 6;
+            var marks = Array(markCount + 1).join('*');
+            var line = marks + Array(tag.length + 1 + 2).join('-') + marks;
+            // + 1 because array.join creates one less copy of the string
+            // than the count, and + 2 because of the spaces around the tag
+            console.log(Array(lineCount + 1).join('\n' + line));
+            console.log(marks + ' ' + tag + ' ' + marks);
+            console.log(Array(lineCount + 1).join(line + '\n'));
+            break;
         case 1:
             console.log('\n\n****** ' + tag + ' ******\n\n');
             break;
@@ -43,7 +54,7 @@ gulp.task('default', function () {
 });
 
 gulp.task('watch', function () {
-    log('Executing script ' + SCRIPT_FILE, 1);
+    log('Executing script ' + SCRIPT_FILE, 0);
 
     executeJavaScriptOsaFile(
         SCRIPT_FILE,
