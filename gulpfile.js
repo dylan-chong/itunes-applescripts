@@ -59,14 +59,13 @@ gulp.task('default', function () {
 });
 
 gulp.task('watch', function () {
-    log('Executing script ' + SCRIPT_FILE, 0);
-
     executeJsOsaFile(SCRIPT_FILE);
 });
 
 gulp.task('execute-js-osa-file', executeJsOsaFile);
 
 function executeJsOsaFile(filePath, callback) {
+    log('Executing script "' + filePath + '"', 0);
     exec(getCommand(), callback || logExecuteResults);
 
     function getCommand() {
