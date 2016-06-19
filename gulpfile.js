@@ -48,34 +48,14 @@ gulp.task('default', function () {
 gulp.task('watch', function () {
     log('Executing script ' + SCRIPT_FILE, 0);
 
-    executeJsOsaFile(SCRIPT_FILE, callback);
-
-    function callback (error, stdout, stderr) {
-        if (error && error.code) {
-            log('Error executing script (Code ' + error.code + ')', 3);
-        }
-        if (stderr) {
-            log('Console:', 2, stderr);
-        }
-        if (stdout) {
-            log('Result', 2, stdout);
-        }
-        /*
-        for (var k in error) {
-        log(k, error[k]);
-        }
-        log('Error', error);
-        log('stdout ${stdout}', stdout);
-        log('stderr ${stderr}', stderr);
-        */
-        log('Finished executing script', 1);
-    }
+    executeJsOsaFile(SCRIPT_FILE);
 });
 
 gulp.task('execute-js-osa-file', executeJsOsaFile);
+
 function executeJsOsaFile(filePath, callback) {
     var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback);
+    exec(getCommand(scriptContents), callback || defaultCallback);
 
     function getCommand(scriptAsString) {
         var escapedScript = scriptAsString
@@ -83,4 +63,22 @@ function executeJsOsaFile(filePath, callback) {
             .replace(/\n/g, '" -e "');
         return 'osascript -l JavaScript -e "' + escapedScript + '"';
     }
+
+    function defaultCallback() {
+        logExecuteResults();
+    }
+}
+
+function logExecuteResults(error, stdout, stderr) {
+    if (error && error.code) {
+        log('Error executing script (Code ' + error.code + ')', 3);
+    }
+    if (stderr) {
+        log('Console:', 2, stderr);
+    }
+    if (stdout) {
+        log('Result', 2, stdout);
+    }
+
+    log('Finished executing script', 1);
 }
