@@ -64,10 +64,10 @@ Example Result:
 
     // Completely Missing
     var missingDiscs = getMissingDiscs(discObjects);
-    this.console.log("Completely missing discs: " + missingDiscs);
+    this.console.log('Completely missing discs: ' + missingDiscs);
 
     // Partially Missing
-    this.console.log("Partially missing discs: ");
+    this.console.log('Partially missing discs: ');
 
     for (var a = 0; a < discObjects.length; a++) {
         var obj = getMissingTrackObjectForDiscObject(discObjects[a]);
@@ -76,7 +76,7 @@ Example Result:
         this.console.log(missingTrackObjectToString(obj));
     }
 
-    return "Done";
+    return 'Done';
 
 
     function getDiscObjects(first, last) {
@@ -95,18 +95,18 @@ Example Result:
     }
 
     function discObjToString(discObj) {
-        var ret = "Disc number: " + discObj.discNumber + ",\n";
-        ret += "\tTrack count: " + discObj.trackCount + ",\n";
-        ret += "\tTracks:\n";
+        var ret = 'Disc number: ' + discObj.discNumber + ',\n';
+        ret += '\tTrack count: ' + discObj.trackCount + ',\n';
+        ret += '\tTracks:\n';
 
         for (var t = 0; t < discObj.tracks.length; t++) {
             var track = discObj.tracks[t];
-            var line = "\t\tTrack: ";
+            var line = '\t\tTrack: ';
 
-            line += track.trackNumber() + " of " + track.trackCount();
-            line += ", Name: " + track.name();
+            line += track.trackNumber() + ' of ' + track.trackCount();
+            line += ', Name: ' + track.name();
 
-            ret += line + "\n";
+            ret += line + '\n';
         }
 
         return ret;
@@ -212,13 +212,13 @@ Example Result:
     }
 
     function missingTrackObjectToString(obj) {
-        var str = "\tDisc Number: " + obj.discNumber;
-        str += "\n\t\t" + "Ideal Track Count: " + obj.idealTrackCount;
-                str += "\n\t\t" + "Existing Track Numbers: " +obj.existingTrackNumbers;
+        var str = '\tDisc Number: ' + obj.discNumber;
+        str += '\n\t\t' + 'Ideal Track Count: ' + obj.idealTrackCount;
+                str += '\n\t\t' + 'Existing Track Numbers: ' +obj.existingTrackNumbers;
         if (obj.missingTrackNumbers.length > 0)
-            str += "\n\t\t" + "Missing Track Numbers: " + obj.missingTrackNumbers.toString();
+            str += '\n\t\t' + 'Missing Track Numbers: ' + obj.missingTrackNumbers.toString();
         if (obj.extraTrackNumbers.length > 0)
-            str += "\n\t\t" + "Extra Track Numbers: " + obj.extraTrackNumbers;
+            str += '\n\t\t' + 'Extra Track Numbers: ' + obj.extraTrackNumbers;
         return str;
     }
 

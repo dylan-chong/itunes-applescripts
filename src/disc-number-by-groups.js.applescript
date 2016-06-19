@@ -63,7 +63,7 @@ Example Result:
     // ******* Constants *******
 
     var INITIAL_DISK_NUMBER = 1;
-    var DELIMITER = "-";
+    var DELIMITER = '-';
 
     // *************************
 
@@ -89,9 +89,9 @@ Example Result:
         // Code that applies the changes:
         // currentTrack.discNumber.set(discNumber);
 
-        this.console.log("Disc: " + discNumber + ", Name: " + currentTrackName);
+        this.console.log('Disc: ' + discNumber + ', Name: ' + currentTrackName);
     }
-    return "Done";
+    return 'Done';
 
     function shouldKeepSameDiscNumber(trackName, previousTrackName) {
         if (!previousTrackName) return true;

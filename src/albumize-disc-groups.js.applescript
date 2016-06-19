@@ -53,11 +53,11 @@ Example Result:
                 // track.trackNumber.set(num);
             }
 
-            this.console.log("Track: " + num + " of " + count + ", Name: " + track.name());
+            this.console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
         }
     }
 
-    return "Done";
+    return 'Done';
 
     function getGroupsOfTracks(originalTracksArray) {
         if (originalTracksArray == null || originalTracksArray.length == 0)

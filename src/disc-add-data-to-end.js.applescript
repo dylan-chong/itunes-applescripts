@@ -31,29 +31,29 @@ Example Selection:
     Concerto Grosso Op.3 No.6 in D major
 
 Example DATA and DATA_PREFIX:
-    var DATA_PREFIX = " - ";
-    var DATA = "I. Allegro\n" +
-        "II. Largo\n" +
-        "III. Allegro\n" +
-        "I. Vivace\n" +
-        "II. Largo\n" +
-        "III. Allegro\n" +
-        "IV. Moderato\n" +
-        "V. Allegro\n" +
-        "I. Largo, e staccato Ñ allegro\n" +
-        "II. Andante\n" +
-        "III. Allegro\n" +
-        "I. Largo\n" +
-        "II. Andante\n" +
-        "III. Allegro\n" +
-        "IV. Allegro\n" +
-        "I. Largo\n" +
-        "II. Fuga, allegro\n" +
-        "III. Adagio\n" +
-        "IV. Allegro, ma non troppo\n" +
-        "V. Allegro\n" +
-        "I. Vivace\n" +
-        "II. Allegro";
+    var DATA_PREFIX = ' - ';
+    var DATA = 'I. Allegro\n' +
+        'II. Largo\n' +
+        'III. Allegro\n' +
+        'I. Vivace\n' +
+        'II. Largo\n' +
+        'III. Allegro\n' +
+        'IV. Moderato\n' +
+        'V. Allegro\n' +
+        'I. Largo, e staccato Ñ allegro\n' +
+        'II. Andante\n' +
+        'III. Allegro\n' +
+        'I. Largo\n' +
+        'II. Andante\n' +
+        'III. Allegro\n' +
+        'IV. Allegro\n' +
+        'I. Largo\n' +
+        'II. Fuga, allegro\n' +
+        'III. Adagio\n' +
+        'IV. Allegro, ma non troppo\n' +
+        'V. Allegro\n' +
+        'I. Vivace\n' +
+        'II. Allegro';
 
 Example Result:
     Concerto Grosso Op.3 No.1 in B flat major - I. Allegro
@@ -87,32 +87,32 @@ Example Result:
 
     // The text to put in between the original
     // track name, and a piece of data
-    var DATA_PREFIX = " - ";
+    var DATA_PREFIX = ' - ';
 
     // Don't leave any empty lines in DATA
     // (or start/end with \n)
-    var DATA = "I. Allegro\n" +
-        "II. Largo\n" +
-        "III. Allegro\n" +
-        "I. Vivace\n" +
-        "II. Largo\n" +
-        "III. Allegro\n" +
-        "IV. Moderato\n" +
-        "V. Allegro\n" +
-        "I. Largo, e staccato Ñ allegro\n" +
-        "II. Andante\n" +
-        "III. Allegro\n" +
-        "I. Largo\n" +
-        "II. Andante\n" +
-        "III. Allegro\n" +
-        "IV. Allegro\n" +
-        "I. Largo\n" +
-        "II. Fuga, allegro\n" +
-        "III. Adagio\n" +
-        "IV. Allegro, ma non troppo\n" +
-        "V. Allegro\n" +
-        "I. Vivace\n" +
-        "II. Allegro";
+    var DATA = 'I. Allegro\n' +
+        'II. Largo\n' +
+        'III. Allegro\n' +
+        'I. Vivace\n' +
+        'II. Largo\n' +
+        'III. Allegro\n' +
+        'IV. Moderato\n' +
+        'V. Allegro\n' +
+        'I. Largo, e staccato Ñ allegro\n' +
+        'II. Andante\n' +
+        'III. Allegro\n' +
+        'I. Largo\n' +
+        'II. Andante\n' +
+        'III. Allegro\n' +
+        'IV. Allegro\n' +
+        'I. Largo\n' +
+        'II. Fuga, allegro\n' +
+        'III. Adagio\n' +
+        'IV. Allegro, ma non troppo\n' +
+        'V. Allegro\n' +
+        'I. Vivace\n' +
+        'II. Allegro';
 
     function getNewName(oldName) {
         return oldName + DATA_PREFIX + dataItems[a];
@@ -126,7 +126,7 @@ Example Result:
 
     var selection = window.selection();
 
-    var dataItems = DATA.split("\n");
+    var dataItems = DATA.split('\n');
 
     for (var a = 0; a < selection.length; a++) {
         if (a >= dataItems.length) break;
@@ -140,5 +140,5 @@ Example Result:
 
         this.console.log(newTrackName);
     }
-    return "Done";
+    return 'Done';
 })();
