@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const fs = require('fs');
 
 const commandLineArgs = require('command-line-args');
 
@@ -68,14 +67,10 @@ gulp.task('watch', function () {
 gulp.task('execute-js-osa-file', executeJsOsaFile);
 
 function executeJsOsaFile(filePath, callback) {
-    var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback || logExecuteResults);
+    exec(getCommand(), callback || logExecuteResults);
 
-    function getCommand(scriptAsString) {
-        var escapedScript = scriptAsString
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '" -e "');
-        return 'osascript -l JavaScript -e "' + escapedScript + '"';
+    function getCommand() {
+        return 'osascript -l JavaScript "' + filePath + '"';
     }
 }
 
