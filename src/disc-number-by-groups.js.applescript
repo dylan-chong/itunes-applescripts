@@ -89,7 +89,7 @@ Example Result:
         // Code that applies the changes:
         // currentTrack.discNumber.set(discNumber);
 
-        this.console.log(currentTrackName + ": " + discNumber + "\n");
+        this.console.log("Disc: " + discNumber + ", Name: " + currentTrackName);
     }
     return "Done";
 
