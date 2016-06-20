@@ -62,12 +62,14 @@ gulp.task('default', function () {
         executeJsOsaFile(commandLineArgFile);
         return;
     }
-    gulp.watch(['./src/*.js.applescript'], ['watch']);
+
+    log('Watching for changes', 2);
+    watch(SRC).on('change', onChange);
 });
 
-gulp.task('watch', function () {
-    executeJsOsaFile(SCRIPT_FILE);
-});
+function onChange(filePath) {
+    executeJsOsaFile(filePath);
+};
 
 gulp.task('execute-js-osa-file', executeJsOsaFile);
 
