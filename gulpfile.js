@@ -15,6 +15,12 @@ const optionDefinitions = [
 ];
 const options = commandLineArgs(optionDefinitions);
 
+const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
+const SRC = '/src/*.js';
+const DEST = '/dist/';
+
+
+
 function log(tag, priority, data) {
     switch (priority) {
         case 0:
