@@ -1,11 +1,13 @@
-const gulp = require('gulp');
-
+const exec = require('child_process').exec;
 const commandLineArgs = require('command-line-args');
 
-const exec = require('child_process').exec;
+const gulp = require('gulp');
+const changed = require('gulp-changed');
+const through = require('gulp-through');
+
 const fancyLog = require('fancy-log');
 
-const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
+
 
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
 const optionDefinitions = [
