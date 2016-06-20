@@ -15,8 +15,8 @@ const OPTION_DEFINITIONS = [
 const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
-const SRC = '/src/*.js';
-const DEST = '/dist/';
+const SRC = 'src/*.js.applescript';
+const DEST = 'dist/';
 
 
 
