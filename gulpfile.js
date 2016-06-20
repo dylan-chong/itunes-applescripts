@@ -2,8 +2,7 @@ const exec = require('child_process').exec;
 const commandLineArgs = require('command-line-args');
 
 const gulp = require('gulp');
-const changed = require('gulp-changed');
-const through = require('gulp-through');
+const watch = require('gulp-watch');
 
 const fancyLog = require('fancy-log');
 
