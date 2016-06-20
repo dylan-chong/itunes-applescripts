@@ -1,9 +1,25 @@
-const gulp = require('gulp');
-const fs = require('fs');
+// **************** DEPENDENCIES **************** //
+
 const exec = require('child_process').exec;
+const commandLineArgs = require('command-line-args');
+
+const gulp = require('gulp');
+const watch = require('gulp-watch');
+
 const fancyLog = require('fancy-log');
 
-const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
+// **************** CONSTANTS **************** //
+
+const SRC = 'src/*.js.applescript';
+
+// Command line args
+const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
+const OPTION_DEFINITIONS = [
+    { name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME, alias: 'e', type: String }
+];
+const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
+
+// **************** BASIC LOGGING  **************** //
 
 function log(tag, priority, data) {
     switch (priority) {
@@ -11,11 +27,11 @@ function log(tag, priority, data) {
             var LINE_COUNT = 3;
             var MARK_COUNT = 6;
             var marks = Array(MARK_COUNT + 1).join('*');
-            var obviousLine = marks + Array(tag.length + 1 + 2).join('-')
-                + marks;
+            var obviousLine = marks +
+                Array(tag.length + 1 + 2).join('-') +
+                marks;
             // + 1 because array.join creates one less copy of the string
             // than the count, and + 2 because of the spaces around the tag
-
             for (var a = 0; a < LINE_COUNT; a++) {
                 fancyLog(obviousLine);
             }
@@ -41,50 +57,46 @@ function log(tag, priority, data) {
     if (data) console.log('\t' + data.toString().replace(/\n/g, '\n\t'));
 }
 
-function executeJavaScriptOsaFile(filePath, callback) {
-    var scriptContents = fs.readFileSync(filePath, 'utf8');
-    exec(getCommand(scriptContents), callback);
+// **************** TASKS **************** //
 
-    function getCommand(scriptAsString) {
-        var escapedScript = scriptAsString
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '" -e "');
-        return 'osascript -l JavaScript -e "' + escapedScript + '"';
+gulp.task('default', function () {
+    var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
+    if (commandLineArgFile) {
+        executeJsOsaFile(commandLineArgFile);
+        return;
+    }
+
+    log('Watching for changes', 2);
+    watch(SRC).on('change', onChange);
+});
+
+// **************** EXECUTING SCRIPTS  **************** //
+
+function onChange(filePath) {
+    executeJsOsaFile(filePath);
+};
+
+gulp.task('execute-js-osa-file', executeJsOsaFile);
+
+function executeJsOsaFile(filePath, callback) {
+    log('Executing script "' + filePath + '"', 0);
+    exec(getCommand(), callback || logExecuteResults);
+
+    function getCommand() {
+        return 'osascript -l JavaScript "' + filePath + '"';
     }
 }
 
-function getWatchGlobs() {
-    return ['./src/*.js.applescript'];
+function logExecuteResults(error, stdout, stderr) {
+    if (error && error.code) {
+        log('Error executing script (Code ' + error.code + ')', 3);
+    }
+    if (stderr) {
+        log('Console:', 2, stderr);
+    }
+    if (stdout) {
+        log('Result', 2, stdout);
+    }
+
+    log('Finished executing script', 1);
 }
-
-gulp.task('default', function () {
-    gulp.watch(getWatchGlobs(), ['watch']);
-});
-
-gulp.task('watch', function () {
-    log('Executing script ' + SCRIPT_FILE, 0);
-
-    executeJavaScriptOsaFile(
-        SCRIPT_FILE,
-        (error, stdout, stderr) => {
-            if (error && error.code) {
-                log('Error executing script (Code ' + error.code + ')', 3);
-            }
-            if (stderr) {
-                log('Console:', 2, stderr);
-            }
-            if (stdout) {
-                log('Result', 2, stdout);
-            }
-            /*
-            for (var k in error) {
-            log(k, error[k]);
-            }
-            log('Error', error);
-            log('stdout ${stdout}', stdout);
-            log('stderr ${stderr}', stderr);
-            */
-            log('Finished executing script', 1);
-        }
-    );
-});
