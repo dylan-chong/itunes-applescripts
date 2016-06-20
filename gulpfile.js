@@ -1,3 +1,5 @@
+// **************** DEPENDENCIES **************** //
+
 const exec = require('child_process').exec;
 const commandLineArgs = require('command-line-args');
 
@@ -6,17 +8,18 @@ const watch = require('gulp-watch');
 
 const fancyLog = require('fancy-log');
 
+// **************** CONSTANTS **************** //
 
+const SRC = 'src/*.js.applescript';
 
+// Command line args
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
 const OPTION_DEFINITIONS = [
     { name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME, alias: 'e', type: String }
 ];
 const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 
-const SRC = 'src/*.js.applescript';
-
-
+// **************** BASIC LOGGING  **************** //
 
 function log(tag, priority, data) {
     switch (priority) {
@@ -54,7 +57,7 @@ function log(tag, priority, data) {
     if (data) console.log('\t' + data.toString().replace(/\n/g, '\n\t'));
 }
 
-
+// **************** TASKS **************** //
 
 gulp.task('default', function () {
     var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
@@ -66,6 +69,8 @@ gulp.task('default', function () {
     log('Watching for changes', 2);
     watch(SRC).on('change', onChange);
 });
+
+// **************** EXECUTING SCRIPTS  **************** //
 
 function onChange(filePath) {
     executeJsOsaFile(filePath);
