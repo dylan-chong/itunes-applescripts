@@ -10,10 +10,10 @@ const fancyLog = require('fancy-log');
 
 
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
-const optionDefinitions = [
+const OPTION_DEFINITIONS = [
     { name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME, alias: 'e', type: String }
 ];
-const options = commandLineArgs(optionDefinitions);
+const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 
 const SCRIPT_FILE = 'src/albumize-disc-groups.js.applescript';
 const SRC = '/src/*.js';
@@ -57,8 +57,10 @@ function log(tag, priority, data) {
     if (data) console.log('\t' + data.toString().replace(/\n/g, '\n\t'));
 }
 
+
+
 gulp.task('default', function () {
-    var commandLineArgFile = options[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
+    var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
     if (commandLineArgFile) {
         executeJsOsaFile(commandLineArgFile);
         return;
