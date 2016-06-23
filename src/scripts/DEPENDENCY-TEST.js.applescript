@@ -1,3 +1,5 @@
+// TODO NEXT turn this structure into a TinyCore module
+
 (function () {
   function getScript() {
     var script = {
