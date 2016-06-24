@@ -1,6 +1,5 @@
 // **************** DEPENDENCIES **************** //
 
-const exec = require('child_process').exec;
 const commandLineArgs = require('command-line-args');
 
 const gulp = require('gulp');
