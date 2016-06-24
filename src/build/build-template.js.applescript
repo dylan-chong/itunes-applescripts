@@ -1,13 +1,13 @@
-/* @import tiny-core */
+/* @fill tiny-core */
 
-/* @import dependencies */
+/* @fill dependencies */
 
 (function () {
   var DEFAULT_SCRIPT_NAME = 'script';
   
   var moduleSuccessfullyDefined = 
     
-  /* @import script */
+  /* @fill script */
     
     ;
 
