@@ -7,6 +7,7 @@ const gulp = require('gulp');
 const watch = require('gulp-watch');
 
 const log = require('./node_modules-local/header-log.js').log;
+const osa = require('./node_modules-local/execute-osa');
 
 // **************** CONSTANTS **************** //
 
@@ -29,32 +30,9 @@ gulp.task('default', function () {
     }
 
     log('Watching for changes', 2);
-    watch(SRC).on('change', executeJsOsaFile);
+    watch(SRC).on('change', osa.executeJsFile);
 });
 
 // **************** EXECUTING SCRIPTS  **************** //
 
-gulp.task('execute-js-osa-file', executeJsOsaFile);
-
-function executeJsOsaFile(filePath, callback) {
-    log('Executing script "' + filePath + '"', 0);
-    exec(getCommand(), callback || logExecuteResults);
-
-    function getCommand() {
-        return 'osascript -l JavaScript "' + filePath + '"';
-    }
-}
-
-function logExecuteResults(error, stdout, stderr) {
-    if (error && error.code) {
-        log('Error executing script (Code ' + error.code + ')', 3);
-    }
-    if (stderr) {
-        log('Console:', 2, stderr);
-    }
-    if (stdout) {
-        log('Result', 2, stdout);
-    }
-
-    log('Finished executing script', 1);
-}
+gulp.task('execute-js-osa-file', osa.executeJsFile);
