@@ -24,14 +24,10 @@ const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 gulp.task('default', function () {
     var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
     if (commandLineArgFile) {
-        executeJsOsaFile(commandLineArgFile);
+        osa.executeJsFile(commandLineArgFile);
         return;
     }
 
     log('Watching for changes', 2);
     watch(SRC).on('change', osa.executeJsFile);
 });
-
-// **************** EXECUTING SCRIPTS  **************** //
-
-gulp.task('execute-js-osa-file', osa.executeJsFile);
