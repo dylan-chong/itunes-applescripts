@@ -29,14 +29,10 @@ gulp.task('default', function () {
     }
 
     log('Watching for changes', 2);
-    watch(SRC).on('change', onChange);
+    watch(SRC).on('change', executeJsOsaFile);
 });
 
 // **************** EXECUTING SCRIPTS  **************** //
-
-function onChange(filePath) {
-    executeJsOsaFile(filePath);
-};
 
 gulp.task('execute-js-osa-file', executeJsOsaFile);
 
