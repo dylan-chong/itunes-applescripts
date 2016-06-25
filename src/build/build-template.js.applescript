@@ -18,5 +18,5 @@
   }
   
   console.log('Script + "' + scriptName + '" was successfully defined');
-  return TinyCore.Module.instantiate(scriptName).run();
+  return TinyCore.Module.start(scriptName).run();
 })();
