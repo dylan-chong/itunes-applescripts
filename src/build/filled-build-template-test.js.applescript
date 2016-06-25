@@ -15,7 +15,7 @@
         onStart: onStart,
       };
 
-      function onStart() {
+      function onStart(resultObj) {
         console.log('STARTING');
 
         var app = Application('iTunes');
@@ -43,7 +43,7 @@
           }
         }
 
-        return 'Done';
+        resultObj.result = 'Done';
 
         function getGroupsOfTracks(originalTracksArray) {
           if (originalTracksArray == null || originalTracksArray.length == 0)
@@ -85,5 +85,7 @@
   }
   
   console.log('Script + "' + DEFAULT_SCRIPT_NAME + '" was successfully defined');
-  return TinyCore.Module.start(DEFAULT_SCRIPT_NAME);
+  var resultObj = {};
+  TinyCore.Module.start(DEFAULT_SCRIPT_NAME, resultObj);
+  return resultObj.result;
 })();
