@@ -12,11 +12,11 @@
     TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
 
       return {
-        onStart: onStart,
+        onStart: onStart
       };
 
       function onStart(resultObj) {
-        console.log('STARTING');
+        console.log('STARTING ', resultObj, resultObj.testProperty);
 
         var app = Application('iTunes');
         app.includeStandardAdditions = true;
@@ -44,6 +44,7 @@
         }
 
         resultObj.result = 'Done';
+        console.log('SET RESULT TO ' + resultObj.result);
 
         function getGroupsOfTracks(originalTracksArray) {
           if (originalTracksArray == null || originalTracksArray.length == 0)
@@ -85,7 +86,7 @@
   }
   
   console.log('Script + "' + DEFAULT_SCRIPT_NAME + '" was successfully defined');
-  var resultObj = {};
+  var resultObj = {testProperty: 'TEST'};
   TinyCore.Module.start(DEFAULT_SCRIPT_NAME, resultObj);
-  return resultObj.result;
+  return resultObj.result || 'Error: No result';
 })();
