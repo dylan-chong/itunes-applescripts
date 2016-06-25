@@ -30,7 +30,7 @@ const OPTION_DEFINITIONS = [{
 }];
 const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 
-// **************** TASKS **************** //
+// **************** DEFAULT **************** //
 
 gulp.task('default', function () {
   var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
@@ -40,5 +40,17 @@ gulp.task('default', function () {
   }
 
   log('Watching for changes', 2);
-  watch(FILES.SCRIPT_FILES).on('change', osa.executeJsFile);
+  watch(FILES.SCRIPT_FILES).on('change', function (file) {
+    // TODO LATER MAYBE compile just the changed scripts
+    compileAll();
+    
+    // TODO AFTER run changed script
+  });
 });
+
+// **************** COMPILING **************** //
+
+function compileAll() {
+  log('compile-all called', 1);
+  // TODO compile the script
+}
