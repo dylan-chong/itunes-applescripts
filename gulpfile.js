@@ -10,7 +10,7 @@ const osa = require('./node_modules-local/execute-osa');
 
 // **************** CONSTANTS **************** //
 
-const SRC = 'src/*.js.applescript';
+const SRC = 'src/**/*.js.applescript';
 
 // Command line args
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
