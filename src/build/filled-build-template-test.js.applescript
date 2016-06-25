@@ -23,11 +23,17 @@
         var window = app.windows[0];
 
         var selection = window.selection();
+        
+        console.log('1');
 
         var groups = getGroupsOfTracks(selection);
 
+        console.log('2');
+        resultObj.result = 'Just about done';
         for (var g = 0; g < groups.length; g++) {
+          console.log('3');
           var group = groups[g];
+          console.log('4');
           for (var t = 0; t < group.length; t++) {
             var track = group[t];
             var num = t + 1;
@@ -39,7 +45,7 @@
               // track.trackNumber.set(num);
             }
 
-            this.console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
+            console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
           }
         }
 
