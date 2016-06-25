@@ -5,14 +5,14 @@ TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
     onStart: onStart,
     run: run
   };
-  
+
   function onStart(onStartData) {
     console.log('STARTING ', onStartData);
   }
 
   function run() {
     console.log('running');
-    
+
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
@@ -71,3 +71,4 @@ TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
     }
   }
 });
+

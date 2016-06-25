@@ -11,12 +11,13 @@
     
     ;
 
-  var console = TinyCore.Toolbox.request('console');
   if (!moduleSuccessfullyDefined) {
-    console.error('Script + "' + scriptName + '" was unable to be defined');
+    console.error('Script + "' + DEFAULT_SCRIPT_NAME + '" was unable to be defined');
     return 'Script not run';
   }
-  
-  console.log('Script + "' + scriptName + '" was successfully defined');
-  return TinyCore.Module.start(scriptName).run();
+
+  console.log('Script + "' + DEFAULT_SCRIPT_NAME + '" was successfully defined');
+  var resultObj = {testProperty: 'TEST'};
+  TinyCore.Module.start(DEFAULT_SCRIPT_NAME, resultObj);
+  return resultObj.result || 'Error: No result';
 })();
