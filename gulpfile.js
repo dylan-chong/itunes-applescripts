@@ -6,7 +6,8 @@ const gulp = require('gulp');
 const watch = require('gulp-watch');
 
 const log = require('./node_modules-local/header-log.js').log;
-const osa = require('./node_modules-local/execute-osa');
+const osa = require('./node_modules-local/execute-osa.js');
+const getFilledString = require('./node_modules-local/fill.js').getFilledString;
 
 // **************** CONSTANTS **************** //
 
@@ -18,7 +19,8 @@ const DIRECTORIES = {
 const FILES = {
   SCRIPT_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/script.js.applescript',
   DESCRIPTION_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/description.txt',
-  BUILD_TEMPLATE_FILE: 'src/build/build-template.js.applescript'
+  BUILD_TEMPLATE_FILE: 'src/build/build-template.js.applescript',
+  TINY_CORE_LIBRARY_FILE: 'bower_components/TinyCore.js/build/TinyCore.min.js',
 };
 
 // Command line args
@@ -40,17 +42,51 @@ gulp.task('default', function () {
   }
 
   log('Watching for changes', 2);
-  watch(FILES.SCRIPT_FILES).on('change', function (file) {
-    // TODO LATER MAYBE compile just the changed scripts
-    compileAll();
-    
+  watch(FILES.SCRIPT_FILES).on('change', function (changedFilePath) {
+    var built = buildScript(changedFilePath);
+
     // TODO AFTER run changed script
   });
 });
 
 // **************** COMPILING **************** //
 
-function compileAll() {
-  log('compile-all called', 1);
-  // TODO compile the script
+function buildAll() {
+  log('build-all called', 1); // TODO LATER remove
+  
+  // TODO LATER  build all of them
+}
+
+function buildScript(scriptFileToCompile) {
+  log('build called', 1); // TODO LATER remove
+  var filledTemplateString = getFilledTemplateString();
+  saveTemplateString(filledTemplateString);
+
+  function getFilledTemplateString() {
+    var template = {
+      path: FILES.BUILD_TEMPLATE_FILE
+    };
+
+    var replacements = {
+      'tiny-core': {
+        path: FILES.TINY_CORE_LIBRARY_FILE
+      },
+      'dependencies': {
+        contents: getDependencyString()
+      },
+      'script': {
+        path: scriptFileToCompile
+      }
+    };
+
+    return getFilledString(template, replacements);
+
+    function getDependencyString() {
+      // TODO 
+    }
+  }
+
+  function saveTemplateString(templateString) {
+    // TODO 
+  }
 }
