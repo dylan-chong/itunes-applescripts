@@ -10,7 +10,16 @@ const osa = require('./node_modules-local/execute-osa');
 
 // **************** CONSTANTS **************** //
 
-const SRC = 'src/**/*.js.applescript';
+const DIRECTORIES = {
+  SCRIPT_DIRECTORY: 'src/scripts/',
+  DEPENDENCIES_DIRECTORY: 'src/dependencies/',
+  BUILD_DIRECTORY: 'build/'
+};
+const FILES = {
+  SCRIPT_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/script.js.applescript',
+  DESCRIPTION_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/description.txt',
+  BUILD_TEMPLATE_FILE: 'src/build/build-template.js.applescript'
+};
 
 // Command line args
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
@@ -31,5 +40,5 @@ gulp.task('default', function () {
   }
 
   log('Watching for changes', 2);
-  watch(SRC).on('change', osa.executeJsFile);
+  watch(FILES.SCRIPT_FILES).on('change', osa.executeJsFile);
 });
