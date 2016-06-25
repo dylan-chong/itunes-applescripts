@@ -1,17 +1,3 @@
-/*
-
-Remember to set the language from AppleScript to Javascript!
-
-Description:
-    Removes the tracks that have been played within the last
-    RECENT_DAYS number of days from the playlist with the
-    name PLAYLIST_NAME.
-
-    Note: It does not work on smart playlists due to
-    permissions errors.
-
-*/
-
 (function() {
 
     // ******* Constants *******
