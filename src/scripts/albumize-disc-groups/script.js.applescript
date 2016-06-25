@@ -1,17 +1,12 @@
 // noinspection JSUnresolvedVariable
 TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
-
+  
   return {
-    onStart: onStart,
-    run: run
+    onStart: onStart
   };
 
-  function onStart(onStartData) {
-    console.log('STARTING ', onStartData);
-  }
-
-  function run() {
-    console.log('running');
+  function onStart(resultObj) {
+    console.log('STARTING ', resultObj, resultObj.testProperty);
 
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
@@ -19,10 +14,16 @@ TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
 
     var selection = window.selection();
 
+    console.log('1');
+
     var groups = getGroupsOfTracks(selection);
 
+    console.log('2');
+    resultObj.result = 'Just about done';
     for (var g = 0; g < groups.length; g++) {
+      console.log('3');
       var group = groups[g];
+      console.log('4');
       for (var t = 0; t < group.length; t++) {
         var track = group[t];
         var num = t + 1;
@@ -34,11 +35,12 @@ TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
           // track.trackNumber.set(num);
         }
 
-        this.console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
+        console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
       }
     }
 
-    return 'Done';
+    resultObj.result = 'Done';
+    console.log('SET RESULT TO ' + resultObj.result);
 
     function getGroupsOfTracks(originalTracksArray) {
       if (originalTracksArray == null || originalTracksArray.length == 0)
