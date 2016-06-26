@@ -65,9 +65,10 @@ function buildAll() {
 }
 
 function buildScript(scriptFileToCompile) {
-  log('build called', 1); // TODO LATER remove
   var filledTemplateString = getFilledTemplateString();
-  return saveTemplateString(scriptFileToCompile, filledTemplateString);
+  var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
+  log('Successfully built script "' + builtScriptPath + '"', 3);
+  return builtScriptPath;
 
   function getFilledTemplateString() {
     var template = {
