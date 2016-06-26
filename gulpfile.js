@@ -5,8 +5,6 @@ const commandLineArgs = require('command-line-args');
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 
-const q = require('q');
-
 const log = require('./node_modules-local/header-log.js').log;
 const osa = require('./node_modules-local/execute-osa.js');
 const getFilledString = require('./node_modules-local/fill.js').getFilledString;
@@ -92,6 +90,7 @@ function buildScript(scriptFileToCompile) {
   function saveTemplateString(templateString) {
     // TODO LATER remove
     log('saveTemplateString called', 0, templateString);
+    
     // TODO  return path that it was saved at
   }
 }
