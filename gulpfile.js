@@ -12,15 +12,15 @@ const getFilledString = require('./node_modules-local/fill.js').getFilledString;
 // **************** CONSTANTS **************** //
 
 const DIRECTORIES = {
-  SCRIPT_DIRECTORY: 'src/scripts/',
-  DEPENDENCIES_DIRECTORY: 'src/dependencies/',
-  BUILD_DIRECTORY: 'build/'
+  SCRIPTS: 'src/scripts/',
+  DEPENDENCIES: 'src/dependencies/',
+  BUILD: 'build/'
 };
 const FILES = {
-  SCRIPT_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/script.js.applescript',
-  DESCRIPTION_FILES: DIRECTORIES.SCRIPT_DIRECTORY + '*/description.txt',
-  BUILD_TEMPLATE_FILE: 'src/build/build-template.js.applescript',
-  TINY_CORE_LIBRARY_FILE: 'bower_components/TinyCore.js/build/TinyCore.min.js',
+  SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js.applescript',
+  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
+  BUILD_TEMPLATE: 'src/build/build-template.js.applescript',
+  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js',
 };
 
 // Command line args
@@ -43,7 +43,7 @@ gulp.task('default', function () {
 
   log('Watching for changes', 2);
   
-  watch(FILES.SCRIPT_FILES).on('change', function (changedFilePath) {
+  watch(FILES.SCRIPTS).on('change', function (changedFilePath) {
     var builtPath = buildScript(changedFilePath);
     osa.executeJsFile(builtPath);
   });
@@ -64,12 +64,12 @@ function buildScript(scriptFileToCompile) {
 
   function getFilledTemplateString() {
     var template = {
-      path: FILES.BUILD_TEMPLATE_FILE
+      path: FILES.BUILD_TEMPLATE
     };
 
     var replacements = {
       'tiny-core': {
-        path: FILES.TINY_CORE_LIBRARY_FILE
+        path: FILES.TINY_CORE_LIBRARY
       },
       'dependencies': {
         contents: getDependencyString()
