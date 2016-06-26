@@ -52,11 +52,11 @@ gulp.task('default', function () {
   });
 });
 
-// **************** COMPILING **************** //
+// **************** BUILDING **************** //
+
+gulp.task('build', buildAll);
 
 function buildAll() {
-  log('build-all called', 1); // TODO LATER remove
-
   // TODO LATER  build all of them
 }
 
