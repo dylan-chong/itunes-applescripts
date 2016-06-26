@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const gulp = require('gulp');
 const watch = require('gulp-watch');
+const glob = require('glob');
 
 const log = require('./node_modules-local/header-log.js').log;
 const osa = require('./node_modules-local/execute-osa.js');
@@ -57,7 +58,10 @@ gulp.task('default', function () {
 gulp.task('build', buildAll);
 
 function buildAll() {
-  // TODO LATER  build all of them
+  var files = glob.sync(FILES.SCRIPTS);
+  for (var a = 0; a < files.length; a++) {
+    buildScript(files[a]);
+  }
 }
 
 function buildScript(scriptFileToCompile) {
