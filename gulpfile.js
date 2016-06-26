@@ -21,7 +21,8 @@ const FILES = {
   SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js.applescript',
   SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
   BUILD_TEMPLATE: 'src/build/build-template.js.applescript',
-  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js'
+  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js',
+  DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.js.applescript'
 };
 const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 
