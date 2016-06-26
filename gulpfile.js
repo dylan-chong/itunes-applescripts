@@ -7,6 +7,8 @@ const gulp = require('gulp');
 const watch = require('gulp-watch');
 const glob = require('glob');
 
+const mkdirp = require('mkdirp');
+
 const log = require('./node_modules-local/header-log.js').log;
 const osa = require('./node_modules-local/execute-osa.js');
 const getFilledString = require('./node_modules-local/fill.js').getFilledString;
@@ -98,12 +100,18 @@ function buildScript(scriptFileToCompile) {
   function saveTemplateString(scriptFileToCompile, templateString) {
     var scriptPath = DIRECTORIES.BUILD + getScriptName(scriptFileToCompile) +
       BUILT_SCRIPT_EXTENSION;
+    makeDirectoriesIfNecessary(scriptPath);
     fs.writeFileSync(scriptPath, templateString);
     return scriptPath;
 
     function getScriptName(scriptFileToCompile) {
       var pathParts = scriptFileToCompile.split('/');
       return pathParts[pathParts.length - 2];
+    }
+
+    function makeDirectoriesIfNecessary(file) {
+      var directory = file.substr(0, file.lastIndexOf('/'));
+      mkdirp.sync(directory);
     }
   }
 }
