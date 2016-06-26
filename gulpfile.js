@@ -82,12 +82,14 @@ function buildScript(scriptFileToCompile) {
     return getFilledString(template, replacements);
 
     function getDependencyString() {
-      // TODO 
+      // TODO LATER remove
+      return '// Some dependencies';
     }
   }
 
   function saveTemplateString(templateString) {
-    // TODO 
+    // TODO LATER remove
+    log('saveTemplateString called', 0, templateString);
     
     // TODO  return path that it was saved at
   }
