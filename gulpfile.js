@@ -90,13 +90,14 @@ function buildScript(scriptFileToCompile) {
   }
 
   function saveTemplateString(scriptFileToCompile, templateString) {
-    var scriptPath = DIRECTORIES.BUILD + getScriptName(scriptFileToCompile);
+    var scriptPath = DIRECTORIES.BUILD + getScriptName(scriptFileToCompile) +
+      BUILT_SCRIPT_EXTENSION;
     fs.writeFileSync(scriptPath, templateString);
     return scriptPath;
 
     function getScriptName(scriptFileToCompile) {
       var pathParts = scriptFileToCompile.split('/');
-      return pathParts[pathParts.length - 1];
+      return pathParts[pathParts.length - 2];
     }
   }
 }
