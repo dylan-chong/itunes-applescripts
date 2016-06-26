@@ -1,7 +1,6 @@
 // noinspection JSUnresolvedVariable
 TinyCore.Module.define(DEFAULT_SCRIPT_NAME, [], function () {
   
-  
   return {
     onStart: onStart
   };

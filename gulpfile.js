@@ -42,7 +42,7 @@ gulp.task('default', function () {
   }
 
   log('Watching for changes', 2);
-  
+
   watch(FILES.SCRIPTS).on('change', function (changedFilePath) {
     var builtPath = buildScript(changedFilePath);
     osa.executeJsFile(builtPath);
@@ -53,7 +53,7 @@ gulp.task('default', function () {
 
 function buildAll() {
   log('build-all called', 1); // TODO LATER remove
-  
+
   // TODO LATER  build all of them
 }
 
@@ -90,7 +90,7 @@ function buildScript(scriptFileToCompile) {
   function saveTemplateString(templateString) {
     // TODO LATER remove
     log('saveTemplateString called', 0, templateString);
-    
+
     // TODO  return path that it was saved at
   }
 }
