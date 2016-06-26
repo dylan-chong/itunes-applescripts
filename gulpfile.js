@@ -20,7 +20,7 @@ const FILES = {
   SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js.applescript',
   SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
   BUILD_TEMPLATE: 'src/build/build-template.js.applescript',
-  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js'
+  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js',
 };
 
 // Command line args
@@ -60,7 +60,7 @@ function buildAll() {
 function buildScript(scriptFileToCompile) {
   log('build called', 1); // TODO LATER remove
   var filledTemplateString = getFilledTemplateString();
-  return saveTemplateString(filledTemplateString);
+  return saveTemplateString(scriptFileToCompile, filledTemplateString);
 
   function getFilledTemplateString() {
     var template = {
@@ -87,10 +87,13 @@ function buildScript(scriptFileToCompile) {
     }
   }
 
-  function saveTemplateString(templateString) {
-    // TODO LATER remove
-    log('saveTemplateString called', 0, templateString);
-
+  function saveTemplateString(scriptFileToCompile, templateString) {
+    var scriptName = getScriptName(scriptFileToCompile);
     // TODO  return path that it was saved at
+    
+    function getScriptName(scriptFileToCompile) {
+      var pathParts = scriptFileToCompile.split('/');
+      return pathParts[pathParts.length - 1];
+    }
   }
 }
