@@ -92,8 +92,14 @@ function buildScript(scriptFileToCompile) {
     return getFilledString(template, replacements);
 
     function getDependencyString() {
-      // TODO LATER remove
-      return '// Some dependencies';
+      var files = glob.sync(FILES.DEPENDENCIES);
+      var combined = '';
+
+      for (var a = 0; a < files.length; a++) {
+        combined += fs.readFileSync(files[a]) + ';\n';
+      }
+
+      return combined;
     }
   }
 
