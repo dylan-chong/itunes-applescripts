@@ -99,7 +99,7 @@ function buildScript(scriptFileToCompile) {
         combined += fs.readFileSync(files[a]) + ';\n';
       }
 
-      return combined;
+      return combined || '// No dependencies found\n';
     }
   }
 
