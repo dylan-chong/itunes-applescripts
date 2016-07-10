@@ -15,7 +15,5 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "augment": "^4.3.0"
-  }
+  "dependencies": {}
 }

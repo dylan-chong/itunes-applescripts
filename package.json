@@ -7,7 +7,9 @@
     "concatenate-files": "^0.1.1",
     "fancy-log": "^1.2.0",
     "gulp": "^3.9.1",
+    "gulp-typescript": "^2.13.6",
     "gulp-watch": "^4.3.8",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "typescript": "^1.8.10"
   }
 }
