@@ -21,6 +21,7 @@ const DIRECTORIES = {
   BUILD: 'build/'
 };
 const FILES = {
+  ALL_SRC: DIRECTORIES.SCRIPTS + '**/*',
   SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js',
   SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
   BUILD_TEMPLATE: 'src/build/build-template.js',
@@ -49,11 +50,28 @@ gulp.task('default', function () {
 
   log('Watching for changes', 2);
 
-  watch(FILES.SCRIPTS).on('change', function (changedFilePath) {
-    var builtPath = buildScript(changedFilePath);
-    osa.executeJsFile(builtPath);
+  watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
+    log(changedFilePath, 1);
+    if (fileIsAnExecutableScript(changedFilePath)) 
+      buildAndExecuteScript(changedFilePath);
+    else 
+      buildAll();
+    
+    function buildAndExecuteScript(file) {
+      var builtPath = buildScript(file);
+      osa.executeJsFile(builtPath);
+    }
+    
+    function fileIsAnExecutableScript(file) {
+      var scripts = glob.sync(FILES.SCRIPTS);
+      for (var a = 0; a < scripts.length; a++) {
+        if (file.endsWith(scripts[a])) 
+          return true;
+      }
+      return false;
+    }
   });
-});
+}); // TODO AFTER rename the scripts to actual names
 
 // **************** BUILDING **************** //
 
