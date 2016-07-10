@@ -16,6 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "TinyCore.js": "tinycorejs#^1.0.2"
+    "augment": "^4.3.0"
   }
 }

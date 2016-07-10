@@ -1,8 +1,10 @@
-/* @fill tiny-core */
+/* @fill augment */
 
 /* @fill dependencies */
 
 (function () {
+  'use strict';
+  
   var DEFAULT_SCRIPT_NAME = 'script';
   
   var moduleSuccessfullyDefined = 

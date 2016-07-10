@@ -24,7 +24,7 @@ const FILES = {
   SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js',
   SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
   BUILD_TEMPLATE: 'src/build/build-template.js',
-  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js',
+  AUGMENT_LIBRARY: 'bower_components/augment/augment.js',
   DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.js'
 };
 const BUILT_SCRIPT_EXTENSION = '.js.applescript';
@@ -77,12 +77,12 @@ function buildScript(scriptFileToCompile) {
       path: FILES.BUILD_TEMPLATE
     };
 
-    var replacements = {
-      'tiny-core': {
-        path: FILES.TINY_CORE_LIBRARY
+    var replacements = { // TODO make the replacements a constant at the top of the file
+      'augment': {
+        path: FILES.AUGMENT_LIBRARY
       },
       'dependencies': {
-        contents: getDependencyString()
+        contents: getDependencyString() // TODO make the fill method take an array
       },
       'script': {
         path: scriptFileToCompile
@@ -90,6 +90,7 @@ function buildScript(scriptFileToCompile) {
     };
 
     return getFilledString(template, replacements);
+
 
     function getDependencyString() {
       var files = glob.sync(FILES.DEPENDENCIES);
@@ -121,3 +122,5 @@ function buildScript(scriptFileToCompile) {
     }
   }
 }
+
+// TODO gulp deploy into scpt format
