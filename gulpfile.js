@@ -6,6 +6,7 @@ const fs = require('fs');
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const glob = require('glob');
+const typescript = require('typescript-compiler');
 
 const mkdirp = require('mkdirp');
 
@@ -22,11 +23,10 @@ const DIRECTORIES = {
 };
 const FILES = {
   ALL_SRC: DIRECTORIES.SCRIPTS + '**/*',
-  SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js',
+  SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.ts',
   SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
-  BUILD_TEMPLATE: 'src/build/build-template.js',
-  AUGMENT_LIBRARY: 'bower_components/augment/augment.js',
-  DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.js'
+  BUILD_TEMPLATE: 'src/build/build-template.ts',
+  DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.ts'
 };
 const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 
@@ -52,20 +52,20 @@ gulp.task('default', function () {
 
   watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
     log(changedFilePath, 1);
-    if (fileIsAnExecutableScript(changedFilePath)) 
+    if (fileIsAnExecutableScript(changedFilePath))
       buildAndExecuteScript(changedFilePath);
-    else 
+    else
       buildAll();
-    
+
     function buildAndExecuteScript(file) {
       var builtPath = buildScript(file);
       osa.executeJsFile(builtPath);
     }
-    
+
     function fileIsAnExecutableScript(file) {
       var scripts = glob.sync(FILES.SCRIPTS);
       for (var a = 0; a < scripts.length; a++) {
-        if (file.endsWith(scripts[a])) 
+        if (file.endsWith(scripts[a]))
           return true;
       }
       return false;
@@ -88,7 +88,7 @@ function buildScript(scriptFileToCompile) {
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
   log('Successfully built script "' + builtScriptPath + '"', 3);
-  return builtScriptPath;
+  return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
     var template = {
@@ -96,9 +96,6 @@ function buildScript(scriptFileToCompile) {
     };
 
     var replacements = { // TODO make the replacements a constant at the top of the file
-      'augment': {
-        path: FILES.AUGMENT_LIBRARY
-      },
       'dependencies': {
         contents: getDependencyString() // TODO make the fill method take an array
       },
@@ -107,7 +104,8 @@ function buildScript(scriptFileToCompile) {
       }
     };
 
-    return getFilledString(template, replacements);
+    var tsString = getFilledString(template, replacements);
+    return typescript.compileString(tsString);
 
 
     function getDependencyString() {
