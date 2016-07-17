@@ -87,6 +87,7 @@ function buildAll() {
 function buildScript(scriptFileToCompile) {
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
+  log('\n')
   log('Successfully built script "' + builtScriptPath + '"', 3);
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
@@ -105,8 +106,16 @@ function buildScript(scriptFileToCompile) {
     };
 
     var tsString = getFilledString(template, replacements);
-    return typescript.compileString(tsString);
+    var tsArgs = ['--noImplicitAny'];
+    var tsOptions = null;
 
+    return typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
+
+    // TODO AFTER rename script.ts files
+    function onTsError(diagnostic) {
+      // Called for each compilation error
+      log(diagnostic.messageText, 3);
+    }
 
     function getDependencyString() {
       var files = glob.sync(FILES.DEPENDENCIES);
