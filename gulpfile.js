@@ -113,6 +113,7 @@ function buildScript(scriptFileToCompile) {
 
     function onTsError(diagnostic) {
       // Called for each compilation error
+      // TODO AFTER diagnostic category
       log(diagnostic.messageText, 3);
     }
   }
