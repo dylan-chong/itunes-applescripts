@@ -23,10 +23,11 @@ const DIRECTORIES = {
 };
 const FILES = {
   ALL_SRC: DIRECTORIES.SCRIPTS + '**/*',
-  SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.ts',
-  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
+  SCRIPTS: DIRECTORIES.SCRIPTS + '*/*.script.ts',
+  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/*.description.txt',
   BUILD_TEMPLATE: 'src/build/build-template.ts',
-  DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.ts'
+  GLOBAL_DEPENDENCIES: DIRECTORIES.GLOBAL_DEPENDENCIES + '*.ts'
+  // TODO LATER (per) SCRIPT_DEPENDENCIES
 };
 const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 
@@ -87,8 +88,7 @@ function buildAll() {
 function buildScript(scriptFileToCompile) {
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('\n')
-  log('Successfully built script "' + builtScriptPath + '"', 3);
+  log('Successfully built script "' + builtScriptPath + '"', 2);
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
@@ -111,14 +111,13 @@ function buildScript(scriptFileToCompile) {
 
     return typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
 
-    // TODO AFTER rename script.ts files
     function onTsError(diagnostic) {
       // Called for each compilation error
       log(diagnostic.messageText, 3);
     }
 
     function getDependencyString() {
-      var files = glob.sync(FILES.DEPENDENCIES);
+      var files = glob.sync(FILES.GLOBAL_DEPENDENCIES);
       var combined = '';
 
       for (var a = 0; a < files.length; a++) {
@@ -148,4 +147,4 @@ function buildScript(scriptFileToCompile) {
   }
 }
 
-// TODO gulp deploy into scpt format
+// TODO LATER gulp deploy into scpt format
