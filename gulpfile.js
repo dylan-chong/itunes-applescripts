@@ -1,3 +1,4 @@
+// TODO NEXT make interfaces for Application
 // **************** DEPENDENCIES **************** //
 
 const commandLineArgs = require('command-line-args');
@@ -6,6 +7,7 @@ const fs = require('fs');
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const glob = require('glob');
+const typescript = require('typescript-compiler');
 
 const mkdirp = require('mkdirp');
 
@@ -21,11 +23,12 @@ const DIRECTORIES = {
   BUILD: 'build/'
 };
 const FILES = {
-  SCRIPTS: DIRECTORIES.SCRIPTS + '*/script.js',
-  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/description.txt',
-  BUILD_TEMPLATE: 'src/build/build-template.js',
-  TINY_CORE_LIBRARY: 'bower_components/TinyCore.js/build/TinyCore.min.js',
-  DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '*.js'
+  ALL_SRC: DIRECTORIES.SCRIPTS + '**/*',
+  SCRIPTS: DIRECTORIES.SCRIPTS + '*/*.script.ts',
+  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/*.description.txt',
+  BUILD_TEMPLATE: 'src/build/build-template.ts',
+  GLOBAL_DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '**/*.ts'
+  // TODO LATER (per) SCRIPT_DEPENDENCIES
 };
 const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 
@@ -49,9 +52,26 @@ gulp.task('default', function () {
 
   log('Watching for changes', 2);
 
-  watch(FILES.SCRIPTS).on('change', function (changedFilePath) {
-    var builtPath = buildScript(changedFilePath);
-    osa.executeJsFile(builtPath);
+  watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
+    log(changedFilePath, 1);
+    if (fileIsAnExecutableScript(changedFilePath))
+      buildAndExecuteScript(changedFilePath);
+    else
+      buildAll();
+
+    function buildAndExecuteScript(file) {
+      var builtPath = buildScript(file);
+      osa.executeJsFile(builtPath);
+    }
+
+    function fileIsAnExecutableScript(file) {
+      var scripts = glob.sync(FILES.SCRIPTS);
+      for (var a = 0; a < scripts.length; a++) {
+        if (file.endsWith(scripts[a]))
+          return true;
+      }
+      return false;
+    }
   });
 });
 
@@ -69,37 +89,33 @@ function buildAll() {
 function buildScript(scriptFileToCompile) {
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Successfully built script "' + builtScriptPath + '"', 3);
-  return builtScriptPath;
+  log('Successfully built script "' + builtScriptPath + '"', 2); // TODO don't show success if error
+  return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
     var template = {
       path: FILES.BUILD_TEMPLATE
     };
 
-    var replacements = {
-      'tiny-core': {
-        path: FILES.TINY_CORE_LIBRARY
-      },
+    var replacements = { // TODO make the replacements a constant at the top of the file
       'dependencies': {
-        contents: getDependencyString()
+        path: FILES.GLOBAL_DEPENDENCIES // TODO make the fill method take an array
       },
       'script': {
         path: scriptFileToCompile
       }
     };
 
-    return getFilledString(template, replacements);
+    var tsString = getFilledString(template, replacements);
+    var tsArgs = ['--noImplicitAny'];
+    var tsOptions = null;
 
-    function getDependencyString() {
-      var files = glob.sync(FILES.DEPENDENCIES);
-      var combined = '';
+    return typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
 
-      for (var a = 0; a < files.length; a++) {
-        combined += fs.readFileSync(files[a]) + ';\n';
-      }
-
-      return combined || '// No dependencies found\n';
+    function onTsError(diagnostic) {
+      // Called for each compilation error
+      // TODO AFTER diagnostic category
+      log(diagnostic.messageText, 3);
     }
   }
 
@@ -121,3 +137,5 @@ function buildScript(scriptFileToCompile) {
     }
   }
 }
+
+// TODO LATER gulp deploy into scpt format
