@@ -13,7 +13,7 @@ function createScript():Script {
 
     var groups = getGroupsOfTracks(selection);
 
-    for (var g = 0; g < groups.length; g++) {
+    for (var g = 0; g < groups.length; g++) { // TODO put into function, and move return up
       var group = groups[g];
       for (var t = 0; t < group.length; t++) {
         var track = group[t];
