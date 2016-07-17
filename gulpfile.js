@@ -98,7 +98,7 @@ function buildScript(scriptFileToCompile) {
 
     var replacements = { // TODO make the replacements a constant at the top of the file
       'dependencies': {
-        contents: getDependencyString() // TODO make the fill method take an array
+        path: FILES.GLOBAL_DEPENDENCIES // TODO make the fill method take an array
       },
       'script': {
         path: scriptFileToCompile
@@ -114,17 +114,6 @@ function buildScript(scriptFileToCompile) {
     function onTsError(diagnostic) {
       // Called for each compilation error
       log(diagnostic.messageText, 3);
-    }
-
-    function getDependencyString() {
-      var files = glob.sync(FILES.GLOBAL_DEPENDENCIES);
-      var combined = '';
-
-      for (var a = 0; a < files.length; a++) {
-        combined += fs.readFileSync(files[a]) + ';\n';
-      }
-
-      return combined || '// No dependencies found\n';
     }
   }
 
