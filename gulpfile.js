@@ -73,7 +73,7 @@ gulp.task('default', function () {
       return false;
     }
   });
-}); // TODO AFTER rename the scripts to actual names
+});
 
 // **************** BUILDING **************** //
 
@@ -89,7 +89,7 @@ function buildAll() {
 function buildScript(scriptFileToCompile) {
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Successfully built script "' + builtScriptPath + '"', 2);
+  log('Successfully built script "' + builtScriptPath + '"', 2); // TODO don't show success if error
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
