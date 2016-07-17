@@ -23,16 +23,16 @@ function createScript():Script {
 
     // Completely Missing
     var missingDiscs = getMissingDiscs(discObjects);
-    this.console.log('Completely missing discs: ' + missingDiscs);
+    console.log('Completely missing discs: ' + missingDiscs);
 
     // Partially Missing
-    this.console.log('Partially missing discs: ');
+    console.log('Partially missing discs: ');
 
     for (var a = 0; a < discObjects.length; a++) {
       var obj = getMissingTrackObjectForDiscObject(discObjects[a]);
       if (!obj) continue;
 
-      this.console.log(missingTrackObjectToString(obj));
+      console.log(missingTrackObjectToString(obj));
     }
 
     return 'Done';

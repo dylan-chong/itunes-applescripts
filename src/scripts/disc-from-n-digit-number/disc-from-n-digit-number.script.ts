@@ -28,7 +28,7 @@ function createScript():Script {
       var discNumber = get3DigitNumber(numbers);
       if (!discNumber) continue;
 
-      this.console.log('Disc: ' + discNumber + ', Name: ' + track.name());
+      console.log('Disc: ' + discNumber + ', Name: ' + track.name());
 
       // Code that applies the changes:
       // track.discNumber.set(discNumber);

@@ -30,10 +30,10 @@ function createScript():Script {
         // track.playedDate.set(lastPlayedDate);
 
         logTrackDetails(averagePlays, lastPlayedDate,
-            track.name(), this.console);
+            track.name(), console); // TODO remove console
       }
 
-      this.console.log('\n')
+      console.log('\n')
 
       return 'Done';
 
@@ -100,7 +100,7 @@ function createScript():Script {
 
       function logGroupsOfTracks(groups, console) {
         for (var g = 0; g < groups.length; g++) {
-          logTracks(groups[g], this.console);
+          logTracks(groups[g], console);
         }
       }
 

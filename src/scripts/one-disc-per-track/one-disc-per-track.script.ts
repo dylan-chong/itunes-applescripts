@@ -26,7 +26,7 @@ function createScript():Script {
       // Code that applies the changes:
       // track.discNumber.set(disc);
 
-      this.console.log('Disc: ' + disc + ', Name: ' + track.name());
+      console.log('Disc: ' + disc + ', Name: ' + track.name());
     }
     return 'Done';
   }

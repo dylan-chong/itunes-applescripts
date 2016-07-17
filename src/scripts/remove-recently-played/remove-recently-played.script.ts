@@ -21,7 +21,7 @@ function createScript():Script {
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
-    var console = this.console;
+    var console = console;
 
     var playlist;
 

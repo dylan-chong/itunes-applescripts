@@ -1,3 +1,4 @@
+// TODO NEXT make interfaces for Application
 // **************** DEPENDENCIES **************** //
 
 const commandLineArgs = require('command-line-args');

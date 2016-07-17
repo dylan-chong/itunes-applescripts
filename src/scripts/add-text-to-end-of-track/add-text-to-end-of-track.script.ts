@@ -61,7 +61,7 @@ function createScript():Script {
       // Code that applies the changes:
       // currentTrack.name.set(newTrackName);
 
-      this.console.log(newTrackName); // TODO fix all this.console
+      console.log(newTrackName);
     }
     return 'Done';
   }
