@@ -3,7 +3,7 @@ function createScript():Script {
   return <Script>{
     run: run
   };
-  
+
   function run() {
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
@@ -20,11 +20,9 @@ function createScript():Script {
         var num = t + 1;
         var count = group.length;
 
-        for (var a = 0; a < 2; a++) {
-          // Code that applies the changes:
-          // track.trackCount.set(count);
-          // track.trackNumber.set(num);
-        }
+        // Code that applies the changes:
+        // track.trackCount.set(count);
+        // track.trackNumber.set(num);
 
         console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
       }
