@@ -8,15 +8,21 @@ function createScript():Script {
 
     // ******* Constants *******
 
-    var PLAYLIST_NAME = 'Source'; // Make sure there are no name conflicts
-    var PLAYLIST_IS_SMART = false; // Note: Currently doesn't work on smart playlists
+    // Make sure there are no name conflicts for this playlist
+    var PLAYLIST_NAME = 'Source';
+
+    // Note: Doesn't work on smart playlists because of iTunes not allowing
+    // scripts to modify or even read them
+    var PLAYLIST_IS_SMART = false;
+
+    // Will leave this number of discs at the top of the playlist
+    var DISCS_TO_IGNORE = 1;
 
     // *************************
 
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
-    var console = console;
 
     var playlist;
 
@@ -36,9 +42,14 @@ function createScript():Script {
       return 'No tracks in this playlist';
 
     var groups = getGroupsOfTracks(playlist.tracks());
-    var albumGroups = getSortedGroups(groups);
+    var groupsToShuffle = groups.slice(DISCS_TO_IGNORE);
+    var ignoredDiscs = groups.slice(0, DISCS_TO_IGNORE)
+
+    var albumGroups = getSortedGroups(groupsToShuffle);
     var shuffledDiscs = getShuffledDiscs(albumGroups);
-    logAllDiscGroups(shuffledDiscs);
+
+    var combinedDiscGroups = ignoredDiscs.concat(shuffledDiscs);
+    logAllDiscGroups(combinedDiscGroups);
     // Code that makes changes:
     // reorderPlaylist(shuffledDiscs, playlist);
 
