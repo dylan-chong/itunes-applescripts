@@ -43,7 +43,7 @@ function createScript():Script {
     logTrackNames(recentTracks);
 
     // Code that makes changes:
-    // removeTracksFromPlaylist(recentTracks, playlist);
+    removeTracksFromPlaylist(recentTracks, playlist);
 
     return 'Done';
 

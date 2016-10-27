@@ -24,8 +24,8 @@ function createScript():Script {
         // Reapply changes twice (sometimes changes don't apply properly)
         for (var i = 0; i < 2; i++) {
           // Code that applies the changes:
-          // track.trackCount.set(count);
-          // track.trackNumber.set(num);
+          track.trackCount.set(count);
+          track.trackNumber.set(num);
         }
 
         console.log('Track: ' + num + ' of ' + count +

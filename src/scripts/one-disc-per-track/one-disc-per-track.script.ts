@@ -24,7 +24,7 @@ function createScript():Script {
       var disc = FIRST_DISC + a * INCREMENT;
 
       // Code that applies the changes:
-      // track.discNumber.set(disc);
+      track.discNumber.set(disc);
 
       console.log('Disc: ' + disc + ', Name: ' + track.name());
     }

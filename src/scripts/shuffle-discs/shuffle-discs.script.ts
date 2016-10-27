@@ -41,7 +41,7 @@ function createScript():Script {
     logAllDiscs(combinedDiscs);
 
     // Code that makes changes:
-    // reorderPlaylist(shuffledDiscs, playlist);
+    reorderPlaylist(shuffledDiscs, playlist);
 
     return 'Done';
 
