@@ -2,16 +2,14 @@
   "name": "itunes-applescripts",
   "version": "0.1.0",
   "devDependencies": {
-    "bower": "^1.7.9",
     "command-line-args": "^3.0.0",
     "concatenate-files": "^0.1.1",
     "fancy-log": "^1.2.0",
+    "glob": "^7.1.1",
     "gulp": "^3.9.1",
     "gulp-watch": "^4.3.8",
     "mkdirp": "^0.5.1",
     "typescript-compiler": "^1.4.1-2"
   },
-  "dependencies": {
-    "glob": "latest"
-  }
+  "dependencies": {}
 }
