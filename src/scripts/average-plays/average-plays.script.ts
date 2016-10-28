@@ -17,10 +17,15 @@ function createScript():Script {
       var group = groups[g];
 
       var minimumPlays = getMinimumPlays(group);
-      if (minimumPlays == 0) continue;
+      if (minimumPlays == 0) {
+        console.log('Skipping disk with ' + group[0].name());
+        continue;
+      }
 
       var averagePlays = getAveragePlays(group);
       var lastPlayedDate = getLastPlayedDate(group);
+
+      console.log(); // new line
 
       for (var t = 0; t < group.length; t++) {
         var track = group[t];
@@ -33,11 +38,11 @@ function createScript():Script {
             track.name());
       }
 
-      console.log('\n')
-
-      return 'Done';
-
+      console.log(''); // new line
     }
+
+    return 'Done';
+
     // TODO externalise the below method?
     function getGroupsOfTracks(originalTracksArray) {
       if (originalTracksArray == null || originalTracksArray.length == 0)
@@ -121,7 +126,7 @@ function createScript():Script {
     function logTrackDetails(playCount, playedDate, name) {
       var log = 'Play Count: ' + playCount;
       log += ', Last Played: ' + playedDate;
-      log += ',\n\t\t\tName: ' + name + '\n';
+      log += ',\n\t\t\tName: ' + name;
       console.log(log);
     }
 
