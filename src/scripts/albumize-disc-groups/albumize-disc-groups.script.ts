@@ -20,11 +20,15 @@ function createScript():Script {
         var num = t + 1;
         var count = group.length;
 
-        // Code that applies the changes:
-        // track.trackCount.set(count);
-        // track.trackNumber.set(num);
+        // Reapply changes twice (sometimes changes don't apply properly)
+        for (var i = 0; i < 2; i++) {
+          // Code that applies the changes:
+          // track.trackCount.set(count);
+          // track.trackNumber.set(num);
+        }
 
-        console.log('Track: ' + num + ' of ' + count + ', Name: ' + track.name());
+        console.log('Track: ' + num + ' of ' + count +
+                    ', Name: ' + track.name());
       }
     }
     return 'Done';
