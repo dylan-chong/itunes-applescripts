@@ -43,10 +43,11 @@ const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 
 // **************** DEFAULT **************** //
 
-gulp.task('default', function () {
+gulp.task('default', function (done) {
   var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
   if (commandLineArgFile) {
     osa.executeJsFile(commandLineArgFile);
+    done();
     return;
   }
 
@@ -73,6 +74,8 @@ gulp.task('default', function () {
       return false;
     }
   });
+
+  // Don't call done() if watch-ing
 });
 
 // **************** BUILDING **************** //
