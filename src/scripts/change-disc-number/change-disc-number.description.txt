@@ -1,0 +1,23 @@
+Description:
+     Increases the disc number of each track by DISC_NUMBER_CHANGE. If
+     DISC_NUMBER_CHANGE is negative, then the disc number is decreased.
+
+Example Selection:
+    Disc Number: 24, Name: Joseph - Symphony No. 024 in D major - 1. Allegro
+    Disc Number: 24, Name: Joseph - Symphony No. 024 in D major - 2. Adagio
+    Disc Number: 24, Name: Joseph - Symphony No. 024 in D major - 3. Menuetto e Trio
+    Disc Number: 24, Name: Joseph - Symphony No. 024 in D major - 4. Allegro
+    Disc Number: 253, Name: Divertimento No 13 F-Dur - 1776 - 01 - Tema con variazioni (Andante)
+    Disc Number: 253, Name: Divertimento No 13 F-Dur - 1776 - 02 - Menuetto
+    Disc Number: 253, Name: Divertimento No 13 F-Dur - 1776 - 03 - Allegro assai
+
+Example DISC_NUMBER_CHANGE value: 10
+
+Example Result:
+    Disc Number: 34, Name: Joseph - Symphony No. 024 in D major - 1. Allegro
+    Disc Number: 34, Name: Joseph - Symphony No. 024 in D major - 2. Adagio
+    Disc Number: 34, Name: Joseph - Symphony No. 024 in D major - 3. Menuetto e Trio
+    Disc Number: 34, Name: Joseph - Symphony No. 024 in D major - 4. Allegro
+    Disc Number: 263, Name: Divertimento No 13 F-Dur - 1776 - 01 - Tema con variazioni (Andante)
+    Disc Number: 263, Name: Divertimento No 13 F-Dur - 1776 - 02 - Menuetto
+    Disc Number: 263, Name: Divertimento No 13 F-Dur - 1776 - 03 - Allegro assai
