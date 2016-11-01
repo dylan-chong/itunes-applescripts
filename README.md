@@ -1,21 +1,53 @@
-#iTunes AppleScripts
-Useful JavaScript AppleScripts I make for batch-altering iTunes track data. Inspired by [scripts by Doug Adams](http://dougscripts.com/itunes/index.php)
+# iTunes AppleScripts #
 
-If you import lots of music into your iTunes library and you want your track data to be perfect, don't alter them by hand! Use scripts! A combination of [scripts by Doug Adams](http://dougscripts.com/itunes/index.php) and my own work really well. If there's a script I haven't made, don't worry, I make scripts all the time! 
+Useful JavaScript AppleScripts I make for batch-altering iTunes track data.
+Inspired by [scripts by Doug Adams](http://dougscripts.com/itunes/index.php)
 
-[Email me](mailto:dylanchongit@gmail.com?Subject=iTunes%20AppleScripts%3A) any script requests here.
+If you import lots of music into your iTunes library and you want your track
+data to be perfect, don't alter them by hand! Use scripts! A combination of
+[scripts by Doug Adams](http://dougscripts.com/itunes/index.php) and my own
+work really well. If there's a script I haven't made, don't worry, I make
+scripts all the time!
 
-Feel free to use and modify yourself! Just keep them free to use.<br>
-but **be careful - please backup your music before using**
+Feel free to request some new scripts ideas (just create an issue).
 
-<h2> Instructions for Use </h2>
-1. Download a script (to a Mac with your iTunes library)
-1. Make a copy of the tracks you want to apply the script to
-1. Select the tracks in iTunes. Make sure your tracks are in sequential order (each disc is grouped together, and tracks are in the right order)
-1. Double click the script (opens the Script Editor)
-1. Set language to JavaScript (from AppleScript) at the top left of the editor
-1. Change the constants if there are any in the script (press Command+F and then search for the word "constants")
-1. Click the square, with three horizontal lines, in it at the bottom of the editor, and then click messages
-1. Click the run button (the triangle) and see the results that appear in the console
-1. If the results are good, then uncomment the one or two lines of code that applies the changes to the tracks, and then run the script again (for real this time)
-1. Done!
+Feel free to use and modify yourself! Just keep them free to use.<br> but **be
+careful - please backup your iTunes library before using**
+
+## How to install ##
+
+Run:
+```bash
+git clone https://github.com/dylan-chong/itunes-applescripts
+cd itunes-applescripts
+npm install
+```
+
+## How to use ##
+
+1. Run `gulp build` to build all of the scripts into `./build/`
+2. Call `gulp -e build/<SCRIPT-NAME-HERE>` to run a specific script
+
+*Note: There are plenty of TypeScript warnings because this project was
+recently moved to TypeScript, and almost no TS interfaces have been added yet.*
+
+### Enabling scripts ###
+
+The scripts are all disabled in a hard-coded way. In order to get the script to
+apply changes to your iTunes library, look for the line of code that `// Code
+that applies the changes:`, uncomment the code below it, and run the script
+again. This will be changed in the future, ideally with some sort of GUI.
+
+### Debugging with Safari and Script Editor ###
+
+Providing the scripts have been built, you can also open a script in `./build`
+with the built in `Script Editor.app`, set the language to 'JavaScript', and
+use it with the Safari debugger (see the [Apple docs on
+this](https://developer.apple.com/library/content/releasenotes/InterapplicationCommunication/RN-JavaScriptForAutomation/Articles/OSX10-11.html)).
+
+### A more useful way to use when developing scripts ###
+
+Run `gulp` then edit a `./src/scripts/<SCRIPT-NAME>/<SCRIPT-NAME>.script.ts`
+script file using your favourite text editor / web IDE. Gulp will watch for
+changes, rebuild the changed script, **and execute it** (including when you
+just write the file without making any changes).
