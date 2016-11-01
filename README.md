@@ -28,12 +28,15 @@ npm install
 1. Run `gulp build` to build all of the scripts into `./build/`
 2. Call `gulp -e build/<SCRIPT-NAME-HERE>` to run a specific script
 
+*Note: There are plenty of TypeScript warnings because this project was
+recently moved to TypeScript, and almost no TS interfaces have been added yet.*
+
 ### Enabling scripts ###
 
 The scripts are all disabled in a hard-coded way. In order to get the script to
 apply changes to your iTunes library, look for the line of code that `// Code
 that applies the changes:`, uncomment the code below it, and run the script
-again.
+again. This will be changed in the future, ideally with some sort of GUI.
 
 ### Debugging with Safari and Script Editor ###
 
