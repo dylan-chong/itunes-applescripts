@@ -46,8 +46,7 @@ const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
 gulp.task('default', function (done) {
   var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
   if (commandLineArgFile) {
-    osa.executeJsFile(commandLineArgFile);
-    done();
+    osa.executeJsFile(commandLineArgFile, done);
     return;
   }
 
