@@ -1,5 +1,8 @@
 # iTunes AppleScripts #
 
+**NOTE: This branch contains scripts that always make changes when you run
+them. These are written for the developer's convenience for personal use.**
+
 Useful JavaScript AppleScripts I make for batch-altering iTunes track data.
 Inspired by [scripts by Doug Adams](http://dougscripts.com/itunes/index.php)
 
