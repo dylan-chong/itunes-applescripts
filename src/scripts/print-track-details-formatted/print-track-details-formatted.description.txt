@@ -1,0 +1,4 @@
+Description:
+     Displays the selected tracks' data in a list. Currently it only prints
+     track name and play count
+

@@ -54,7 +54,7 @@ gulp.task('default', function (done) {
 
   watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
     log(changedFilePath, 1);
-    if (fileIsAnExecutableScript(changedFilePath))
+    if (fileIsABuildableScript(changedFilePath))
       buildAndExecuteScript(changedFilePath);
     else
       buildAll();
@@ -64,7 +64,7 @@ gulp.task('default', function (done) {
       osa.executeJsFile(builtPath);
     }
 
-    function fileIsAnExecutableScript(file) {
+    function fileIsABuildableScript(file) {
       var scripts = glob.sync(FILES.SCRIPTS);
       for (var a = 0; a < scripts.length; a++) {
         if (file.endsWith(scripts[a]))
