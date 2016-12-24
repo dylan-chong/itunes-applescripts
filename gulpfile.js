@@ -39,7 +39,16 @@ const OPTION_DEFINITIONS = [{
   alias: 'e',
   type: String
 }];
-const OPTIONS = commandLineArgs(OPTION_DEFINITIONS);
+const OPTIONS = (function () {
+  try {
+    return commandLineArgs(OPTION_DEFINITIONS);
+  } catch (err) {
+    // Prevent crash when using IntelliJ Node debugger for commandLineArgs module
+    if (err.message !== 'Unknown option: --color')
+      throw err;
+    return null;
+  }
+})();
 
 // **************** DEFAULT **************** //
 
@@ -112,7 +121,14 @@ function buildScript(scriptFileToCompile) {
     var tsArgs = ['--noImplicitAny'];
     var tsOptions = null;
 
-    return typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
+    var result =  typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
+
+    if (!result) {
+      log('Error, compilation failed', 0);
+      return null;
+    }
+
+    return result;
 
     function onTsError(diagnostic) {
       // Called for each compilation error
