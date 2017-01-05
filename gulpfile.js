@@ -34,11 +34,19 @@ const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 
 // Command line args
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
-const OPTION_DEFINITIONS = [{
-  name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
-  alias: 'e',
-  type: String
-}];
+const BUILD_FILE_COMMAND_LINE_NAME = 'build-js-osa-file';
+const OPTION_DEFINITIONS = [
+  {
+    name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
+    alias: 'e',
+    type: String
+  },
+  {
+    name: BUILD_FILE_COMMAND_LINE_NAME,
+    alias: 'b',
+    type: String
+  }
+];
 const OPTIONS = (function () {
   try {
     return commandLineArgs(OPTION_DEFINITIONS);
@@ -53,9 +61,18 @@ const OPTIONS = (function () {
 // **************** DEFAULT **************** //
 
 gulp.task('default', function (done) {
-  var commandLineArgFile = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
-  if (commandLineArgFile) {
-    osa.executeJsFile(commandLineArgFile, done);
+
+  // Execute file
+  var fileToExecute = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
+  if (fileToExecute) {
+    osa.executeJsFile(fileToExecute, done);
+    return;
+  }
+
+  // Build file
+  var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
+  if (scriptNameToBuild) {
+    buildScript(lookForFileToBuild(scriptNameToBuild));
     return;
   }
 
@@ -101,7 +118,7 @@ function buildScript(scriptFileToCompile) {
   log('Building script "' + scriptFileToCompile + '"', 0);
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Successfully built script "' + builtScriptPath + '"', 2); // TODO don't show success if error
+  log('Build script saved to "' + builtScriptPath + '"', 2); // TODO don't show success if error
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
@@ -161,16 +178,34 @@ function buildScript(scriptFileToCompile) {
     fs.writeFileSync(scriptPath, templateString);
     return scriptPath;
 
-    function getScriptName(scriptFileToCompile) {
-      var pathParts = scriptFileToCompile.split('/');
-      return pathParts[pathParts.length - 2];
-    }
-
     function makeDirectoriesIfNecessary(file) {
       var directory = file.substr(0, file.lastIndexOf('/'));
       mkdirp.sync(directory);
     }
   }
+}
+
+function getScriptName(scriptFileToCompile) {
+  var pathParts = scriptFileToCompile.split('/');
+  return pathParts[pathParts.length - 2];
+}
+
+/**
+ * Look for a script file that ends in the name
+ * @param scriptName
+ */
+function lookForFileToBuild(scriptName) {
+  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
+
+  var scriptNames = scriptFilePaths
+    .map(function (path) {
+      return getScriptName(path).split('.')[0];
+    });
+
+  var index = scriptNames.indexOf(scriptName);
+  if (index == -1) throw 'Not found: ' + scriptName;
+
+  return scriptFilePaths[index];
 }
 
 // TODO LATER gulp deploy into scpt format
