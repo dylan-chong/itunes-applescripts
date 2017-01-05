@@ -22,15 +22,15 @@ function createScript(): Script {
 
     // Process tracks
     var allTracks = allMusicPlaylist.tracks()
-      .slice(426, 456);
+      .slice(0, 100);
     var wrappedReadyTracks = wrapReadyTracks(allTracks);
+    debugger; // todo
     wrappedReadyTracks.sort((w1, w2) => {
       return w1.getDaysUntilReady() - w2.getDaysUntilReady();
     });
 
-    wrappedReadyTracks.forEach((wrapper) => {
-      console.log(wrapper.getDaysUntilReady() + ':\t' + wrapper.getTrack().name());
-    });
+    clearPlaylist(queuePlaylist, wrappedReadyTracks);
+    addAllToPlaylist(queuePlaylist, wrappedReadyTracks);
 
     return 'Done';
 
@@ -42,6 +42,62 @@ function createScript(): Script {
       if (matches.length > 1) throw 'Multiple matches for playlist: ' + name;
 
       return matches[0];
+    }
+
+    function clearPlaylist(playlist:IPlaylist,
+                           tracksWrappersToKeep: TrackReadinessWrapper[]) {
+      var tracksToKeep = tracksWrappersToKeep.map(wrapper => wrapper.getTrack());
+      playlist.tracks().forEach((track) => {
+        if (arrayOfTracksContainsTrack(tracksToKeep, track)) return;
+        track.delete({from: playlist});
+      });
+    }
+
+    function addAllToPlaylist(playlist:IPlaylist,
+                              tracksWrappersToAdd: TrackReadinessWrapper[]) {
+      tracksWrappersToAdd.forEach((wrapper) => {
+        var existingTrack = firstMatchingTrackInArray(
+          playlist.tracks(),
+          wrapper.getTrack());
+
+        if (existingTrack) {
+          existingTrack.move({to: playlist});
+        } else {
+          wrapper.getTrack().duplicate({to: playlist});
+        }
+      })
+    }
+
+    function firstMatchingTrackInArray(trackArray: ITrack[],
+                                       track: ITrack): ITrack {
+      for (var i = 0; i < trackArray.length; i++) {
+        if (tracksAreEqual(trackArray[i], track)) return trackArray[i];
+      }
+      return null;
+
+      function tracksAreEqual(trackA: ITrack, trackB: ITrack) {
+        if (trackA.name() !== trackB.name()) return false;
+        if (trackA.album() !== trackB.album()) return false;
+        if (trackA.artist() !== trackB.artist()) return false;
+        if (trackA.bitRate() !== trackB.bitRate()) return false;
+        if (!nullableDatesAreEqual(trackA.playedDate(), trackB.playedDate()))
+          return false;
+        if (!nullableDatesAreEqual(trackA.dateAdded(), trackB.dateAdded()))
+          return false;
+        return true;
+
+        function nullableDatesAreEqual(dateA: Date, dateB: Date) {
+          if (dateA === null || dateB === null) {
+            return dateA === null && dateB === null;
+          }
+          return dateA.getTime() === dateB.getTime();
+        }
+      }
+    }
+
+    function arrayOfTracksContainsTrack(trackArray: ITrack[],
+                                        track: ITrack): boolean {
+      return firstMatchingTrackInArray(trackArray, track) !== null;
     }
 
     /**
@@ -63,9 +119,12 @@ function createScript(): Script {
        * @return {number} Less than 0 if already ready to play
        */
       function getDaysUntilTrackIsReady(track: ITrack): number {
-        var readyDay = getLaterDate(track.playedDate(), getWaitDays(track));
+        var readyDate: Date;
+        if (track.playedDate()) {
+          readyDate = getLaterDate(track.playedDate(), getWaitDays(track));
+        }
         var now = new Date();
-        return daysBetween(now, readyDay);
+        return daysBetween(now, readyDate || new Date(0));
 
         function daysBetween(from: Date, to: Date): number {
           var millisDifference = to.getTime() - from.getTime();

@@ -13,13 +13,26 @@ interface IPlaylist {
 
 interface ITrack {
   name: IGettableSettable<string>;
+  album: IGettableSettable<string>;
+  artist: IGettableSettable<string>;
+  bitRate: IGettableSettable<number>;
   /** Between 0 and 100. Divide by 20 to get number of stars */
   rating: IGettableSettable<number>;
   playedCount: IGettableSettable<number>;
   playedDate: IGettableSettable<Date>;
+  dateAdded: IGettableSettable<Date>;
+  // noinspection ReservedWordAsName
+  delete: ITrackAction<{from: IPlaylist}>; // Stupid Apple API uses a reserved keyword for a property
+  duplicate: ITrackAction<{to: IPlaylist}>;
+  move: ITrackAction<{to: IPlaylist}>;
+  playlists: () => IPlaylist[];
 }
 
 interface IGettableSettable<T> {
-  (): T;
+  (): T; // get
   set: (value: T) => void
+}
+
+interface ITrackAction<T> {
+  (action: T): ITrack
 }
