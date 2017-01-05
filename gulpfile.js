@@ -114,16 +114,27 @@ gulp.task('build', buildAll);
 
 function buildAll() {
   var files = glob.sync(FILES.SCRIPTS);
+  var successes = 0;
+  var fails = 0;
   for (var a = 0; a < files.length; a++) {
-    buildScript(files[a]);
+    if (buildScript(files[a])) successes++;
+    else fails++;
   }
+
+  log('Build finished with ' + successes + ' successes, and ' +
+    fails + ' failures', 1);
 }
 
 function buildScript(scriptFileToCompile) {
   log('Building script "' + scriptFileToCompile + '"', 0);
   var filledTemplateString = getFilledTemplateString();
+  if (!filledTemplateString){
+    log('', 4);
+    return false;
+  }
+
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Build script saved to "' + builtScriptPath + '"', 2); // TODO don't show success if error
+  log('Build script saved to "' + builtScriptPath + '"', 2);
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
