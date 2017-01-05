@@ -5,6 +5,7 @@ function createScript(): Script {
   };
 
   function run() {
+
     // ******* Constants *******
 
     var ALL_MUSIC_PLAYLIST = 'All Playable Music';
@@ -15,16 +16,21 @@ function createScript(): Script {
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
 
+    // Playlists
     var allMusicPlaylist = getPlaylist(ALL_MUSIC_PLAYLIST);
     var queuePlaylist = getPlaylist(QUEUE_PLAYLIST);
 
+    // Process tracks
     var allTracks = allMusicPlaylist.tracks()
       .slice(426, 456);
-    var readyTracks: ITrack[] = [];
-    var unreadyTracks: ITrack[] = [];
-    divideTracks(allTracks, readyTracks, unreadyTracks);
+    var wrappedReadyTracks = wrapReadyTracks(allTracks);
+    wrappedReadyTracks.sort((w1, w2) => {
+      return w1.getDaysUntilReady() - w2.getDaysUntilReady();
+    });
 
-    debugger;
+    wrappedReadyTracks.forEach((wrapper) => {
+      console.log(wrapper.getDaysUntilReady() + ':\t' + wrapper.getTrack().name());
+    });
 
     return 'Done';
 
@@ -38,17 +44,19 @@ function createScript(): Script {
       return matches[0];
     }
 
-    function divideTracks(tracks: ITrack[],
-                          readyTracks: ITrack[],
-                          unreadyTracks: ITrack[]): void {
-      debugger;
-
+    /**
+     * Copies only the ready tracks into a new array, wrapping them in an object
+     * @param tracks
+     * @return {TrackReadinessWrapper[]}
+     */
+    function wrapReadyTracks(tracks: ITrack[]): TrackReadinessWrapper[] {
+      var wrapped: TrackReadinessWrapper[] = [];
       tracks.forEach((track) => {
-        if (getDaysUntilTrackIsReady(track) < 0) {
-          readyTracks.push(track);
-        }
-        else unreadyTracks.push(track);
+        var days = getDaysUntilTrackIsReady(track);
+        if (days > 0) return;
+        wrapped.push(new TrackReadinessWrapper(track, days));
       });
+      return wrapped;
 
       /**
        * @param track
