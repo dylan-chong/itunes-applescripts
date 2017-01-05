@@ -1,3 +1,3 @@
 interface Script {
-  run: () => string
+  run: () => string;
 }
