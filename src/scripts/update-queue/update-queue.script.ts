@@ -36,16 +36,10 @@ function createScript(): Script {
         wrapper.getTrack().name());
     });
 
-    clearPlaylist(queuePlaylist, wrappedReadyTracks, shouldKeepExistingTracks());
-    addAllToPlaylist(queuePlaylist, wrappedReadyTracks, shouldKeepExistingTracks());
+    clearPlaylist(queuePlaylist);
+    duplicateAllToPlaylist(queuePlaylist, wrappedReadyTracks);
 
     return 'Done';
-
-    function shouldKeepExistingTracks(): boolean {
-      if (wrappedReadyTracks.length > 100) return false;
-      if (queuePlaylist.tracks().length > 100) return false;
-      return true;
-    }
 
     function getPlaylist(name: string): IPlaylist {
       var matches = app.playlists()
@@ -57,33 +51,16 @@ function createScript(): Script {
       return matches[0];
     }
 
-    function clearPlaylist(playlist:IPlaylist,
-                           tracksWrappersToKeep: TrackReadinessWrapper[],
-                           shouldKeepExistingTracks: boolean) {
-      var tracksToKeep = tracksWrappersToKeep.map(wrapper => wrapper.getTrack());
+    function clearPlaylist(playlist:IPlaylist) {
       playlist.tracks().forEach((track) => {
-        if (shouldKeepExistingTracks &&
-          arrayOfTracksContainsTrack(tracksToKeep, track)) {
-          return;
-        }
         track.delete({from: playlist});
       });
     }
 
-    function addAllToPlaylist(playlist:IPlaylist,
-                              tracksWrappersToAdd: TrackReadinessWrapper[],
-                              shouldKeepExistingTracks: boolean) {
+    function duplicateAllToPlaylist(playlist:IPlaylist,
+                                    tracksWrappersToAdd: TrackReadinessWrapper[]) {
       tracksWrappersToAdd.forEach((wrapper) => {
-        if (shouldKeepExistingTracks)
-          var existingTrack = firstMatchingTrackInArray(
-            playlist.tracks(),
-            wrapper.getTrack());
-
-        if (existingTrack) {
-          existingTrack.move({to: playlist});
-        } else {
           wrapper.getTrack().duplicate({to: playlist});
-        }
       })
     }
 
@@ -126,7 +103,7 @@ function createScript(): Script {
      */
     function wrapReadyTracks(tracks: ITrack[]): TrackReadinessWrapper[] {
       var wrapped: TrackReadinessWrapper[] = [];
-      tracks.forEach((track, index) => {
+      tracks.forEach((track) => {
         if (wrapped.length >= TRACK_LIMIT) return;
         var days = getDaysUntilTrackIsReady(track);
         if (days > 0) return;
