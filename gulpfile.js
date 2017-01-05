@@ -62,18 +62,23 @@ const OPTIONS = (function () {
 
 gulp.task('default', function (done) {
 
-  // Execute file
-  var fileToExecute = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
-  if (fileToExecute) {
-    osa.executeJsFile(fileToExecute, done);
-    return;
-  }
+  if (OPTIONS) {
+    // Execute file
+    var fileToExecute = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
+    if (fileToExecute) {
+      osa.executeJsFile(fileToExecute, done);
+      return;
+    }
 
-  // Build file
-  var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
-  if (scriptNameToBuild) {
-    buildScript(lookForFileToBuild(scriptNameToBuild));
-    return;
+    // Build file
+    var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
+    if (scriptNameToBuild) {
+      buildScript(lookForFileToBuild(scriptNameToBuild));
+      return;
+    }
+  } else {
+    log('WARNING: command-line-args doesn\'t work when running from an ' +
+      'IntelliJ/WebStorm gulp build configuration', 1);
   }
 
   log('Watching for changes', 2);
