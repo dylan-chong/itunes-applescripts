@@ -190,9 +190,20 @@ function buildScript(scriptFileToCompile) {
   }
 }
 
-function getScriptName(scriptFileToCompile) {
+function getScriptName(scriptFileToCompile, shouldPruneExtension) {
   var pathParts = scriptFileToCompile.split('/');
-  return pathParts[pathParts.length - 2];
+  var name = pathParts[pathParts.length - 2];
+  if (shouldPruneExtension) name = name.split('.')[0];
+  return name;
+}
+
+function getAllScriptNames() {
+  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
+
+  return scriptFilePaths
+    .map(function (path) {
+      return getScriptName(path, true);
+    });
 }
 
 /**
@@ -202,15 +213,22 @@ function getScriptName(scriptFileToCompile) {
 function lookForFileToBuild(scriptName) {
   var scriptFilePaths = glob.sync(FILES.SCRIPTS);
 
-  var scriptNames = scriptFilePaths
-    .map(function (path) {
-      return getScriptName(path).split('.')[0];
-    });
+  var scriptNames = getAllScriptNames();
 
   var index = scriptNames.indexOf(scriptName);
   if (index == -1) throw 'Not found: ' + scriptName;
 
   return scriptFilePaths[index];
+}
+
+// **************** OTHER **************** //
+
+gulp.task('ls', listScripts);
+gulp.task('list', listScripts);
+
+function listScripts() {
+  var scriptNames = getAllScriptNames();
+  log('Scripts:', 1, scriptNames.join('\n') + '\n');
 }
 
 // TODO LATER gulp deploy into scpt format
