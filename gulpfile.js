@@ -98,6 +98,7 @@ function buildAll() {
 }
 
 function buildScript(scriptFileToCompile) {
+  log('Building script "' + scriptFileToCompile + '"', 0);
   var filledTemplateString = getFilledTemplateString();
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
   log('Successfully built script "' + builtScriptPath + '"', 2); // TODO don't show success if error
@@ -121,7 +122,8 @@ function buildScript(scriptFileToCompile) {
     var tsArgs = ['--noImplicitAny'];
     var tsOptions = null;
 
-    var result =  typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
+    var hasHadTsError = false;
+    var result = typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
 
     if (!result) {
       log('Error, compilation failed', 0);
@@ -130,10 +132,25 @@ function buildScript(scriptFileToCompile) {
 
     return result;
 
+    /**
+     * Called for each compilation error
+     */
     function onTsError(diagnostic) {
-      // Called for each compilation error
+      if (!hasHadTsError) {
+        hasHadTsError = true;
+        log("File contents: ", 3, prefixLinesWithLineNumbers(diagnostic.file.text));
+      }
       // TODO AFTER diagnostic category
-      log(diagnostic.messageText, 3);
+      log("Typescript Message: ", 3, diagnostic.formattedMessage);
+
+      function prefixLinesWithLineNumbers(text) {
+        var prefixedText = '';
+        var lines = text.split('\n');
+        for (var l = 0; l < lines.length; l++) {
+          prefixedText += (l + 1) + '\t' + lines[l] + '\n';
+        }
+        return prefixedText;
+      }
     }
   }
 
