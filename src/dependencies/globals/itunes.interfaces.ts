@@ -32,7 +32,7 @@ interface ITrack {
 
 interface IGettableSettable<T> {
   (): T; // get
-  set: (value: T) => void
+  set: (value: T) => any
 }
 
 interface ITrackAction<T> {

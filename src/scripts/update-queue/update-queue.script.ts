@@ -8,23 +8,13 @@ function createScript(): Script {
 
     // ******* Constants *******
 
-    var ALL_MUSIC_PLAYLIST = 'All Playable Music';
+    var ALL_MUSIC_PLAYLIST = 'Ready to Queue';
     var QUEUE_PLAYLIST = 'Queue';
 
     /**
      * Number of tracks in the queue
      */
-    var TRACK_LIMIT = 300;
-    /**
-     * Ignore tracks that require more than this many days to be ready.
-     * Manually lower for efficiency on large iTunes libraries.
-     *
-     * Default: 0
-     *
-     * Note: Negative numbers are treated differently. I.e., if the value is
-     * -10, then all tracks must have been ready for 10 days.
-     */
-    var MAX_DAYS_TO_BE_READY = -40;
+    var TRACK_LIMIT = 3e6;
 
     // *************************
 
@@ -43,8 +33,8 @@ function createScript(): Script {
     wrappedReadyTracks = wrappedReadyTracks.slice(0, TRACK_LIMIT);
 
     wrappedReadyTracks.forEach(wrapper => {
-      var d = -Math.round(wrapper.getDaysUntilReady());
-      console.log('Has been ready for ' + d + ' days:\t' +
+      var days = -Math.round(wrapper.getDaysUntilReady());
+      console.log('Has been ready for ' + days + ' days:\t' +
         wrapper.getTrack().name());
     });
 
@@ -79,7 +69,7 @@ function createScript(): Script {
     function compareTrackWrappers(w1: TrackReadinessWrapper,
                                   w2: TrackReadinessWrapper) {
       var readyDaysDifference = w1.getDaysUntilReady() - w2.getDaysUntilReady();
-      // Account for time difference when calculating each daysUntilReady
+      // Account for slight time difference when calculating each daysUntilReady
       // return readyDaysDifference;
       if (Math.abs(readyDaysDifference) > 0.0001) return readyDaysDifference;
 
@@ -104,6 +94,7 @@ function createScript(): Script {
       tracks.forEach((track) => {
         var days = getDaysUntilTrackIsReady(track);
         if (days > 0) return;
+
         wrapped.push(new TrackReadinessWrapper(track, days));
       });
       return wrapped;
