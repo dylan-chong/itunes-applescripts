@@ -11,7 +11,20 @@ function createScript(): Script {
     var ALL_MUSIC_PLAYLIST = 'All Playable Music';
     var QUEUE_PLAYLIST = 'Queue';
 
+    /**
+     * Number of tracks in the queue
+     */
     var TRACK_LIMIT = 300;
+    /**
+     * Ignore tracks that require more than this many days to be ready.
+     * Manually lower for efficiency on large iTunes libraries.
+     *
+     * Default: 0
+     *
+     * Note: Negative numbers are treated differently. I.e., if the value is
+     * -10, then all tracks must have been ready for 10 days.
+     */
+    var MAX_DAYS_TO_BE_READY = -40;
 
     // *************************
 
@@ -26,9 +39,8 @@ function createScript(): Script {
     var allTracks = allMusicPlaylist.tracks();
     var wrappedReadyTracks = wrapReadyTracks(allTracks);
 
-    wrappedReadyTracks.sort((w1, w2) => {
-      return w1.getDaysUntilReady() - w2.getDaysUntilReady();
-    });
+    wrappedReadyTracks.sort(compareTrackWrappers);
+    wrappedReadyTracks = wrappedReadyTracks.slice(0, TRACK_LIMIT);
 
     wrappedReadyTracks.forEach(wrapper => {
       var d = -Math.round(wrapper.getDaysUntilReady());
@@ -64,36 +76,22 @@ function createScript(): Script {
       })
     }
 
-    function firstMatchingTrackInArray(trackArray: ITrack[],
-                                       track: ITrack): ITrack {
-      for (var i = 0; i < trackArray.length; i++) {
-        if (tracksAreEqual(trackArray[i], track)) return trackArray[i];
-      }
-      return null;
+    function compareTrackWrappers(w1: TrackReadinessWrapper,
+                                  w2: TrackReadinessWrapper) {
+      var readyDaysDifference = w1.getDaysUntilReady() - w2.getDaysUntilReady();
+      // Account for time difference when calculating each daysUntilReady
+      // return readyDaysDifference;
+      if (Math.abs(readyDaysDifference) > 0.0001) return readyDaysDifference;
 
-      function tracksAreEqual(trackA: ITrack, trackB: ITrack) {
-        if (trackA.name() !== trackB.name()) return false;
-        if (trackA.album() !== trackB.album()) return false;
-        if (trackA.artist() !== trackB.artist()) return false;
-        if (trackA.bitRate() !== trackB.bitRate()) return false;
-        if (!nullableDatesAreEqual(trackA.playedDate(), trackB.playedDate()))
-          return false;
-        if (!nullableDatesAreEqual(trackA.dateAdded(), trackB.dateAdded()))
-          return false;
-        return true;
+      var album1 = w1.getTrack().album();
+      var album2 = w2.getTrack().album();
+      if (album1 < album2) return -1;
+      if (album1 > album2) return 1;
 
-        function nullableDatesAreEqual(dateA: Date, dateB: Date) {
-          if (dateA === null || dateB === null) {
-            return dateA === null && dateB === null;
-          }
-          return dateA.getTime() === dateB.getTime();
-        }
-      }
-    }
+      var discDiff = w1.getTrack().discNumber() - w2.getTrack().discNumber();
+      if (discDiff !== 0) return discDiff;
 
-    function arrayOfTracksContainsTrack(trackArray: ITrack[],
-                                        track: ITrack): boolean {
-      return firstMatchingTrackInArray(trackArray, track) !== null;
+      return w1.getTrack().trackNumber() - w2.getTrack().trackNumber();
     }
 
     /**
@@ -104,7 +102,6 @@ function createScript(): Script {
     function wrapReadyTracks(tracks: ITrack[]): TrackReadinessWrapper[] {
       var wrapped: TrackReadinessWrapper[] = [];
       tracks.forEach((track) => {
-        if (wrapped.length >= TRACK_LIMIT) return;
         var days = getDaysUntilTrackIsReady(track);
         if (days > 0) return;
         wrapped.push(new TrackReadinessWrapper(track, days));

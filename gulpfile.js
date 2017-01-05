@@ -134,7 +134,7 @@ function buildScript(scriptFileToCompile) {
   }
 
   var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Build script saved to "' + builtScriptPath + '"', 2);
+  log('Built script saved to "' + builtScriptPath + '"', 2);
   return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
 
   function getFilledTemplateString() {
