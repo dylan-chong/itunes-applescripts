@@ -14,7 +14,7 @@ function createScript(): Script {
     /**
      * Number of tracks in the queue
      */
-    var TRACK_LIMIT = 3e6;
+    var TRACK_LIMIT = 300;
 
     // *************************
 
@@ -72,6 +72,11 @@ function createScript(): Script {
       // Account for slight time difference when calculating each daysUntilReady
       // return readyDaysDifference;
       if (Math.abs(readyDaysDifference) > 0.0001) return readyDaysDifference;
+
+      // One that was imported earlier should appear first. In seconds
+      var addedTimeDifference = (w1.getTrack().dateAdded().getTime() -
+        w2.getTrack().dateAdded().getTime());
+      if (addedTimeDifference > 1000) return addedTimeDifference;
 
       var album1 = w1.getTrack().album();
       var album2 = w2.getTrack().album();
