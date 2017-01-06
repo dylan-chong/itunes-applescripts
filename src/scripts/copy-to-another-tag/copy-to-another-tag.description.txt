@@ -1,0 +1,2 @@
+Description:
+    Copies the data from one tag into another. E.g. Album -> Comment

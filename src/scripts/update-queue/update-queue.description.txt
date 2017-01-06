@@ -1,0 +1,3 @@
+Description:
+    Updates the playlist called 'Queue' with tracks, sorting by how long the
+    track has been available to queue.

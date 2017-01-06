@@ -1,0 +1,5 @@
+Description:
+    Adds data to the start or end of each track in each disc. The first disc
+    takes the first text item, the second disc takes the second text item, and
+    so on.
+
