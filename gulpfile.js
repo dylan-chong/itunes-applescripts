@@ -3,6 +3,7 @@
 
 const commandLineArgs = require('command-line-args');
 const fs = require('fs');
+const util = require('util');
 
 const gulp = require('gulp');
 const watch = require('gulp-watch');
@@ -35,6 +36,7 @@ const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 // Command line args
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
 const BUILD_FILE_COMMAND_LINE_NAME = 'build-js-osa-file';
+const BUILD_AND_EXECUTE_COMMAND_LINE_NAME = 'build-and-execute-js-osa-file';
 const OPTION_DEFINITIONS = [
   {
     name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
@@ -44,6 +46,11 @@ const OPTION_DEFINITIONS = [
   {
     name: BUILD_FILE_COMMAND_LINE_NAME,
     alias: 'b',
+    type: String
+  },
+  {
+    name: BUILD_AND_EXECUTE_COMMAND_LINE_NAME,
+    alias: 'r',
     type: String
   }
 ];
@@ -74,6 +81,16 @@ gulp.task('default', function (done) {
     var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
     if (scriptNameToBuild) {
       buildScript(lookForFileToBuild(scriptNameToBuild));
+      return;
+    }
+
+    var scriptNameToBuildAndExecute = OPTIONS[BUILD_AND_EXECUTE_COMMAND_LINE_NAME];
+    if (scriptNameToBuildAndExecute) {
+      var scriptPath = buildScript(lookForFileToBuild(
+        scriptNameToBuildAndExecute));
+      if (!scriptPath) return;
+      osa.executeJsFile(scriptPath, done);
+
       return;
     }
   } else {
