@@ -37,6 +37,7 @@ const BUILT_SCRIPT_EXTENSION = '.js.applescript';
 const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
 const BUILD_FILE_COMMAND_LINE_NAME = 'build-js-osa-file';
 const BUILD_AND_EXECUTE_COMMAND_LINE_NAME = 'build-and-execute-js-osa-file';
+const SCRIPT_COMMAND_LINE_ARG = 'script';
 const OPTION_DEFINITIONS = [
   {
     name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
@@ -52,6 +53,11 @@ const OPTION_DEFINITIONS = [
     name: BUILD_AND_EXECUTE_COMMAND_LINE_NAME,
     alias: 'r',
     type: String
+  },
+  { // For selecting a single script
+    name: SCRIPT_COMMAND_LINE_ARG,
+    alias: 's',
+    type: String
   }
 ];
 const OPTIONS = (function () {
@@ -61,6 +67,8 @@ const OPTIONS = (function () {
     // Prevent crash when using IntelliJ Node debugger for commandLineArgs module
     if (err.message !== 'Unknown option: --color')
       throw err;
+    log('WARNING: command-line-args doesn\'t work when running from an ' +
+      'IntelliJ/WebStorm gulp build configuration', 1);
     return null;
   }
 })();
@@ -93,9 +101,6 @@ gulp.task('default', function (done) {
 
       return;
     }
-  } else {
-    log('WARNING: command-line-args doesn\'t work when running from an ' +
-      'IntelliJ/WebStorm gulp build configuration', 1);
   }
 
   log('Watching for changes', 2);
@@ -105,7 +110,7 @@ gulp.task('default', function (done) {
     if (fileIsABuildableScript(changedFilePath))
       buildAndExecuteScript(changedFilePath);
     else
-      buildAll();
+      build();
 
     function buildAndExecuteScript(file) {
       var builtPath = buildScript(file);
@@ -127,25 +132,42 @@ gulp.task('default', function (done) {
 
 // **************** BUILDING **************** //
 
-gulp.task('build', buildAll);
+gulp.task('build', build);
+gulp.task('b', build);
 
-function buildAll() {
-  var files = glob.sync(FILES.SCRIPTS);
-  var successes = 0;
-  var fails = 0;
-  for (var a = 0; a < files.length; a++) {
-    if (buildScript(files[a])) successes++;
-    else fails++;
+function build() {
+  if (tryDoWithSelectedScript(buildSelectedScript)) {
+    return;
   }
 
-  log('Build finished with ' + successes + ' successes, and ' +
-    fails + ' failures', 1);
+  buildFiles(glob.sync(FILES.SCRIPTS));
+
+  function buildFiles(files) {
+    var successes = 0;
+    var fails = 0;
+    for (var a = 0; a < files.length; a++) {
+      if (buildScript(files[a])) successes++;
+      else fails++;
+    }
+
+    log('Build finished with ' + successes + ' successes, and ' +
+      fails + ' failures', 1);
+  }
+
+  function buildSelectedScript(userInputtedScript) {
+    buildFiles([userInputtedScript]);
+  }
 }
 
+// todo move into separate file
 function buildScript(scriptFileToCompile) {
+  if (!fs.existsSync(scriptFileToCompile)) {
+    scriptFileToCompile = lookForFileToBuild(scriptFileToCompile);
+  }
+
   log('Building script "' + scriptFileToCompile + '"', 0);
   var filledTemplateString = getFilledTemplateString();
-  if (!filledTemplateString){
+  if (!filledTemplateString) {
     log('', 4);
     return false;
   }
@@ -244,19 +266,52 @@ function lookForFileToBuild(scriptName) {
   var scriptNames = getAllScriptNames();
 
   var index = scriptNames.indexOf(scriptName);
-  if (index == -1) throw 'Not found: ' + scriptName;
+  if (index == -1) throw 'ERROR: Script not found by name: ' + scriptName;
 
   return scriptFilePaths[index];
 }
 
-// **************** OTHER **************** //
+// **************** EXECUTING **************** //
 
-gulp.task('ls', listScripts);
+gulp.task('execute', execute);
+gulp.task('e', execute);
+
+function execute() {
+}
+
+// **************** OTHER TASKS **************** //
+
 gulp.task('list', listScripts);
+gulp.task('ls', listScripts);
+gulp.task('l', listScripts);
 
 function listScripts() {
   var scriptNames = getAllScriptNames();
   log('Scripts:', 1, scriptNames.join('\n') + '\n');
+}
+
+// **************** OTHER **************** //
+
+/**
+ *
+ * @param doFunc function (userInputtedScriptName) {...}.
+ *        Called before returning true
+ * @throws When user uses SCRIPT_COMMAND_LINE_ARG and doesn't input a script
+ * @return {boolean} true: when user uses SCRIPT_COMMAND_LINE_ARG and inputs a script
+ *         false: when user doesn't use SCRIPT_COMMAND_LINE_ARG
+ */
+function tryDoWithSelectedScript(doFunc) {
+  if (OPTIONS) {
+    if (OPTIONS.hasOwnProperty(SCRIPT_COMMAND_LINE_ARG)) {
+      var selectedScript = OPTIONS[SCRIPT_COMMAND_LINE_ARG];
+      if (!selectedScript) {
+        throw 'ERROR: No script name/directory argument found';
+      }
+      doFunc(selectedScript);
+      return true;
+    }
+  }
+  return false;
 }
 
 // TODO LATER gulp deploy into scpt format
