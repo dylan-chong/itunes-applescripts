@@ -10,7 +10,8 @@
     "gulp": "^3.9.1",
     "gulp-watch": "^4.3.8",
     "mkdirp": "^0.5.1",
-    "typescript-compiler": "^1.4.1-2"
+    "typescript-compiler": "^1.4.1-2",
+    "wordwrap": "^1.0.0"
   },
   "dependencies": {}
 }

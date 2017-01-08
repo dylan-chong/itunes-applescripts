@@ -14,6 +14,7 @@ const mkdirp = require('mkdirp');
 
 const log = require('./node_modules-local/header-log.js').log;
 const Table = require('cli-table');
+const wrap = require('wordwrap');
 
 const osa = require('./node_modules-local/execute-osa.js');
 const getFilledString = require('./node_modules-local/fill.js').getFilledString;
@@ -93,7 +94,8 @@ function createTask(taskObj) {
     gulp.task(alias, [taskObj.taskName]);
   });
 
-  taskObjects.push(taskObj);
+  if (!taskObj.shouldHideFromHelp)
+    taskObjects.push(taskObj);
 }
 
 // **************** DEFAULT **************** //
@@ -122,27 +124,24 @@ createTask({
 
 function helpTask() {
   var sortedTaskObjects = taskObjects.slice(0, taskObjects.length);
-  sortedTaskObjects.sort(function (taskObjA, taskObjB) {
-    // Make default the first task in the list
-    if (taskObjA.taskName === 'default') return -1;
-    if (taskObjB.taskName === 'default') return 1;
+  sortedTaskObjects.sort(compareTaskObjects);
 
-    if (taskObjA.taskName < taskObjB.taskName) return -1;
-    if (taskObjA.taskName > taskObjB.taskName) return 1;
-    throw 'What?';
+  var table = new Table({
+    head: [
+      // Table column headers
+      'Task', 'Aliases', 'Task Dependencies', 'Description'
+    ]
   });
 
-  var table = new Table({head: [
-    // Table column headers
-    'Task', 'Aliases', 'Task Dependencies', 'Description'
-  ]});
+  const COL_WIDTH = 25;
+  var doWrap = wrap(COL_WIDTH);
 
   sortedTaskObjects.forEach(function (taskObj) {
     table.push([
       getTaskName(taskObj),
-      taskObj.taskAliasNames.join(', '),
-      taskObj.taskDependencies.join(', '),
-      taskObj.taskDescription || ''
+      taskObj.taskAliasNames.join(',\n'),
+      taskObj.taskDependencies.join(',\n'),
+      doWrap(taskObj.taskDescription) || ''
     ]);
 
     function getTaskName(taskObj) {
@@ -152,6 +151,16 @@ function helpTask() {
   });
 
   log('These are the tasks you can run', 1, table.toString() + '\n');
+
+  function compareTaskObjects(taskObjA, taskObjB) {
+    // Make default the first task in the list
+    if (taskObjA.taskName === 'default') return -1;
+    if (taskObjB.taskName === 'default') return 1;
+
+    if (taskObjA.taskName < taskObjB.taskName) return -1;
+    if (taskObjA.taskName > taskObjB.taskName) return 1;
+    throw 'What?';
+  }
 }
 
 // **************** BUILDING **************** //
@@ -289,7 +298,7 @@ function getAllScriptNames() {
 
 createTask({
   taskName: 'execute',
-  taskDependencies: [],
+  taskDependencies: ['require-selected-script-arg'],
   taskFunction: executeTask,
   taskAliasNames: ['e'],
   taskDescription: 'Executes a single script which is chosen using the ' +
@@ -297,7 +306,7 @@ createTask({
 });
 
 function executeTask(done) {
-  requireSelectedScriptArgTask('execute', executeScript);
+  executeScript(OPTIONS[SCRIPT_COMMAND_LINE_ARG]);
 
   function executeScript(userEnteredScriptName) {
     osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
@@ -320,7 +329,8 @@ createTask({
   taskDependencies: [],
   taskFunction: watchTask,
   taskAliasNames: ['w'],
-  taskDescription: 'Automatically rebuilds and executes the changed script (DANGEROUS!)'
+  taskDescription: '(DANGEROUS!) Automatically rebuilds and executes the ' +
+  'changed script'
 });
 
 function watchTask(done) {
@@ -385,11 +395,12 @@ createTask({
   taskDependencies: [],
   taskFunction: requireSelectedScriptArgTask,
   taskAliasNames: [],
-  taskDescription: 'Just a helper task. Don\'t use me'
+  taskDescription: 'Just a helper task. Don\'t use me',
+  shouldHideFromHelp: true
 });
 
-function requireSelectedScriptArgTask(doFuncThatTakesAScriptNameOrPath) {
-  if (tryDoWithSelectedScript(doFuncThatTakesAScriptNameOrPath)) {
+function requireSelectedScriptArgTask() {
+  if (hasScriptArgument()) {
     return;
   }
 
@@ -397,31 +408,18 @@ function requireSelectedScriptArgTask(doFuncThatTakesAScriptNameOrPath) {
     ' some-script-name-or-path';
   throw 'ERROR: No script name detected. Try again with something like:' +
   example;
+
+  function hasScriptArgument() {
+    if (!OPTIONS || !OPTIONS.hasOwnProperty(SCRIPT_COMMAND_LINE_ARG)) {
+      return false;
+    }
+
+    var selectedScript = OPTIONS[SCRIPT_COMMAND_LINE_ARG];
+    return !!selectedScript;
+  }
 }
 
 // **************** OTHER **************** //
-
-/**
- *
- * @param doFuncThatTakesAScriptNameOrPath function (userSelectedScript) {...}.
- *        Called before returning true
- * @throws When user uses SCRIPT_COMMAND_LINE_ARG and doesn't input a script
- * @return {boolean} true: when user uses SCRIPT_COMMAND_LINE_ARG and inputs a script
- *         false: when user doesn't use SCRIPT_COMMAND_LINE_ARG
- */
-function tryDoWithSelectedScript(doFuncThatTakesAScriptNameOrPath) {
-  if (OPTIONS) {
-    if (OPTIONS.hasOwnProperty(SCRIPT_COMMAND_LINE_ARG)) {
-      var selectedScript = OPTIONS[SCRIPT_COMMAND_LINE_ARG];
-      if (!selectedScript) {
-        throw 'ERROR: No script name/directory argument found';
-      }
-      doFuncThatTakesAScriptNameOrPath(selectedScript);
-      return true;
-    }
-  }
-  return false;
-}
 
 /**
  * Look for a script file that ends in the name
