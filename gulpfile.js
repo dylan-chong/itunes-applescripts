@@ -73,18 +73,58 @@ const OPTIONS = (function () {
   }
 })();
 
+// **************** CREATE TASKS **************** //
+
+var taskObjects = [];
+
+/**
+ * Note: Does not check for duplicate task names or aliases
+ */
+function createTask(taskObj) {
+  gulp.task(taskObj.taskName, taskObj.taskDependencies, taskObj.taskFunction);
+
+  if (taskObj.taskAliasNames) {
+    taskObj.taskAliasNames.forEach(function (alias) {
+      gulp.task(alias, [taskObj.taskName]);
+    });
+  }
+
+  taskObjects.push(taskObj);
+}
+
 // **************** DEFAULT **************** //
 
-gulp.task('default', ['build'], defaultTask);
+createTask({
+    taskName: 'default',
+    taskDependencies: ['help'],
+    taskFunction: defaultTask,
+    taskAliasNames: []
+});
 
 function defaultTask() {
   // Do nothing
 }
 
+gulp.task('help',  helpTask);
+
+createTask({
+  taskName: 'help',
+  taskDependencies: [],
+  taskFunction: helpTask,
+  taskAliasNames: ['h']
+});
+
+function helpTask() {
+}
+
 // **************** BUILDING **************** //
 
-gulp.task('build', buildTask);
-gulp.task('b', buildTask);
+createTask({
+  taskName: 'build',
+  taskDependencies: [],
+  taskFunction: buildTask,
+  taskAliasNames: ['b']
+});
 
 function buildTask() {
   if (tryDoWithSelectedScript(buildSelectedScript)) {
@@ -208,8 +248,12 @@ function getAllScriptNames() {
 
 // **************** EXECUTING **************** //
 
-gulp.task('execute', executeTask);
-gulp.task('e', executeTask);
+createTask({
+  taskName: 'execute',
+  taskDependencies: [],
+  taskFunction: executeTask,
+  taskAliasNames: ['e']
+});
 
 function executeTask(done) {
   requireSelectedScriptArg('execute', executeScript);
@@ -230,7 +274,12 @@ function executeTask(done) {
 
 // **************** WATCH **************** //
 
-gulp.task('watch', watchTask);
+createTask({
+  taskName: 'watch',
+  taskDependencies: [],
+  taskFunction: watchTask,
+  taskAliasNames: ['w']
+});
 
 function watchTask(done) {
   log('Watching for changes. Will auto execute script on change', 2);
@@ -264,8 +313,12 @@ function watchTask(done) {
 
 // **************** OTHER TASKS **************** //
 
-gulp.task('build-execute',  buildAndExecuteTask);
-gulp.task('be',  buildAndExecuteTask);
+createTask({
+  taskName: 'build-execute',
+  taskDependencies: [],
+  taskFunction: buildAndExecuteTask,
+  taskAliasNames: ['be']
+});
 
 function buildAndExecuteTask(done) {
   requireSelectedScriptArg('build-execute', noop);
@@ -275,9 +328,12 @@ function buildAndExecuteTask(done) {
   function noop() {}
 }
 
-gulp.task('list', listScriptsTask);
-gulp.task('ls', listScriptsTask);
-gulp.task('l', listScriptsTask);
+createTask({
+  taskName: 'list-scripts',
+  taskDependencies: [],
+  taskFunction: listScriptsTask,
+  taskAliasNames: ['list', 'ls', 'l']
+});
 
 function listScriptsTask() {
   var scriptNames = getAllScriptNames();
