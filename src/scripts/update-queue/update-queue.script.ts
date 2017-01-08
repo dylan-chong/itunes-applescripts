@@ -38,8 +38,9 @@ function createScript(): Script {
         wrapper.getTrack().name());
     });
 
-    clearPlaylist(queuePlaylist);
-    duplicateAllToPlaylist(queuePlaylist, wrappedReadyTracks);
+    // Code that makes changes:
+    // clearPlaylist(queuePlaylist);
+    // duplicateAllToPlaylist(queuePlaylist, wrappedReadyTracks);
 
     return 'Done';
 
