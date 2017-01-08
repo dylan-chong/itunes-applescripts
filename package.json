@@ -2,6 +2,7 @@
   "name": "itunes-applescripts",
   "version": "0.1.0",
   "devDependencies": {
+    "cli-table": "^0.3.1",
     "command-line-args": "^3.0.0",
     "concatenate-files": "^0.1.1",
     "fancy-log": "^1.2.0",
