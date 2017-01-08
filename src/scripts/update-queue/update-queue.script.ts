@@ -79,8 +79,8 @@ function createScript(): Script {
     logDiscs(limitedDiscs);
 
     // Code that makes changes:
-    // clearPlaylist(queuePlaylist);
-    // duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
+    clearPlaylist(queuePlaylist);
+    duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
 
     return 'Done';
 
