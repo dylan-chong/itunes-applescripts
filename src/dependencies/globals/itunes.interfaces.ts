@@ -3,8 +3,7 @@ interface IApplication {
   playlists: () => IPlaylist[];
 }
 
-type ApplicationGlobal = (appName: string) => IApplication;
-declare var Application: ApplicationGlobal;
+declare var Application: (appName: string) => IApplication;
 
 interface IPlaylist {
   name: () => string;

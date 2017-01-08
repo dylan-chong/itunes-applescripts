@@ -1,49 +1,27 @@
-// TODO NEXT make interfaces for Application
 // **************** DEPENDENCIES **************** //
 
 const commandLineArgs = require('command-line-args');
-const fs = require('fs');
 
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const glob = require('glob');
-const typescript = require('typescript-compiler');
 
-const mkdirp = require('mkdirp');
+const files = require('./gulp-helpers/files');
 
-const log = require('./node_modules-local/header-log.js').log;
-const osa = require('./node_modules-local/execute-osa.js');
-const getFilledString = require('./node_modules-local/fill.js').getFilledString;
+const log = require('./gulp-helpers/header-log.js').log;
+const helpPrinter = require('./gulp-helpers/help-printer');
+
+const scriptBuilder = require('./gulp-helpers/script-builder');
+const osa = require('./gulp-helpers/execute-osa.js');
 
 // **************** CONSTANTS **************** //
 
-const DIRECTORIES = {
-  SCRIPTS: 'src/scripts/',
-  DEPENDENCIES: 'src/dependencies/',
-  BUILD: 'build/'
-};
-const FILES = {
-  ALL_SRC: DIRECTORIES.SCRIPTS + '**/*',
-  SCRIPTS: DIRECTORIES.SCRIPTS + '*/*.script.ts',
-  SCRIPT_DESCRIPTIONS: DIRECTORIES.SCRIPTS + '*/*.description.txt',
-  BUILD_TEMPLATE: 'src/build/build-template.ts',
-  GLOBAL_DEPENDENCIES: DIRECTORIES.DEPENDENCIES + '**/*.ts'
-  // TODO LATER (per) SCRIPT_DEPENDENCIES
-};
-const BUILT_SCRIPT_EXTENSION = '.js.applescript';
-
 // Command line args
-const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
-const BUILD_FILE_COMMAND_LINE_NAME = 'build-js-osa-file';
+const SCRIPT_COMMAND_LINE_ARG = 'script';
 const OPTION_DEFINITIONS = [
-  {
-    name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
-    alias: 'e',
-    type: String
-  },
-  {
-    name: BUILD_FILE_COMMAND_LINE_NAME,
-    alias: 'b',
+  { // For selecting a single script
+    name: SCRIPT_COMMAND_LINE_ARG,
+    alias: 's',
     type: String
   }
 ];
@@ -54,191 +32,223 @@ const OPTIONS = (function () {
     // Prevent crash when using IntelliJ Node debugger for commandLineArgs module
     if (err.message !== 'Unknown option: --color')
       throw err;
+    log('WARNING: command-line-args doesn\'t work when running from an ' +
+      'IntelliJ/WebStorm gulp build configuration', 1);
     return null;
   }
 })();
 
+// **************** CREATE TASKS **************** //
+
+var taskObjects = [];
+
+/**
+ * Note: Does not check for duplicate task names or aliases
+ */
+function createTask(taskObj) {
+  gulp.task(taskObj.taskName, taskObj.taskDependencies, taskObj.taskFunction);
+
+  // Avoid having to deal with nulls
+  if (!taskObj.taskAliasNames) taskObj.taskAliasNames = [];
+  if (!taskObj.taskDependencies) taskObj.taskDependencies = [];
+
+  taskObj.taskAliasNames.forEach(function (alias) {
+    gulp.task(alias, [taskObj.taskName]);
+  });
+
+  if (!taskObj.shouldHideFromHelp)
+    taskObjects.push(taskObj);
+}
+
 // **************** DEFAULT **************** //
 
-gulp.task('default', function (done) {
+createTask({
+  taskName: 'default',
+  taskDependencies: ['help'],
+  taskFunction: defaultTask,
+  taskAliasNames: [],
+  taskDescription: 'Default task when running `gulp` without choosing a task'
+});
 
-  if (OPTIONS) {
-    // Execute file
-    var fileToExecute = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
-    if (fileToExecute) {
-      osa.executeJsFile(fileToExecute, done);
-      return;
-    }
+function defaultTask() {
+  // Do nothing
+}
 
-    // Build file
-    var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
-    if (scriptNameToBuild) {
-      buildScript(lookForFileToBuild(scriptNameToBuild));
-      return;
-    }
-  } else {
-    log('WARNING: command-line-args doesn\'t work when running from an ' +
-      'IntelliJ/WebStorm gulp build configuration', 1);
+gulp.task('help',  helpTask);
+
+createTask({
+  taskName: 'help',
+  taskDependencies: [],
+  taskFunction: helpTask,
+  taskAliasNames: ['h'],
+  taskDescription: 'Displays this help page'
+});
+
+function helpTask() {
+  helpPrinter.printHelp(taskObjects);
+}
+
+// **************** BUILDING **************** //
+
+createTask({
+  taskName: 'build',
+  taskDependencies: [],
+  taskFunction: buildTask,
+  taskAliasNames: ['b'],
+  taskDescription: 'Builds all scripts, or a single one using the ' +
+  '`--script script-name` argument'
+});
+
+function buildTask() {
+  if (getScriptArgument()) {
+    buildSelectedScript(getScriptArgument());
+    return;
   }
 
-  log('Watching for changes', 2);
+  buildFiles(glob.sync(files.constants.FILES.SCRIPTS));
 
-  watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
+  function buildFiles(files) {
+    var successes = 0;
+    var fails = 0;
+    for (var a = 0; a < files.length; a++) {
+      if (scriptBuilder.buildScript(files[a])) successes++;
+      else fails++;
+    }
+
+    log('Build finished with ' + successes + ' successes, and ' +
+      fails + ' failures', 1);
+  }
+
+  function buildSelectedScript(userSelectedScript) {
+    buildFiles([userSelectedScript]);
+  }
+}
+
+// **************** EXECUTING **************** //
+
+createTask({
+  taskName: 'execute',
+  taskDependencies: ['require-selected-script-arg'],
+  taskFunction: executeTask,
+  taskAliasNames: ['e'],
+  taskDescription: 'Executes a single script which is chosen using the ' +
+  '`--script script-name` argument'
+});
+
+function executeTask(done) {
+  executeScript(OPTIONS[SCRIPT_COMMAND_LINE_ARG]);
+
+  function executeScript(userEnteredScriptName) {
+    osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
+
+    function getScriptPath(scriptName) {
+      if (scriptName.endsWith(files.constants.BUILT_SCRIPT_EXTENSION)) {
+        // User entered executable script path
+        return scriptName;
+      }
+
+      return files.getBuiltScriptPathFromName(scriptName);
+    }
+  }
+}
+
+// **************** WATCH **************** //
+
+createTask({
+  taskName: 'watch',
+  taskDependencies: [],
+  taskFunction: watchTask,
+  taskAliasNames: ['w'],
+  taskDescription: '(DANGEROUS!) Automatically rebuilds and executes the ' +
+  'changed script'
+});
+
+// noinspection JSUnusedLocalSymbols
+function watchTask(done) {
+  log('Watching for changes. Will auto execute script on change', 2);
+
+  // noinspection JSUnresolvedFunction
+  watch(files.constants.FILES.ALL_SRC).on('change', onChange);
+
+  // Don't call done() since watch-ing
+
+  function onChange(changedFilePath) {
     log(changedFilePath, 1);
     if (fileIsABuildableScript(changedFilePath))
       buildAndExecuteScript(changedFilePath);
     else
-      buildAll();
+      buildTask();
 
     function buildAndExecuteScript(file) {
-      var builtPath = buildScript(file);
+      var builtPath = scriptBuilder.buildScript(file);
       osa.executeJsFile(builtPath);
     }
 
     function fileIsABuildableScript(file) {
-      var scripts = glob.sync(FILES.SCRIPTS);
+      var scripts = glob.sync(files.constants.FILES.SCRIPTS);
       for (var a = 0; a < scripts.length; a++) {
         if (file.endsWith(scripts[a]))
           return true;
       }
       return false;
     }
-  });
-
-  // Don't call done() if watch-ing
-});
-
-// **************** BUILDING **************** //
-
-gulp.task('build', buildAll);
-
-function buildAll() {
-  var files = glob.sync(FILES.SCRIPTS);
-  var successes = 0;
-  var fails = 0;
-  for (var a = 0; a < files.length; a++) {
-    if (buildScript(files[a])) successes++;
-    else fails++;
   }
-
-  log('Build finished with ' + successes + ' successes, and ' +
-    fails + ' failures', 1);
 }
 
-function buildScript(scriptFileToCompile) {
-  log('Building script "' + scriptFileToCompile + '"', 0);
-  var filledTemplateString = getFilledTemplateString();
-  if (!filledTemplateString){
-    log('', 4);
+// **************** REQUIRE SELECTED SCRIPT **************** //
+
+createTask({
+  taskName: 'require-selected-script-arg',
+  taskDependencies: [],
+  taskFunction: requireSelectedScriptArgTask,
+  taskAliasNames: [],
+  taskDescription: 'Just a helper task. Don\'t use me',
+  shouldHideFromHelp: true
+});
+
+function requireSelectedScriptArgTask() {
+  if (getScriptArgument()) {
+    return;
+  }
+
+  var example = 'gulp whatever-the-task-was --' + SCRIPT_COMMAND_LINE_ARG +
+    ' some-script-name-or-path';
+  throw 'ERROR: No script name detected. Try again with something like:' +
+  example;
+}
+
+function getScriptArgument() {
+  if (!OPTIONS || !OPTIONS.hasOwnProperty(SCRIPT_COMMAND_LINE_ARG)) {
     return false;
   }
 
-  var builtScriptPath = saveTemplateString(scriptFileToCompile, filledTemplateString);
-  log('Built script saved to "' + builtScriptPath + '"', 2);
-  return builtScriptPath; // TODO use gulp instead, and convert fill thing to gulp style
-
-  function getFilledTemplateString() {
-    var template = {
-      path: FILES.BUILD_TEMPLATE
-    };
-
-    var replacements = { // TODO make the replacements a constant at the top of the file
-      'dependencies': {
-        path: FILES.GLOBAL_DEPENDENCIES // TODO make the fill method take an array
-      },
-      'script': {
-        path: scriptFileToCompile
-      }
-    };
-
-    var tsString = getFilledString(template, replacements);
-    var tsArgs = ['--noImplicitAny'];
-    var tsOptions = null;
-
-    var hasHadTsError = false;
-    var result = typescript.compileString(tsString, tsArgs, tsOptions, onTsError);
-
-    if (!result) {
-      log('Error, compilation failed', 0);
-      return null;
-    }
-
-    return result;
-
-    /**
-     * Called for each compilation error
-     */
-    function onTsError(diagnostic) {
-      if (!hasHadTsError) {
-        hasHadTsError = true;
-        log("File contents: ", 3, prefixLinesWithLineNumbers(diagnostic.file.text));
-      }
-      // TODO AFTER diagnostic category
-      log("Typescript Message: ", 3, diagnostic.formattedMessage);
-
-      function prefixLinesWithLineNumbers(text) {
-        var prefixedText = '';
-        var lines = text.split('\n');
-        for (var l = 0; l < lines.length; l++) {
-          prefixedText += (l + 1) + '\t' + lines[l] + '\n';
-        }
-        return prefixedText;
-      }
-    }
-  }
-
-  function saveTemplateString(scriptFileToCompile, templateString) {
-    var scriptPath = DIRECTORIES.BUILD + getScriptName(scriptFileToCompile) +
-      BUILT_SCRIPT_EXTENSION;
-    makeDirectoriesIfNecessary(scriptPath);
-    fs.writeFileSync(scriptPath, templateString);
-    return scriptPath;
-
-    function makeDirectoriesIfNecessary(file) {
-      var directory = file.substr(0, file.lastIndexOf('/'));
-      mkdirp.sync(directory);
-    }
-  }
+  return OPTIONS[SCRIPT_COMMAND_LINE_ARG];
 }
 
-function getScriptName(scriptFileToCompile, shouldPruneExtension) {
-  var pathParts = scriptFileToCompile.split('/');
-  var name = pathParts[pathParts.length - 2];
-  if (shouldPruneExtension) name = name.split('.')[0];
-  return name;
+// **************** OTHER TASKS **************** //
+
+createTask({
+  taskName: 'build-execute',
+  taskDependencies: ['require-selected-script-arg', 'build', 'execute'],
+  taskFunction: buildAndExecuteTask,
+  taskAliasNames: ['be'],
+  taskDescription: 'Builds and executes using the `--script script-name` argument'
+});
+
+function buildAndExecuteTask(done) {
+  // Dependencies do the work
 }
 
-function getAllScriptNames() {
-  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
+createTask({
+  taskName: 'list-scripts',
+  taskDependencies: [],
+  taskFunction: listScriptsTask,
+  taskAliasNames: ['list', 'ls', 'l'],
+  taskDescription: 'Lists all the scripts in the src/scripts/ directory'
+});
 
-  return scriptFilePaths
-    .map(function (path) {
-      return getScriptName(path, true);
-    });
-}
-
-/**
- * Look for a script file that ends in the name
- * @param scriptName
- */
-function lookForFileToBuild(scriptName) {
-  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
-
-  var scriptNames = getAllScriptNames();
-
-  var index = scriptNames.indexOf(scriptName);
-  if (index == -1) throw 'Not found: ' + scriptName;
-
-  return scriptFilePaths[index];
-}
-
-// **************** OTHER **************** //
-
-gulp.task('ls', listScripts);
-gulp.task('list', listScripts);
-
-function listScripts() {
-  var scriptNames = getAllScriptNames();
+function listScriptsTask() {
+  var scriptNames = files.getAllScriptNames();
   log('Scripts:', 1, scriptNames.join('\n') + '\n');
 }
 
