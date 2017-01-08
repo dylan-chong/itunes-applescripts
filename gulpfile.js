@@ -1,43 +1,24 @@
 // **************** DEPENDENCIES **************** //
 
 const commandLineArgs = require('command-line-args');
-const util = require('util');
 
 const gulp = require('gulp');
 const watch = require('gulp-watch');
 const glob = require('glob');
 
-const files = require('./node_modules-local/files');
+const files = require('./gulp-helpers/files');
 
-const log = require('./node_modules-local/header-log.js').log;
-const helpPrinter = require('./node_modules-local/help-printer');
+const log = require('./gulp-helpers/header-log.js').log;
+const helpPrinter = require('./gulp-helpers/help-printer');
 
-const scriptBuilder = require('./node_modules-local/script-builder');
-const osa = require('./node_modules-local/execute-osa.js');
+const scriptBuilder = require('./gulp-helpers/script-builder');
+const osa = require('./gulp-helpers/execute-osa.js');
 
 // **************** CONSTANTS **************** //
 
 // Command line args
-const EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME = 'execute-js-osa-file';
-const BUILD_FILE_COMMAND_LINE_NAME = 'build-js-osa-file';
-const BUILD_AND_EXECUTE_COMMAND_LINE_NAME = 'build-and-execute-js-osa-file';
 const SCRIPT_COMMAND_LINE_ARG = 'script';
 const OPTION_DEFINITIONS = [
-  {
-    name: EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME,
-    alias: 'e',
-    type: String
-  },
-  {
-    name: BUILD_FILE_COMMAND_LINE_NAME,
-    alias: 'b',
-    type: String
-  },
-  {
-    name: BUILD_AND_EXECUTE_COMMAND_LINE_NAME,
-    alias: 'r',
-    type: String
-  },
   { // For selecting a single script
     name: SCRIPT_COMMAND_LINE_ARG,
     alias: 's',
@@ -161,12 +142,12 @@ function executeTask(done) {
     osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
 
     function getScriptPath(scriptName) {
-      if (scriptName.endsWith(BUILT_SCRIPT_EXTENSION)) {
+      if (scriptName.endsWith(files.constants.BUILT_SCRIPT_EXTENSION)) {
         // User entered executable script path
         return scriptName;
       }
 
-      return getBuiltScriptPathFromName(scriptName);
+      return files.getBuiltScriptPathFromName(scriptName);
     }
   }
 }
