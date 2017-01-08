@@ -154,8 +154,8 @@ function build() {
       fails + ' failures', 1);
   }
 
-  function buildSelectedScript(userInputtedScript) {
-    buildFiles([userInputtedScript]);
+  function buildSelectedScript(userSelectedScript) {
+    buildFiles([userSelectedScript]);
   }
 }
 
@@ -227,8 +227,7 @@ function buildScript(scriptFileToCompile) {
   }
 
   function saveTemplateString(scriptFileToCompile, templateString) {
-    var scriptPath = DIRECTORIES.BUILD + getScriptName(scriptFileToCompile) +
-      BUILT_SCRIPT_EXTENSION;
+    var scriptPath = getBuiltScriptPathFromName(getScriptName(scriptFileToCompile));
     makeDirectoriesIfNecessary(scriptPath);
     fs.writeFileSync(scriptPath, templateString);
     return scriptPath;
@@ -256,27 +255,30 @@ function getAllScriptNames() {
     });
 }
 
-/**
- * Look for a script file that ends in the name
- * @param scriptName
- */
-function lookForFileToBuild(scriptName) {
-  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
-
-  var scriptNames = getAllScriptNames();
-
-  var index = scriptNames.indexOf(scriptName);
-  if (index == -1) throw 'ERROR: Script not found by name: ' + scriptName;
-
-  return scriptFilePaths[index];
-}
-
 // **************** EXECUTING **************** //
 
 gulp.task('execute', execute);
 gulp.task('e', execute);
 
-function execute() {
+function execute(done) {
+  if (!tryDoWithSelectedScript(executeScript)) {
+    var example = 'gulp execute --' + SCRIPT_COMMAND_LINE_ARG +
+      ' some-script-name-or-path';
+    throw 'ERROR: No script detected. Try again with something like: ' + example;
+  }
+
+  function executeScript(userEnteredScriptName) {
+    osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
+
+    function getScriptPath(scriptName) {
+      if (scriptName.endsWith(BUILT_SCRIPT_EXTENSION)) {
+        // User entered executable script path
+        return scriptName;
+      }
+
+      return getBuiltScriptPathFromName(scriptName);
+    }
+  }
 }
 
 // **************** OTHER TASKS **************** //
@@ -294,24 +296,44 @@ function listScripts() {
 
 /**
  *
- * @param doFunc function (userInputtedScriptName) {...}.
+ * @param doFuncThatTakesAScriptNameOrPath function (userSelectedScript) {...}.
  *        Called before returning true
  * @throws When user uses SCRIPT_COMMAND_LINE_ARG and doesn't input a script
  * @return {boolean} true: when user uses SCRIPT_COMMAND_LINE_ARG and inputs a script
  *         false: when user doesn't use SCRIPT_COMMAND_LINE_ARG
  */
-function tryDoWithSelectedScript(doFunc) {
+function tryDoWithSelectedScript(doFuncThatTakesAScriptNameOrPath) {
   if (OPTIONS) {
     if (OPTIONS.hasOwnProperty(SCRIPT_COMMAND_LINE_ARG)) {
       var selectedScript = OPTIONS[SCRIPT_COMMAND_LINE_ARG];
       if (!selectedScript) {
         throw 'ERROR: No script name/directory argument found';
       }
-      doFunc(selectedScript);
+      doFuncThatTakesAScriptNameOrPath(selectedScript);
       return true;
     }
   }
   return false;
+}
+
+/**
+ * Look for a script file that ends in the name
+ * @param scriptName
+ */
+function lookForFileToBuild(scriptName) {
+  var scriptFilePaths = glob.sync(FILES.SCRIPTS);
+
+  var scriptNames = getAllScriptNames();
+
+  var index = scriptNames.indexOf(scriptName);
+  if (index == -1) throw 'ERROR: Script not found by name: ' + scriptName;
+
+  return scriptFilePaths[index];
+}
+
+function getBuiltScriptPathFromName(scriptName) {
+  return DIRECTORIES.BUILD + scriptName +
+    BUILT_SCRIPT_EXTENSION;
 }
 
 // TODO LATER gulp deploy into scpt format
