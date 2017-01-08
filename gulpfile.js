@@ -75,67 +75,18 @@ const OPTIONS = (function () {
 
 // **************** DEFAULT **************** //
 
-gulp.task('default', function (done) {
+gulp.task('default', ['build'], defaultTask);
 
-  if (OPTIONS) {
-    // Execute file
-    var fileToExecute = OPTIONS[EXECUTE_JS_OSA_FILE_COMMAND_LINE_NAME];
-    if (fileToExecute) {
-      osa.executeJsFile(fileToExecute, done);
-      return;
-    }
-
-    // Build file
-    var scriptNameToBuild = OPTIONS[BUILD_FILE_COMMAND_LINE_NAME];
-    if (scriptNameToBuild) {
-      buildScript(lookForFileToBuild(scriptNameToBuild));
-      return;
-    }
-
-    var scriptNameToBuildAndExecute = OPTIONS[BUILD_AND_EXECUTE_COMMAND_LINE_NAME];
-    if (scriptNameToBuildAndExecute) {
-      var scriptPath = buildScript(lookForFileToBuild(
-        scriptNameToBuildAndExecute));
-      if (!scriptPath) return;
-      osa.executeJsFile(scriptPath, done);
-
-      return;
-    }
-  }
-
-  log('Watching for changes', 2);
-
-  watch(FILES.ALL_SRC).on('change', function (changedFilePath) {
-    log(changedFilePath, 1);
-    if (fileIsABuildableScript(changedFilePath))
-      buildAndExecuteScript(changedFilePath);
-    else
-      build();
-
-    function buildAndExecuteScript(file) {
-      var builtPath = buildScript(file);
-      osa.executeJsFile(builtPath);
-    }
-
-    function fileIsABuildableScript(file) {
-      var scripts = glob.sync(FILES.SCRIPTS);
-      for (var a = 0; a < scripts.length; a++) {
-        if (file.endsWith(scripts[a]))
-          return true;
-      }
-      return false;
-    }
-  });
-
-  // Don't call done() if watch-ing
-});
+function defaultTask() {
+  // Do nothing
+}
 
 // **************** BUILDING **************** //
 
-gulp.task('build', build);
-gulp.task('b', build);
+gulp.task('build', buildTask);
+gulp.task('b', buildTask);
 
-function build() {
+function buildTask() {
   if (tryDoWithSelectedScript(buildSelectedScript)) {
     return;
   }
@@ -257,10 +208,10 @@ function getAllScriptNames() {
 
 // **************** EXECUTING **************** //
 
-gulp.task('execute', execute);
-gulp.task('e', execute);
+gulp.task('execute', executeTask);
+gulp.task('e', executeTask);
 
-function execute(done) {
+function executeTask(done) {
   requireSelectedScriptArg('execute', executeScript);
 
   function executeScript(userEnteredScriptName) {
@@ -277,25 +228,58 @@ function execute(done) {
   }
 }
 
+// **************** WATCH **************** //
+
+gulp.task('watch', watchTask);
+
+function watchTask(done) {
+  log('Watching for changes. Will auto execute script on change', 2);
+
+  watch(FILES.ALL_SRC).on('change', onChange);
+
+  // Don't call done() since watch-ing
+
+  function onChange(changedFilePath) {
+    log(changedFilePath, 1);
+    if (fileIsABuildableScript(changedFilePath))
+      buildAndExecuteScript(changedFilePath);
+    else
+      buildTask();
+
+    function buildAndExecuteScript(file) {
+      var builtPath = buildScript(file);
+      osa.executeJsFile(builtPath);
+    }
+
+    function fileIsABuildableScript(file) {
+      var scripts = glob.sync(FILES.SCRIPTS);
+      for (var a = 0; a < scripts.length; a++) {
+        if (file.endsWith(scripts[a]))
+          return true;
+      }
+      return false;
+    }
+  }
+}
+
 // **************** OTHER TASKS **************** //
 
-(function () {
-  gulp.task('build-execute',  buildAndExecute);
-  gulp.task('be',  buildAndExecute);
-})();
-function buildAndExecute(done) {
+gulp.task('build-execute',  buildAndExecuteTask);
+gulp.task('be',  buildAndExecuteTask);
+
+function buildAndExecuteTask(done) {
   requireSelectedScriptArg('build-execute', noop);
-  build(noop);
-  execute(done);
+  buildTask(noop);
+  executeTask(done);
 
   function noop() {}
 }
 
-gulp.task('list', listScripts);
-gulp.task('ls', listScripts);
-gulp.task('l', listScripts);
+gulp.task('list', listScriptsTask);
+gulp.task('ls', listScriptsTask);
+gulp.task('l', listScriptsTask);
 
-function listScripts() {
+function listScriptsTask() {
   var scriptNames = getAllScriptNames();
   log('Scripts:', 1, scriptNames.join('\n') + '\n');
 }
