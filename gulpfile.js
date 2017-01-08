@@ -261,11 +261,7 @@ gulp.task('execute', execute);
 gulp.task('e', execute);
 
 function execute(done) {
-  if (!tryDoWithSelectedScript(executeScript)) {
-    var example = 'gulp execute --' + SCRIPT_COMMAND_LINE_ARG +
-      ' some-script-name-or-path';
-    throw 'ERROR: No script detected. Try again with something like: ' + example;
-  }
+  requireSelectedScriptArg('execute', executeScript);
 
   function executeScript(userEnteredScriptName) {
     osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
@@ -282,6 +278,18 @@ function execute(done) {
 }
 
 // **************** OTHER TASKS **************** //
+
+(function () {
+  gulp.task('build-execute',  buildAndExecute);
+  gulp.task('be',  buildAndExecute);
+})();
+function buildAndExecute(done) {
+  requireSelectedScriptArg('build-execute', noop);
+  build(noop);
+  execute(done);
+
+  function noop() {}
+}
 
 gulp.task('list', listScripts);
 gulp.task('ls', listScripts);
@@ -314,6 +322,18 @@ function tryDoWithSelectedScript(doFuncThatTakesAScriptNameOrPath) {
     }
   }
   return false;
+}
+
+function requireSelectedScriptArg(currentTaskName,
+                                  doFuncThatTakesAScriptNameOrPath) {
+  if (tryDoWithSelectedScript(doFuncThatTakesAScriptNameOrPath)) {
+    return;
+  }
+
+  var example = 'gulp ' + currentTaskName + ' --' + SCRIPT_COMMAND_LINE_ARG +
+    ' some-script-name-or-path';
+  throw 'ERROR: No script name detected. Try again with something like:' +
+  example;
 }
 
 /**
