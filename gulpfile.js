@@ -160,7 +160,7 @@ createTask({
   taskFunction: watchTask,
   taskAliasNames: ['w'],
   taskDescription: '(DANGEROUS!) Automatically rebuilds and executes the ' +
-  'changed script'
+  'script when a change happens'
 });
 
 // noinspection JSUnusedLocalSymbols

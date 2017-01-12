@@ -1,16 +1,10 @@
 /* @fill dependencies */
 
-(function () {
+/* @fill script */
+
+(function (): string {
   'use strict';
-
-
-  var createScript: () => Script =
-
-    /* @fill script */
-
-    ;
-
   var script: Script = createScript();
-
   return script.run() || 'Error: Script not successfully run';
 })();
+
