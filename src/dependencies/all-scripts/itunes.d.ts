@@ -1,3 +1,5 @@
+// TODO SOMETIME put stuff into namespaces
+
 interface IApplication {
   includeStandardAdditions: boolean;
   playlists: () => IPlaylist[];
