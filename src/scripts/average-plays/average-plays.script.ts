@@ -42,8 +42,6 @@ function createScript():Script {
 
     return 'Done';
 
-    // TODO externalise the below method?
-
     function getAveragePlays(tracks: ITrack[]) {
       var totalPlays = 0;
 

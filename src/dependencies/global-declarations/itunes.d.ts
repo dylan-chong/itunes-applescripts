@@ -42,6 +42,7 @@ interface ITrack {
   playedDate: IGettableSettable<Date>;
   dateAdded: IGettableSettable<Date>;
   trackNumber: IGettableSettable<number>;
+  trackCount: IGettableSettable<number>;
   discNumber: IGettableSettable<number>;
   // noinspection ReservedWordAsName
   delete: ITrackAction<{from: IPlaylist}>; // Stupid Apple API uses a reserved keyword for a property

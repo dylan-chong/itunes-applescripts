@@ -44,7 +44,7 @@ function createScript():Script {
     var discsToShuffle = discs.slice(DISCS_TO_IGNORE);
     var ignoredDiscs = discs.slice(0, DISCS_TO_IGNORE);
 
-    var albums = new DiscAlbumifier(discsToShuffle).albumify();
+    var albums = new DiscsAlbumifier(discsToShuffle).albumify();
     var shuffledDiscs = getShuffledDiscs(albums);
 
     var combinedDiscs = ignoredDiscs.concat(shuffledDiscs);

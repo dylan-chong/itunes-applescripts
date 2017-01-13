@@ -1,4 +1,4 @@
-class DiscAlbumifier {
+class DiscsAlbumifier {
   constructor(private sourceDiscs: Disc[]) {
   }
 
