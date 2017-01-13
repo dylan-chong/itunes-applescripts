@@ -16,15 +16,14 @@ function createScript():Script {
     var PLAYLIST_IS_SMART = false;
 
     // Will leave this number of discs at the top of the playlist
-    var DISCS_TO_IGNORE = 1;
+    var DISCS_TO_IGNORE = 3;
 
     // *************************
 
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
-    var window = app.windows[0];
 
-    var playlist;
+    var playlist: IPlaylist;
 
     try {
       playlist = getDefaultPlaylist();
@@ -41,15 +40,16 @@ function createScript():Script {
     if (playlist.tracks().length == 0)
       return 'No tracks in this playlist';
 
-    var groups = getGroupsOfTracks(playlist.tracks());
-    var groupsToShuffle = groups.slice(DISCS_TO_IGNORE);
-    var ignoredDiscs = groups.slice(0, DISCS_TO_IGNORE)
+    var discs = new TracksDiscifier(playlist.tracks()).discify();
+    var discsToShuffle = discs.slice(DISCS_TO_IGNORE);
+    var ignoredDiscs = discs.slice(0, DISCS_TO_IGNORE);
 
-    var albumGroups = getSortedGroups(groupsToShuffle);
-    var shuffledDiscs = getShuffledDiscs(albumGroups);
+    var albums = new DiscsAlbumifier(discsToShuffle).albumify();
+    var shuffledDiscs = getShuffledDiscs(albums);
 
-    var combinedDiscGroups = ignoredDiscs.concat(shuffledDiscs);
-    logAllDiscGroups(combinedDiscGroups);
+    var combinedDiscs = ignoredDiscs.concat(shuffledDiscs);
+    logAllDiscs(combinedDiscs);
+
     // Code that makes changes:
     // reorderPlaylist(shuffledDiscs, playlist);
 
@@ -57,11 +57,13 @@ function createScript():Script {
 
     // **************** Playlists ****************
 
-    function getDefaultPlaylist() {
+    function getDefaultPlaylist(): IPlaylist {
       return getPlaylistByNameAndIsSmart(PLAYLIST_NAME, PLAYLIST_IS_SMART);
     }
 
-    function getPlaylistByNameAndIsSmart(name, isSmart) {
+    // todo playlist finder dependency
+    function getPlaylistByNameAndIsSmart(name: string,
+                                         isSmart: boolean): IPlaylist {
       var playlistArrays = app.sources.playlists();
       var userPlaylists = playlistArrays[0];
 
@@ -77,186 +79,120 @@ function createScript():Script {
       return null;
     }
 
-    function reorderPlaylist(discGroups, playlist) {
-      for (var d = 0; d < discGroups.length; d++) {
-        var disc = discGroups[d];
-        for (var t = 0; t < disc.length; t++) {
-          disc[t].move({to: playlist});
+    function reorderPlaylist(discs: Disc[], playlist: IPlaylist) {
+      for (var d = 0; d < discs.length; d++) {
+        var disc = discs[d];
+        for (var t = 0; t < disc.getTracks().length; t++) {
+          disc.getTracks()[t].move({to: playlist});
         }
       }
     }
 
-    // **************** Grouping and Shuffling ****************
+    // **************** Shuffling ****************
 
-    // Returns an array of array of tracks
-    function getGroupsOfTracks(originalTracksArray) {
-      if (originalTracksArray == null || originalTracksArray.length == 0)
-        return null;
+    function getShuffledDiscs(albums: Album[]) {
+      // Turn Album[] into Disc[][] because an 'Album' should have an array
+      // of Disc objects that all have the same .album() property. This method
+      // merges different Album objects together, so it doesn't make sense for
+      // them to be called Albums after a merge.
+      //
+      // A disc group is a Disc[]
+      var discGroups: Disc[][] = albums.map(album => {
+        return album.getDiscs().slice(); // copy
+      });
+      return pairShuffle(discGroups);
 
-      var tracks = originalTracksArray.slice();
-      var groups = [];
-      while (true) {
-        var group = [];
-        group.push(tracks[0]);
-        tracks = tracks.slice(1);
+      /**
+       * Takes the two small smallest Disc[] and merges them using
+       * alternatingShuffle. Repeats this process until there is only one Disc[]
+       * left, which is returned.
+       *
+       * @param discGroups
+       * @return {Disc[]}
+       */
+      function pairShuffle(discGroups: Disc[][]): Disc[] {
+        var shuffledDGs = discGroups.slice(); // copy
 
-        while (true) {
-          if (!tracks[0]) break;
-          if (tracks[0].album() != group[0].album())
-            break;
-          if (tracks[0].artist() != group[0].artist())
-            break;
-          if (tracks[0].discNumber() != group[0].discNumber())
-            break;
-          group.push(tracks[0]);
-          tracks = tracks.slice(1);
+        if (shuffledDGs.length === 0) throw 'shuffledDGs is empty';
+        while (shuffledDGs.length > 1) {
+          sortAlbumsByLength(shuffledDGs);
+
+          var smallestTwoDiscGroups: Disc[][] =
+            shuffledDGs.splice(shuffledDGs.length - 2, 2); // last 2 items
+          var mergedDiscs: Disc[] = alternatingShuffle(smallestTwoDiscGroups);
+          shuffledDGs.push(mergedDiscs);
         }
 
-        groups.push(group);
-        if (!tracks[0]) break;
-      }
+        // Only 1 Disc[] left inside shuffledDGs
+        return shuffledDGs[0];
 
-      return groups;
-    }
-
-    function getSortedGroups(discGroups) {
-      return getAlbumGroups(discGroups);
-
-      function getAlbumGroups(discGroups) {
-        var albumGroups = [];
-
-        for (var d = 0; d < discGroups.length; d++) {
-          var discGroup = discGroups[d];
-          var index = getIndexOfSameAlbum(discGroup);
-
-          if (index == -1) {
-            albumGroups.push([discGroup]);
-            continue;
-          }
-
-          albumGroups[index].push(discGroup);
-        }
-
-        return albumGroups;
-
-        function getIndexOfSameAlbum(discGroup) {
-          for (var a = 0; a < albumGroups.length; a++) {
-            // first track in the first disc of the album group
-            var groupTrack = albumGroups[a][0][0];
-            var discTrack = discGroup[0];
-
-            if (discTrack.album() !== groupTrack.album()) continue;
-            if (discTrack.artist() !== groupTrack.artist()) continue;
-
-            return a;
-          }
-
-          return -1;
+        /**
+         * From largest to smallest
+         */
+        function sortAlbumsByLength(discGroups: Disc[][]) {
+          discGroups.sort((disksA, disksB) => {
+            return disksA.length - disksB.length;
+          });
         }
       }
 
-      function getArtistGroups(discGroups) {
-        // TODO LATER
-      }
-    }
-
-    function getShuffledDiscs(albumGroups) {
-      return pairShuffle(albumGroups);
-
-      function pairShuffle(albumGroups) {
-        // TODO first disc stays at top
-        var shuffled = albumGroups;
-
-        while (shuffled.length > 1) {
-          shuffled = sortAlbumGroupsByLength(shuffled);
-          // logAlbumGroupLengthsAndNames(shuffled);
-
-          var smallest = shuffled.splice(shuffled.length - 2, 2);
-          var merged = simpleShuffle(smallest);
-          shuffled.push(merged);
+      /**
+       * Merges Disc[][] into Disc[] by alternating between each Disc[] - it
+       * takes one track from each disk until there are no tracks left in any
+       * of the source Disc[] objects.
+       *
+       * @param discGroups
+       * @return {Array}
+       */
+      function alternatingShuffle(discGroups: Disc[][]): Disc[] {
+        // Essentially stores how many Disc objects from each Disc[] have been
+        // added already
+        var currentDiscGroupIndexes: number[] = [];
+        for (var a = 0; a < discGroups.length; a++) {
+          currentDiscGroupIndexes.push(0);
         }
 
-        return shuffled[0];
-
-        // From largest to smallest
-        function sortAlbumGroupsByLength(albumGroups) {
-          var copiedGroups = albumGroups.slice();
-          var sortedGroups = [];
-
-          while (copiedGroups.length > 0) {
-            var largestGroupIndex;
-            var largestGroupSize = -1;
-            for (var a = 0; a < copiedGroups.length; a++) {
-              if (copiedGroups[a].length > largestGroupSize) {
-                largestGroupIndex = a;
-                largestGroupSize = copiedGroups[a].length;
-              }
-            }
-
-            // removedItems always has length 1
-            var removedItems = copiedGroups.splice(largestGroupIndex, 1);
-            sortedGroups.push(removedItems[0]);
-          }
-
-          return sortedGroups;
-        }
-      }
-
-      function simpleShuffle(albumGroups) {
-        var currentAlbumGroupIndexes = [];
-        for (var a = 0; a < albumGroups.length; a++) {
-          currentAlbumGroupIndexes.push(0);
-        }
-
-        var shuffled = []; // disc groups
+        var shuffled: Disc[] = []; // disc groups
 
         // Add one disc, to shuffled, from each album group
         while (true) {
           var albumsEmpty = 0;
-          for (var a = 0; a < albumGroups.length; a++) {
-            var indexInAlbum = currentAlbumGroupIndexes[a];
+          for (var a = 0; a < discGroups.length; a++) {
+            var indexInAlbum = currentDiscGroupIndexes[a];
 
             if (indexInAlbum == -1) {
               albumsEmpty++;
               continue;
             }
 
-            var discGroup = albumGroups[a][indexInAlbum];
+            var discGroup = discGroups[a][indexInAlbum];
             shuffled.push(discGroup);
 
-            currentAlbumGroupIndexes[a]++;
+            currentDiscGroupIndexes[a]++;
 
-            if (currentAlbumGroupIndexes[a] == albumGroups[a].length) {
-              currentAlbumGroupIndexes[a] = -1;
+            if (currentDiscGroupIndexes[a] == discGroups[a].length) {
+              currentDiscGroupIndexes[a] = -1;
               albumsEmpty++;
             }
           }
 
-          if (albumsEmpty == albumGroups.length) break;
+          if (albumsEmpty == discGroups.length) break;
         }
 
         return shuffled;
-      }
-
-      function logAlbumGroupLengthsAndNames(albumGroups) {
-        var logStr = '\n[\n';
-        for (var a = 0; a < albumGroups.length; a++) {
-          logStr += '\t' + albumGroups[a].length + ': ' + albumGroups[a][0][0].album() + ' ,\n';
-        }
-        console.log(logStr + '\n]');
       }
     }
 
     // **************** Debug ****************
 
-    function logAllDiscGroups(groups, tabSpaces) {
-      for (var a = 0; a < groups.length; a++) {
-        logDiscGroup(groups[a], tabSpaces);
+    function logAllDiscs(discs: Disc[], tabSpaces?: number) {
+      for (var a = 0; a < discs.length; a++) {
+        logDiscGroup(discs[a], tabSpaces);
       }
     }
 
-    function logDiscGroup(group, tabSpaces) {
-      var discNum = group[0].discNumber() + '';
+    function logDiscGroup(disc: Disc, tabSpaces?: number) {
+      var discNum = disc.getTracks()[0].discNumber() + '';
 
       while (discNum.length < 3) {
         discNum = ' ' + discNum;
@@ -266,21 +202,8 @@ function createScript():Script {
       for (var a = 0; a < tabSpaces; a++) s += '\t';
 
       s += 'Disc: ' + discNum + ', ';
-      s += 'Album: ' + group[0].album();
+      s += 'Album: ' + disc.getTracks()[0].album();
       console.log(s);
     }
-
-    function logAlbumGroups(albumGroups) {
-      for (var a = 0; a < albumGroups.length; a++) {
-        console.log('Album ' + (a + 1));
-        logAllDiscGroups(albumGroups[a], 1);
-      }
-    }
-
-    function logTime(msg) {
-      var date = new Date();
-      console.log(date.toString() + ' : ' + msg);
-    }
-
   }
 }

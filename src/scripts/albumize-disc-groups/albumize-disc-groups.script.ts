@@ -11,14 +11,15 @@ function createScript():Script {
 
     var selection = window.selection();
 
-    var groups = getGroupsOfTracks(selection);
+    var discs = new TracksDiscifier(selection).discify();
 
-    for (var g = 0; g < groups.length; g++) { // TODO put into function, and move return up
-      var group = groups[g];
-      for (var t = 0; t < group.length; t++) {
-        var track = group[t];
+    for (var d = 0; d < discs.length; d++) { // TODO put into function, and move return up
+      var group = discs[d];
+
+      for (var t = 0; t < group.getTracks().length; t++) {
+        var track = group.getTracks()[t];
         var num = t + 1;
-        var count = group.length;
+        var count = group.getTracks().length;
 
         // Reapply changes twice (sometimes changes don't apply properly)
         for (var i = 0; i < 2; i++) {
@@ -31,37 +32,8 @@ function createScript():Script {
                     ', Name: ' + track.name());
       }
     }
+
     return 'Done';
-
-    function getGroupsOfTracks(originalTracksArray) {
-      if (originalTracksArray == null || originalTracksArray.length == 0)
-        return null;
-
-      var tracks = originalTracksArray.slice();
-      var groups = [];
-      while (true) {
-        var group = [];
-        group.push(tracks[0]);
-        tracks = tracks.slice(1);
-
-        while (true) {
-          if (!tracks[0]) break;
-          if (tracks[0].album() != group[0].album())
-            break;
-          if (tracks[0].artist() != group[0].artist())
-            break;
-          if (tracks[0].discNumber() != group[0].discNumber())
-            break;
-          group.push(tracks[0]);
-          tracks = tracks.slice(1);
-        }
-
-        groups.push(group);
-        if (!tracks[0]) break;
-      }
-
-      return groups;
-    }
   }
 }
 

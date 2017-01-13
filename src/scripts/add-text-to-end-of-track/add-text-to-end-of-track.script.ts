@@ -37,7 +37,7 @@ function createScript():Script {
         'I. Vivace\n' +
         'II. Allegro';
 
-    function getNewName(oldName) {
+    function getNewName(oldName: string): string {
       return oldName + DATA_PREFIX + dataItems[a];
     }
 

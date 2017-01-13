@@ -1,13 +1,34 @@
+// TODO SOMETIME put stuff into namespaces
+
 interface IApplication {
   includeStandardAdditions: boolean;
+  playlists: () => IPlaylist[];
+  windows: IItunesWindow[];
+  sources: ISources;
+}
+
+interface IItunesWindow {
+  selection: () => ITrack[];
+}
+
+interface ISources {
+  [index: number]: ISource;
+  playlists: () => IPlaylist[][]; // looks through all its ISource objects
+  tracks: () => ITrack[][]; // looks through all its ISource objects
+}
+
+interface ISource {
+  name: () => string;
+  tracks: () => ITrack[];
   playlists: () => IPlaylist[];
 }
 
 declare var Application: (appName: string) => IApplication;
 
 interface IPlaylist {
-  name: () => string;
+  name: () => string; // probably should be IGettableSettable
   tracks: () => ITrack[];
+  smart: () => boolean; // is a smart playlist
 }
 
 interface ITrack {
@@ -21,6 +42,7 @@ interface ITrack {
   playedDate: IGettableSettable<Date>;
   dateAdded: IGettableSettable<Date>;
   trackNumber: IGettableSettable<number>;
+  trackCount: IGettableSettable<number>;
   discNumber: IGettableSettable<number>;
   // noinspection ReservedWordAsName
   delete: ITrackAction<{from: IPlaylist}>; // Stupid Apple API uses a reserved keyword for a property
