@@ -3,13 +3,32 @@
 interface IApplication {
   includeStandardAdditions: boolean;
   playlists: () => IPlaylist[];
+  windows: IWindow[];
+  sources: ISources;
+}
+
+interface IWindow {
+  // todo selection
+}
+
+interface ISources {
+  [index: number]: ISource;
+  playlists: () => IPlaylist[][]; // looks through all its ISource objects
+  tracks: () => ITrack[][]; // looks through all its ISource objects
+}
+
+interface ISource {
+  name: () => string;
+  tracks: () => ITrack[];
+  playlists: () => IPlaylist[];
 }
 
 declare var Application: (appName: string) => IApplication;
 
 interface IPlaylist {
-  name: () => string;
+  name: () => string; // probably should be IGettableSettable
   tracks: () => ITrack[];
+  smart: () => boolean; // is a smart playlist
 }
 
 interface ITrack {
