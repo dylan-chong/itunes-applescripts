@@ -40,6 +40,7 @@ function createScript():Script {
     if (playlist.tracks().length == 0)
       return 'No tracks in this playlist';
 
+    // todo remove groups
     var groups = new TracksDiscifier(playlist.tracks()).discifyTracks();
     var groupsToShuffle = groups.slice(DISCS_TO_IGNORE);
     var ignoredDiscs = groups.slice(0, DISCS_TO_IGNORE);

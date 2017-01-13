@@ -3,12 +3,12 @@
 interface IApplication {
   includeStandardAdditions: boolean;
   playlists: () => IPlaylist[];
-  windows: IWindow[];
+  windows: IItunesWindow[];
   sources: ISources;
 }
 
-interface IWindow {
-  // todo selection
+interface IItunesWindow {
+  selection: () => ITrack[];
 }
 
 interface ISources {

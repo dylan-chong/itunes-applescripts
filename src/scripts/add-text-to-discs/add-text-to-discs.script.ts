@@ -1,4 +1,4 @@
-function createScript():Script {
+function createScript(): Script {
 
   // *************** Constants ***************
 
@@ -9,7 +9,7 @@ function createScript():Script {
   // Text to be added between a NAME_DATA item and the original name
   var DELIMITER = ' - ';
 
-  var NAME_DATA:string[] = `[A2] Ouverture For Strings And Continuo In A Major (-1717-22)
+  var NAME_DATA: string[] = `[A2] Ouverture For Strings And Continuo In A Major (-1717-22)
 [a2] Suite For Alto Recorder, Strings And Continuo In A Minor
 [a3] Suite For 2 Oboes, Bassoon And Strings In A Minor
 [A4] Ouverture For Violin, Strings And Continuo In A Major
@@ -29,11 +29,10 @@ function createScript():Script {
     var window = app.windows[0];
 
     var selection = window.selection();
+    var discs: Disc[] = new TracksDiscifier(selection).discifyTracks();
 
-    var groups = getGroupsOfTracks(selection);
-
-    groups.forEach(function (group, groupIndex) {
-      group.forEach(function (track) {
+    discs.forEach(function (disc, groupIndex) {
+      disc.getTracks().forEach(function (track) {
         var newName = track.name();
         var text = NAME_DATA[groupIndex];
 
@@ -53,36 +52,6 @@ function createScript():Script {
     });
 
     return 'Done';
-
-    function getGroupsOfTracks(originalTracksArray) {
-      if (originalTracksArray == null || originalTracksArray.length == 0)
-        return null;
-
-      var tracks = originalTracksArray.slice();
-      var groups = [];
-      while (true) {
-        var group = [];
-        group.push(tracks[0]);
-        tracks = tracks.slice(1);
-
-        while (true) {
-          if (!tracks[0]) break;
-          if (tracks[0].album() != group[0].album())
-            break;
-          if (tracks[0].artist() != group[0].artist())
-            break;
-          if (tracks[0].discNumber() != group[0].discNumber())
-            break;
-          group.push(tracks[0]);
-          tracks = tracks.slice(1);
-        }
-
-        groups.push(group);
-        if (!tracks[0]) break;
-      }
-
-      return groups;
-    }
   }
 }
 
