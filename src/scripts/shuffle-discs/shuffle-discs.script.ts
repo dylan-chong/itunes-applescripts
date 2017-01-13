@@ -40,7 +40,7 @@ function createScript():Script {
     if (playlist.tracks().length == 0)
       return 'No tracks in this playlist';
 
-    var groups = discifyTracks(playlist.tracks());
+    var groups = new TracksDiscifier(playlist.tracks()).discifyTracks();
     var groupsToShuffle = groups.slice(DISCS_TO_IGNORE);
     var ignoredDiscs = groups.slice(0, DISCS_TO_IGNORE);
 
@@ -89,42 +89,6 @@ function createScript():Script {
     }
 
     // **************** Grouping and Shuffling ****************
-
-    // Returns an array of array of tracks
-
-    // todo next type it, then move this into a global dependency (remember to include in all scripts)
-
-    function discifyTracks(originalTracksArray: ITrack[]) {
-      if (originalTracksArray == null || originalTracksArray.length == 0)
-        return null;
-
-      // todo sometime maybe don't assume sequential discs?
-
-      var tracks = originalTracksArray.slice();
-      var discs: Disc[] = [];
-      while (true) {
-        var currentDiscTracks: ITrack[] = [];
-        currentDiscTracks.push(tracks[0]);
-        tracks.shift(); // remove first item
-
-        while (true) {
-          if (tracks.length === 0) break;
-          if (tracks[0].album() != currentDiscTracks[0].album())
-            break;
-          if (tracks[0].artist() != currentDiscTracks[0].artist())
-            break;
-          if (tracks[0].discNumber() != currentDiscTracks[0].discNumber())
-            break;
-          currentDiscTracks.push(tracks[0]);
-          tracks.shift(); // remove first item
-        }
-
-        discs.push(new Disc(currentDiscTracks));
-        if (tracks.length === 0) break;
-      }
-
-      return discs;
-    }
 
     function getSortedGroups(discs: Disc[]): Album[] { // correct return type?
       return getAlbumGroups(discs);

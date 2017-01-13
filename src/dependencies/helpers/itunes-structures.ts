@@ -1,5 +1,5 @@
 /**
- * Array of ITrack objects. Not an official iTunes object
+ * Not an official iTunes object
  */
 class Disc {
   constructor(private tracks: ITrack[]) {
@@ -24,4 +24,3 @@ class Album {
     return this.discs;
   }
 }
-
