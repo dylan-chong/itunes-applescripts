@@ -29,7 +29,7 @@ function createScript(): Script {
     var window = app.windows[0];
 
     var selection = window.selection();
-    var discs: Disc[] = new TracksDiscifier(selection).discifyTracks();
+    var discs: Disc[] = new TracksDiscifier(selection).discify();
 
     discs.forEach(function (disc, groupIndex) {
       disc.getTracks().forEach(function (track) {

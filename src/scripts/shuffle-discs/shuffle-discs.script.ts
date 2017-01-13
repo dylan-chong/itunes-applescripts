@@ -40,16 +40,15 @@ function createScript():Script {
     if (playlist.tracks().length == 0)
       return 'No tracks in this playlist';
 
-    // todo remove groups
-    var groups = new TracksDiscifier(playlist.tracks()).discifyTracks();
-    var groupsToShuffle = groups.slice(DISCS_TO_IGNORE);
-    var ignoredDiscs = groups.slice(0, DISCS_TO_IGNORE);
+    var discs = new TracksDiscifier(playlist.tracks()).discify();
+    var discsToShuffle = discs.slice(DISCS_TO_IGNORE);
+    var ignoredDiscs = discs.slice(0, DISCS_TO_IGNORE);
 
-    var albumGroups = getSortedGroups(groupsToShuffle);
-    var shuffledDiscs = getShuffledDiscs(albumGroups);
+    var albums = new DiscAlbumifier(discsToShuffle).albumify();
+    var shuffledDiscs = getShuffledDiscs(albums);
 
-    var combinedDiscGroups = ignoredDiscs.concat(shuffledDiscs);
-    logAllDiscs(combinedDiscGroups);
+    var combinedDiscs = ignoredDiscs.concat(shuffledDiscs);
+    logAllDiscs(combinedDiscs);
 
     // Code that makes changes:
     // reorderPlaylist(shuffledDiscs, playlist);
@@ -89,50 +88,15 @@ function createScript():Script {
       }
     }
 
-    // **************** Grouping and Shuffling ****************
-
-    function getSortedGroups(discs: Disc[]): Album[] { // correct return type?
-      return getAlbumGroups(discs);
-
-      function getAlbumGroups(discs: Disc[]): Album[] {
-        var albums: Album[] = [];
-
-        for (var d = 0; d < discs.length; d++) {
-          var discGroup = discs[d];
-          var index = getIndexOfSameAlbum(discGroup);
-
-          if (index == -1) {
-            albums.push(new Album([discGroup]));
-            continue;
-          }
-
-          albums[index].getDiscs().push(discGroup);
-        }
-
-        return albums;
-
-        function getIndexOfSameAlbum(disc: Disc): number {
-          for (var a = 0; a < albums.length; a++) {
-            // first track in the first disc of the album group
-            var trackFromAlbumA = albums[a].getDiscs()[0].getTracks()[0];
-            var trackForSearch = disc.getTracks()[0];
-
-            if (trackForSearch.album() !== trackFromAlbumA.album()) continue;
-            if (trackForSearch.artist() !== trackFromAlbumA.artist()) continue;
-
-            return a;
-          }
-
-          return -1;
-        }
-      }
-    }
+    // **************** Shuffling ****************
 
     function getShuffledDiscs(albums: Album[]) {
       // Turn Album[] into Disc[][] because an 'Album' should have an array
       // of Disc objects that all have the same .album() property. This method
       // merges different Album objects together, so it doesn't make sense for
       // them to be called Albums after a merge.
+      //
+      // A disc group is a Disc[]
       var discGroups: Disc[][] = albums.map(album => {
         return album.getDiscs().slice(); // copy
       });
@@ -153,7 +117,6 @@ function createScript():Script {
         while (shuffledDGs.length > 1) {
           sortAlbumsByLength(shuffledDGs);
 
-          // A disc group is a Disc[]
           var smallestTwoDiscGroups: Disc[][] =
             shuffledDGs.splice(shuffledDGs.length - 2, 2); // last 2 items
           var mergedDiscs: Disc[] = alternatingShuffle(smallestTwoDiscGroups);

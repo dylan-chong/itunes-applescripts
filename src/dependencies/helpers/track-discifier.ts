@@ -5,7 +5,7 @@ class TracksDiscifier {
   /**
    * Groups sourceTracks into Disc objects
    */
-  public discifyTracks(): Disc[] {
+  public discify(): Disc[] {
     if (this.sourceTracks == null || this.sourceTracks.length == 0)
       throw 'sourceTracks is empty';
 
