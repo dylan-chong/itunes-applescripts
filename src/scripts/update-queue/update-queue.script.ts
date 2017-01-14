@@ -22,7 +22,7 @@ function createScript(): Script {
      * the queue. Can be set to anywhere between 0 (only allow one disc of
      * each album) and 1 (no limit).
      */
-    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.2;
+    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.1;
 
     // *************************
 
