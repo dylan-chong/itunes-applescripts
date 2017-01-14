@@ -106,7 +106,7 @@ function createScript():Script {
          */
         function sortAlbumsByLength(discGroups: Disc[][]) {
           discGroups.sort((disksA, disksB) => {
-            return disksA.length - disksB.length;
+            return disksB.length - disksA.length;
           });
         }
       }
