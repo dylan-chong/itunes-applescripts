@@ -31,88 +31,27 @@ function createScript(): Script {
     // Process tracks
     var allAlbums = getAllAlbums();
 
-    // Sort discs so the ready to play ones are first
-    allAlbums.forEach(album => {
-      album.getDiscs().sort((discA, discB) => {
-        return compareTracks(discA.getTracks()[0], discB.getTracks()[0]);
-      });
-    });
+    // Sort discs in each album so the ready to play ones are first
+    allAlbums.forEach(album => sortDiscs(album.getDiscs()));
+    allAlbums.forEach(limitDiscsPerAlbum);
 
-    // Each number[] is an album's durations
-    var durationsOfEachDiscByAlbum: number[][] = allAlbums.map(album => {
-      return album.getDiscs().map(disc => {
-        var durationsPerTrack: number[] = disc.getTracks().map(track => {
-          return track.duration();
-        });
-
-        return durationsPerTrack.reduce(sum);
-      });
-    });
-
-    // Remove excess discs in each album (prevents too much of a single album
-    // filling up the queue)
-    allAlbums.forEach((album, albumIndex) => {
-      var discs = album.getDiscs();
-      var duration = 0;
-
-      var durationLimit = DURATION_LIMIT_PER_ALBUM_FRACTION *
-        PLAYLIST_DURATION_LIMIT_SECONDS;
-
-      for (var i = 0; i < discs.length; i++) {
-        duration += durationsOfEachDiscByAlbum[albumIndex][i];
-        if (durationsOfEachDiscByAlbum[albumIndex][i] === undefined)
-          throw 'undefined';
-
-        if (duration >= durationLimit) {
-          // Remove all disks after the current one
-          var startOfRemoval = i + 1;
-          discs.splice(startOfRemoval, discs.length - startOfRemoval);
-          return;
-        }
-      }
-    });
-
-    // Flatten allAlbums
-    var discs: Disc[] = [];
-    allAlbums.forEach(album => {
-      album.getDiscs().forEach(disc => {
-        discs.push(disc);
-      });
-    });
-
-    discs.sort((disc1, disc2) => {
-      return compareTracks(disc1.getTracks()[0], disc2.getTracks()[0]);
-    });
+    var discs = flattenAlbumsIntoDiscs(allAlbums);
+    sortDiscs(discs); // Re-sort - array is not sorted because of the flattening
 
     // Filter out too many discs
-    var limitedDiscs = (function () {
-      var limited: Disc[] = [];
-      var duration = 0;
-
-      for (var i = 0; i < discs.length; i++) {
-        var disc = discs[i];
-        limited.push(disc);
-
-        duration += disc.getTracks()
-          .map(track => track.duration())
-          .reduce(sum);
-        if (duration > PLAYLIST_DURATION_LIMIT_SECONDS) break;
-      }
-
-      return limited;
-    })();
+    var limitedDiscs = limitDiscs();
 
     var queuePlaylist = getPlaylist(QUEUE_PLAYLIST);
 
     // Code that makes changes:
-    clearPlaylist(queuePlaylist);
-    duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
+    // clearPlaylist(queuePlaylist);
+    // duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
 
     return 'Done';
 
     function getAllAlbums() {
       var allMusicPlaylist = getPlaylist(ALL_MUSIC_PLAYLIST);
-      var allTracks = allMusicPlaylist.tracks().slice(0, 300);//todo
+      var allTracks = allMusicPlaylist.tracks();
       var allDiscs = new TracksDiscifier(allTracks).discify();
       return new DiscsAlbumifier(allDiscs).albumify();
     }
@@ -142,6 +81,63 @@ function createScript(): Script {
       });
     }
 
+    function sortDiscs(discs: Disc[]) {
+      discs.sort((discA, discB) => {
+        return compareTracks(discA.getTracks()[0], discB.getTracks()[0]);
+      });
+    }
+
+    function flattenAlbumsIntoDiscs(albums: Album[]): Disc[] {
+      var discs: Disc[] = [];
+      albums.forEach(album => {
+        album.getDiscs().forEach(disc => {
+          discs.push(disc);
+        });
+      });
+      return discs;
+    }
+
+    /**
+     * Remove excess discs in each album (prevents too much of a single album
+     * filling up the queue)
+     */
+    function limitDiscsPerAlbum(album: Album) {
+      var discs = album.getDiscs();
+      var duration = 0;
+
+      var durationLimit = DURATION_LIMIT_PER_ALBUM_FRACTION *
+        PLAYLIST_DURATION_LIMIT_SECONDS;
+
+      for (var i = 0; i < discs.length; i++) {
+        duration += discs[i].getTotalDuration();
+
+        if (duration >= durationLimit) {
+          // Remove all disks after the current one
+          var startOfRemoval = i + 1;
+          discs.splice(startOfRemoval, discs.length - startOfRemoval);
+          return;
+        }
+      }
+    }
+
+    /**
+     * Remove Disc objects at the end of the array if there are too many
+     */
+    function limitDiscs(): Disc[] {
+      var limited: Disc[] = [];
+      var duration = 0;
+
+      for (var i = 0; i < discs.length; i++) {
+        var disc = discs[i];
+        limited.push(disc);
+
+        duration += disc.getTotalDuration();
+        if (duration > PLAYLIST_DURATION_LIMIT_SECONDS) break;
+      }
+
+      return limited;
+    }
+
     /**
      * Compare tracks so that they are sorted in the queue by how long they
      * have been ready in the queue.
@@ -168,26 +164,6 @@ function createScript(): Script {
       if (discDiff !== 0) return discDiff;
 
       return track1.trackNumber() - track2.trackNumber();
-    }
-
-    function sum(a: number, b: number): number {
-      return a + b;
-    }
-
-    /**
-     * Copies only the ready tracks into a new array, wrapping them in an object
-     * @param tracks
-     * @return {TrackReadinessWrapper[]}
-     */
-    function wrapReadyTracks(tracks: ITrack[]): TrackReadinessWrapper[] {
-      var wrapped: TrackReadinessWrapper[] = [];
-      tracks.forEach((track) => {
-        var days = getDaysUntilTrackIsReady(track);
-        if (days > 0) return;
-
-        wrapped.push(new TrackReadinessWrapper(track, days));
-      });
-      return wrapped;
     }
 
     /**
