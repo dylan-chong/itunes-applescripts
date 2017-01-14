@@ -203,7 +203,6 @@ createTask({
   taskFunction: requireSelectedScriptArgTask,
   taskAliasNames: [],
   taskDescription: 'Just a helper task. Don\'t use me',
-  shouldHideFromHelp: true
 });
 
 function requireSelectedScriptArgTask() {
