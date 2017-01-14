@@ -11,8 +11,9 @@ scripts all the time!
 
 Feel free to request some new scripts ideas (just create an issue).
 
-Feel free to use and modify yourself! Just keep them free to use.<br> but **be
-careful - please backup your iTunes library before using**
+Feel free to use and modify yourself! Just keep them free to use.
+
+**Be careful - please backup your iTunes library before using**
 
 ## How to install ##
 
@@ -25,11 +26,21 @@ npm install
 
 ## How to use ##
 
-1. Run `gulp build` to build all of the scripts into `./build/`
-2. Call `gulp -e build/<SCRIPT-NAME-HERE>` to run a specific script
+1. Run `gulp ls` to see all available script names
+2. Run `gulp build-execute -s a-script-name` to build and then execute the
+   script
+
+Or alternately:
+
+1. Run `gulp build` to build all of the scripts into `./build/`, or run `gulp
+   build -s <the-script-name>` to build a specific script (run `gulp ls` to see
+   all available names)
+2. Call `gulp execute build/<SCRIPT-NAME-HERE>` to run a specific script
 
 *Note: There are plenty of TypeScript warnings because this project was
-recently moved to TypeScript, and almost no TS interfaces have been added yet.*
+recently moved to TypeScript, but not all scripts have been typed yet.*
+
+You can also run `gulp help` to see the list of tasks and descriptions
 
 ### Enabling scripts ###
 
@@ -47,7 +58,8 @@ this](https://developer.apple.com/library/content/releasenotes/InterapplicationC
 
 ### A more useful way to use when developing scripts ###
 
-Run `gulp` then edit a `./src/scripts/<SCRIPT-NAME>/<SCRIPT-NAME>.script.ts`
-script file using your favourite text editor / web IDE. Gulp will watch for
-changes, rebuild the changed script, **and execute it** (including when you
-just write the file without making any changes).
+Run `gulp watch` then edit a
+`./src/scripts/<SCRIPT-NAME>/<SCRIPT-NAME>.script.ts` script file using your
+favourite text editor / web IDE. Gulp will watch for changes, rebuild the
+changed script, **and execute it** (including when you just write the file
+without making any changes).
