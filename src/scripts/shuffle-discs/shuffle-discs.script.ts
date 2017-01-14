@@ -23,19 +23,9 @@ function createScript():Script {
     var app = Application('iTunes');
     app.includeStandardAdditions = true;
 
-    var playlist: IPlaylist;
-
-    try {
-      playlist = getDefaultPlaylist();
-    } catch (e) {
-      // Note: An error is not always thrown if there
-      // are name duplicates.
-      return 'There are multiple playlists of the name \''
-          + PLAYLIST_NAME + '\'';
-    }
-
-    if (!playlist)
-      return 'No playlists found';
+    // Note: An error is not always thrown if there
+    // are name duplicates.
+    var playlist = getDefaultPlaylist();
 
     if (playlist.tracks().length == 0)
       return 'No tracks in this playlist';
@@ -58,25 +48,10 @@ function createScript():Script {
     // **************** Playlists ****************
 
     function getDefaultPlaylist(): IPlaylist {
-      return getPlaylistByNameAndIsSmart(PLAYLIST_NAME, PLAYLIST_IS_SMART);
-    }
-
-    // todo playlist finder dependency
-    function getPlaylistByNameAndIsSmart(name: string,
-                                         isSmart: boolean): IPlaylist {
-      var playlistArrays = app.sources.playlists();
-      var userPlaylists = playlistArrays[0];
-
-      for (var a = 0; a < userPlaylists.length; a++) {
-        var playlist = userPlaylists[a];
-
-        if (playlist.name() !== name) continue;
-        if (playlist.smart() !== isSmart) continue;
-
-        return playlist;
-      }
-
-      return null;
+      return PlaylistManager.findPlaylist(
+        PlaylistManager.userPlaylists(app),
+        PLAYLIST_NAME,
+        PLAYLIST_IS_SMART);
     }
 
     function reorderPlaylist(discs: Disc[], playlist: IPlaylist) {

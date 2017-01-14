@@ -9,6 +9,7 @@ function createScript(): Script {
     // ******* Constants *******
 
     var ALL_MUSIC_PLAYLIST = 'Ready to Queue';
+    var ALL_MUSIC_PLAYLIST_IS_SMART = true;
     var QUEUE_PLAYLIST = 'Queue';
 
     /**
@@ -38,10 +39,12 @@ function createScript(): Script {
     var discs = flattenAlbumsIntoDiscs(allAlbums);
     sortDiscs(discs); // Re-sort - array is not sorted because of the flattening
 
-    // Filter out too many discs
+    // Filter out discs if there are too many
     var limitedDiscs = limitDiscs();
 
-    var queuePlaylist = getPlaylist(QUEUE_PLAYLIST);
+    var queuePlaylist = getPlaylist(QUEUE_PLAYLIST, false);
+
+    logDiscs(limitedDiscs);
 
     // Code that makes changes:
     // clearPlaylist(queuePlaylist);
@@ -50,20 +53,19 @@ function createScript(): Script {
     return 'Done';
 
     function getAllAlbums() {
-      var allMusicPlaylist = getPlaylist(ALL_MUSIC_PLAYLIST);
+      var allMusicPlaylist = getPlaylist(
+        ALL_MUSIC_PLAYLIST, ALL_MUSIC_PLAYLIST_IS_SMART);
+
       var allTracks = allMusicPlaylist.tracks();
       var allDiscs = new TracksDiscifier(allTracks).discify();
       return new DiscsAlbumifier(allDiscs).albumify();
     }
 
-    function getPlaylist(name: string): IPlaylist {
-      var matches = app.playlists()
-        .filter((playlist) => playlist.name() == name);
-
-      if (matches.length < 1) throw 'No match for playlist: ' + name;
-      if (matches.length > 1) throw 'Multiple matches for playlist: ' + name;
-
-      return matches[0];
+    function getPlaylist(name: string, isSmart: boolean): IPlaylist {
+      return PlaylistManager.findPlaylist(
+        PlaylistManager.userPlaylists(app),
+        name,
+        isSmart);
     }
 
     function clearPlaylist(playlist: IPlaylist) {
@@ -229,6 +231,24 @@ function createScript(): Script {
           }
         }
       }
+    }
+
+    function logDiscs(discs: Disc[]) {
+      discs.forEach(disc => {
+        var days = -Math.round(getDaysUntilTrackIsReady(disc.getTracks()[0]));
+        var numTracks = formatNumber(disc.getTracks().length);
+
+        console.log(numTracks + ' tracks in this disc have been ready for '
+          + days + ' days:\t' + disc.getTracks()[0].name());
+
+        function formatNumber(num: number): string {
+          var numStr = num + '';
+          while (numStr.length < 3) {
+            numStr = ' ' + numStr;
+          }
+          return numStr;
+        }
+      });
     }
   }
 }
