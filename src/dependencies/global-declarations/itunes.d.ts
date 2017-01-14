@@ -36,6 +36,7 @@ interface ITrack {
   album: IGettableSettable<string>;
   artist: IGettableSettable<string>;
   bitRate: IGettableSettable<number>;
+  duration: () => number;
   /** Between 0 and 100. Divide by 20 to get number of stars */
   rating: IGettableSettable<number>;
   playedCount: IGettableSettable<number>;
