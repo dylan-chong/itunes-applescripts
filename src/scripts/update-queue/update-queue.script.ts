@@ -40,7 +40,7 @@ function createScript(): Script {
     sortDiscs(discs); // Re-sort - array is not sorted because of the flattening
 
     // Filter out discs if there are too many
-    var limitedDiscs = limitDiscs();
+    var limitedDiscs = limitDiscs(discs);
 
     var queuePlaylist = getPlaylist(QUEUE_PLAYLIST, false);
 
@@ -84,9 +84,17 @@ function createScript(): Script {
     }
 
     function sortDiscs(discs: Disc[]) {
+      // Sort Disc[] by size
       discs.sort((discA, discB) => {
         return compareTracks(discA.getTracks()[0], discB.getTracks()[0]);
       });
+
+      // Sort each Disc's tracks by track number
+      discs.forEach(disc => {
+        disc.getTracks().sort((trackA, trackB) => {
+          return trackA.trackNumber() - trackB.trackNumber();
+        })
+      })
     }
 
     function flattenAlbumsIntoDiscs(albums: Album[]): Disc[] {
@@ -125,7 +133,7 @@ function createScript(): Script {
     /**
      * Remove Disc objects at the end of the array if there are too many
      */
-    function limitDiscs(): Disc[] {
+    function limitDiscs(discs: Disc[]): Disc[] {
       var limited: Disc[] = [];
       var duration = 0;
 
