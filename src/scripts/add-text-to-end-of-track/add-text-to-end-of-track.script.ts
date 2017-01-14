@@ -63,6 +63,7 @@ function createScript():Script {
 
       console.log(newTrackName);
     }
+
     return 'Done';
   }
 }

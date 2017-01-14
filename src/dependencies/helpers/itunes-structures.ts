@@ -11,6 +11,11 @@ class Disc {
   }
 
   // todo helper methods to get album and stuff?
+  public getTotalDuration(): number {
+    return this.tracks
+      .map(track => track.duration())
+      .reduce((a, b) => a + b);
+  }
 }
 
 /**
