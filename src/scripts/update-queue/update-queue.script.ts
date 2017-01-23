@@ -15,7 +15,7 @@ function createScript(): Script {
     /**
      * The maximum length of the resulting playlist, in seconds.
      */
-    var PLAYLIST_DURATION_LIMIT_SECONDS = 12 * 3600; // 12 hours
+    var PLAYLIST_DURATION_LIMIT_SECONDS = 3 * 7 * 3600; // 21 hours
 
     /**
      * Set to 0.2 to make sure no album takes up (much) more than 20% of
