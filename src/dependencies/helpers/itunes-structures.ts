@@ -1,6 +1,7 @@
 /**
  * Not an official iTunes object
  */
+
 class Disc {
   constructor(private tracks: ITrack[]) {
     if (tracks.length === 0) throw 'Tracks cannot be empty';
@@ -27,5 +28,17 @@ class Album {
 
   public getDiscs(): Disc[] {
     return this.discs;
+  }
+}
+
+/**
+ * Not an official iTunes object
+ */
+class Artist {
+  constructor(private albums: Album[]) {
+  }
+
+  public getAlbums(): Album[] {
+    return this.albums;
   }
 }
