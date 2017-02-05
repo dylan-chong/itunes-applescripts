@@ -101,7 +101,7 @@ createTask({
 
 function buildTask() {
   if (getScriptArgument()) {
-    buildSelectedScript(getScriptArgument());
+    buildSelectedScript(getParsedScriptArgument());
     return;
   }
 
@@ -136,10 +136,10 @@ createTask({
 });
 
 function executeTask(done) {
-  executeScript(OPTIONS[SCRIPT_COMMAND_LINE_ARG]);
+  executeScript(getParsedScriptArgument());
 
-  function executeScript(userEnteredScriptName) {
-    osa.executeJsFile(getScriptPath(userEnteredScriptName), done);
+  function executeScript(scriptName) {
+    osa.executeJsFile(getScriptPath(scriptName), done);
 
     function getScriptPath(scriptName) {
       if (scriptName.endsWith(files.constants.BUILT_SCRIPT_EXTENSION)) {
@@ -202,7 +202,9 @@ createTask({
   taskDependencies: [],
   taskFunction: requireSelectedScriptArgTask,
   taskAliasNames: [],
-  taskDescription: 'Just a helper task. Don\'t use me',
+  taskDescription: 'A helper task that throws an error if the user doesn\'t ' +
+  'enter "--script script-name". Note: if you type "--script X" and there is ' +
+  'only one script that starts with "X", then that counts as a match.'
 });
 
 function requireSelectedScriptArgTask() {
@@ -222,6 +224,24 @@ function getScriptArgument() {
   }
 
   return OPTIONS[SCRIPT_COMMAND_LINE_ARG];
+}
+
+function getParsedScriptArgument() {
+  var roughScriptName = getScriptArgument(); // assume this exists
+  var allScriptNames = files.getAllScriptNames();
+
+  var matches = [];
+  for (var i = 0; i < allScriptNames.length; i++) {
+    var scriptName = allScriptNames[i];
+    if (scriptName.startsWith(roughScriptName)) {
+      matches.push(scriptName);
+    }
+  }
+
+  if (matches.length === 1) return matches[0];
+  if (matches.length === 0) throw 'No match for selector ' + roughScriptName;
+
+  throw 'Multiple matches for selector "' + roughScriptName + '" : ' + matches;
 }
 
 // **************** OTHER TASKS **************** //
