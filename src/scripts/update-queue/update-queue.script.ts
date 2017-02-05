@@ -15,14 +15,14 @@ function createScript(): Script {
     /**
      * The maximum length of the resulting playlist, in seconds.
      */
-    var PLAYLIST_DURATION_LIMIT_SECONDS = 12 * 3600; // 12 hours
+    var PLAYLIST_DURATION_LIMIT_SECONDS = 2.5 * 7 * 3600;
 
     /**
      * Set to 0.2 to make sure no album takes up (much) more than 20% of
      * the queue. Can be set to anywhere between 0 (only allow one disc of
      * each album) and 1 (no limit).
      */
-    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.2;
+    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.05;
 
     // *************************
 
