@@ -16,7 +16,7 @@ function createScript():Script {
     var PLAYLIST_IS_SMART = false;
 
     // Will leave this number of discs at the top of the playlist
-    var DISCS_TO_IGNORE = 3;
+    var DISCS_TO_IGNORE = 1;
 
     // *************************
 
