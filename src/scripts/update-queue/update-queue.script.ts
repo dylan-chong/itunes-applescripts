@@ -24,6 +24,12 @@ function createScript(): Script {
      */
     var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.05;
 
+    /**
+     * Similar to DURATION_LIMIT_PER_ALBUM_FRACTION, but limits how many discs
+     * there are for each artist.
+     */
+    var DURATION_LIMIT_PER_ARTIST_FRACTION = 0.12;
+
     // *************************
 
     var app = Application('iTunes');
@@ -36,11 +42,22 @@ function createScript(): Script {
     allAlbums.forEach(album => sortDiscs(album.getDiscs()));
     allAlbums.forEach(limitDiscsPerAlbum);
 
-    var discs = flattenAlbumsIntoDiscs(allAlbums);
+    // Sort and limit by artist
+    var allArtists = new AlbumArtistifier(allAlbums).artistify();
+    var allArtistsAsDiscs: Disc[][] = artistsToArtistsAsDiscs(allArtists);
+    allArtistsAsDiscs.forEach(discsForArtist => sortDiscs(discsForArtist));
+    var limitedArtistsAsDiscs = allArtistsAsDiscs.map(discsForArtist => {
+      return limitDiscs(
+        discsForArtist,
+        DURATION_LIMIT_PER_ARTIST_FRACTION * PLAYLIST_DURATION_LIMIT_SECONDS
+      );
+    });
+
+    var discs = flattenIntoDiscs(limitedArtistsAsDiscs);
     sortDiscs(discs); // Re-sort - array is not sorted because of the flattening
 
     // Filter out discs if there are too many
-    var limitedDiscs = limitDiscs(discs);
+    var limitedDiscs = limitDiscs(discs, PLAYLIST_DURATION_LIMIT_SECONDS);
 
     var queuePlaylist = getPlaylist(QUEUE_PLAYLIST, false);
 
@@ -52,7 +69,7 @@ function createScript(): Script {
 
     return 'Done';
 
-    function getAllAlbums() {
+    function getAllAlbums(): Album[] {
       var allMusicPlaylist = getPlaylist(
         ALL_MUSIC_PLAYLIST, ALL_MUSIC_PLAYLIST_IS_SMART);
 
@@ -97,10 +114,10 @@ function createScript(): Script {
       })
     }
 
-    function flattenAlbumsIntoDiscs(albums: Album[]): Disc[] {
+    function flattenIntoDiscs(discsAsAlbums: Disc[][]): Disc[] {
       var discs: Disc[] = [];
-      albums.forEach(album => {
-        album.getDiscs().forEach(disc => {
+      discsAsAlbums.forEach(discsInOneAlbum => {
+        discsInOneAlbum.forEach(disc => {
           discs.push(disc);
         });
       });
@@ -133,7 +150,7 @@ function createScript(): Script {
     /**
      * Remove Disc objects at the end of the array if there are too many
      */
-    function limitDiscs(discs: Disc[]): Disc[] {
+    function limitDiscs(discs: Disc[], limitDuration: number): Disc[] {
       var limited: Disc[] = [];
       var duration = 0;
 
@@ -142,7 +159,7 @@ function createScript(): Script {
         limited.push(disc);
 
         duration += disc.getTotalDuration();
-        if (duration > PLAYLIST_DURATION_LIMIT_SECONDS) break;
+        if (duration > limitDuration) break;
       }
 
       return limited;
@@ -174,6 +191,19 @@ function createScript(): Script {
       if (discDiff !== 0) return discDiff;
 
       return track1.trackNumber() - track2.trackNumber();
+    }
+
+    /**
+     * Each Artist object will get converted to Disc[]
+     */
+    function artistsToArtistsAsDiscs(artists: Artist[]): Disc[][] {
+      return artists.map(artist => {
+        var discs: Disc[] = [];
+        artist.getAlbums().forEach(album => {
+          album.getDiscs().forEach(disc => discs.push(disc));
+        });
+        return discs;
+      });
     }
 
     /**
@@ -247,7 +277,7 @@ function createScript(): Script {
         var numTracks = formatNumber(disc.getTracks().length);
 
         console.log(numTracks + ' tracks in this disc have been ready for '
-          + days + ' days:\t' + disc.getTracks()[0].name());
+          + days + ' days:\t' + disc.getTracks()[0].album());
 
         function formatNumber(num: number): string {
           var numStr = num + '';
