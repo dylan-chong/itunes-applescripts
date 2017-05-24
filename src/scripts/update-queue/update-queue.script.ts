@@ -22,13 +22,27 @@ function createScript(): Script {
      * the queue. Can be set to anywhere between 0 (only allow one disc of
      * each album) and 1 (no limit).
      */
-    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.03;
+    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.06;
 
     /**
      * Similar to DURATION_LIMIT_PER_ALBUM_FRACTION, but limits how many discs
      * there are for each artist.
      */
     var DURATION_LIMIT_PER_ARTIST_FRACTION = 0.12;
+
+    /**
+     * Similar DURATION_LIMIT_PER_ALBUM_FRACTION, but limits how many tracks
+     * there are for each rating. E.g. the '3: 0.6' line makes sure 3 star
+     * makes sure that 3-star tracks make up, at most, slightly more than 60%
+     * of the entire playlist.
+     */
+    var RATING_LIMITS: {[rating: string]: number} = {
+      1: 0.03,
+      2: 0.12,
+      3: 0.60,
+      4: 0.15,
+      5: 0.10
+    };
 
     // *************************
 
@@ -46,18 +60,17 @@ function createScript(): Script {
     var allArtists = new AlbumArtistifier(allAlbums).artistify();
     var allArtistsAsDiscs: Disc[][] = artistsToArtistsAsDiscs(allArtists);
     allArtistsAsDiscs.forEach(discsForArtist => sortDiscs(discsForArtist));
-    var limitedArtistsAsDiscs = allArtistsAsDiscs.map(discsForArtist => {
-      return limitDiscs(
-        discsForArtist,
-        DURATION_LIMIT_PER_ARTIST_FRACTION * PLAYLIST_DURATION_LIMIT_SECONDS
-      );
-    });
+    var limitedArtistsAsDiscs = allArtistsAsDiscs.map(discsForArtist => limitDiscs(
+      discsForArtist,
+      DURATION_LIMIT_PER_ARTIST_FRACTION * PLAYLIST_DURATION_LIMIT_SECONDS
+    ));
 
     var discs = flattenIntoDiscs(limitedArtistsAsDiscs);
     sortDiscs(discs); // Re-sort - array is not sorted because of the flattening
 
     // Filter out discs if there are too many
     var limitedDiscs = limitDiscs(discs, PLAYLIST_DURATION_LIMIT_SECONDS);
+    limitedDiscs = limitDiscsByRating(limitedDiscs);
 
     var queuePlaylist = getPlaylist(QUEUE_PLAYLIST, false);
 
@@ -163,6 +176,21 @@ function createScript(): Script {
       }
 
       return limited;
+    }
+
+    function limitDiscsByRating(albums: Disc[]): Disc[] {
+      var ratingDuration: {[rating: string]: number} = {};
+      for (var i = 0; i < 5; i++) ratingDuration[i + 1] = 0;
+
+      return albums.filter(disc => {
+        var rating = disc.getTracks()[0].rating() / 20;
+        var maxDuration = RATING_LIMITS[rating] * PLAYLIST_DURATION_LIMIT_SECONDS;
+        
+        if (ratingDuration[rating] > maxDuration) return false;
+
+        ratingDuration[rating] += disc.getTotalDuration();
+        return true;
+      });
     }
 
     /**
