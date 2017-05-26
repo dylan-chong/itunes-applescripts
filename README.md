@@ -49,12 +49,14 @@ apply changes to your iTunes library, look for the line of code that `// Code
 that applies the changes:`, uncomment the code below it, and run the script
 again. This will be changed in the future, ideally with some sort of GUI.
 
-### Debugging with Safari and Script Editor ###
+### Debugging with Safari ###
 
-Providing the scripts have been built, you can also open a script in `./build`
-with the built in `Script Editor.app`, set the language to 'JavaScript', and
-use it with the Safari debugger (see the [Apple docs on
-this](https://developer.apple.com/library/content/releasenotes/InterapplicationCommunication/RN-JavaScriptForAutomation/Articles/OSX10-11.html)).
+- Open Safari, then enable `Develop > YourComputerName > Automatically Show Web
+  Inspector for JSContexts`
+- Then add a `debugger` line somewhere in the program (the debugger won't open
+  until the program reaches this line)
+- Run the program. Note that sometimes the debugger doesn't open for some
+  reason, in which case just restart Safari.
 
 ### A more useful way to use when developing scripts ###
 
