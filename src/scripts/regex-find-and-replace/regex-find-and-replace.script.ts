@@ -18,8 +18,6 @@ function createScript():Script {
      * to:
      *     K 547, L.S28 in G Major - Vladimir Horowitz
      */
-
-    //
     var FIND_REGEX = /^Sonata in (.*(?:Major|Minor)) K\.?(\w+) _ L\.(\w+) - (.*)$/;
     var REPLACE_PATTERN = 'K $2, L.$3 in $1 - $4';
 
@@ -42,7 +40,7 @@ function createScript():Script {
       console.log('\tfor Track: ' + track.name());
 
       // Code that applies the changes:
-      trackProperty.set(newValue);
+      // trackProperty.set(newValue);
     }
     return 'Done';
   }
