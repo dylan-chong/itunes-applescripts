@@ -45,6 +45,7 @@ interface ITrack {
   trackNumber: IGettableSettable<number>;
   trackCount: IGettableSettable<number>;
   discNumber: IGettableSettable<number>;
+  comment: IGettableSettable<string>;
   // noinspection ReservedWordAsName
   delete: ITrackAction<{from: IPlaylist}>; // Stupid Apple API uses a reserved keyword for a property
   duplicate: ITrackAction<{to: IPlaylist}>;
