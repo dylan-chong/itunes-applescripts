@@ -8,17 +8,17 @@ function createScript():Script {
 
     // ******* Constants *******
 
-    function getSourceTag(track):string {
+    function getSourceTag(track: ITrack):string {
       return track.artist();
     }
 
-    function getNewTagValue(track, sourceTagValue:string):string {
+    function getNewTagValue(track: ITrack, sourceTagValue:string):string {
       var newValue = track.comment();
       if (newValue.length > 0) newValue += '\n';
       return newValue + sourceTagValue;
     }
 
-    function setDestinationTag(track, newValue:string) {
+    function setDestinationTag(track: ITrack, newValue:string) {
       track.comment.set(newValue);
     }
 
