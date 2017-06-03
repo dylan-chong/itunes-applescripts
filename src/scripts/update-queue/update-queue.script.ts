@@ -22,7 +22,7 @@ function createScript(): Script {
      * the queue. Can be set to anywhere between 0 (only allow one disc of
      * each album) and 1 (no limit).
      */
-    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.06;
+    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.05;
 
     /**
      * Similar to DURATION_LIMIT_PER_ALBUM_FRACTION, but limits how many discs
@@ -39,9 +39,9 @@ function createScript(): Script {
     var RATING_LIMITS: {[rating: string]: number} = {
       1: 0.03,
       2: 0.12,
-      3: 0.60,
-      4: 0.15,
-      5: 0.10
+      3: 0.58,
+      4: 0.16,
+      5: 0.11
     };
 
     // *************************
