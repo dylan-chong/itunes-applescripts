@@ -44,6 +44,8 @@ function createScript(): Script {
       5: 0.11
     };
 
+    var WAIT_DAY_INCREASE_PER_PLAYED_COUNT_GROUP = 10;
+
     // *************************
 
     var app = Application('iTunes');
@@ -185,7 +187,7 @@ function createScript(): Script {
       return albums.filter(disc => {
         var rating = disc.getTracks()[0].rating() / 20;
         var maxDuration = RATING_LIMITS[rating] * PLAYLIST_DURATION_LIMIT_SECONDS;
-        
+
         if (ratingDuration[rating] > maxDuration) return false;
 
         ratingDuration[rating] += disc.getTotalDuration();
@@ -271,11 +273,9 @@ function createScript(): Script {
         }
 
         var stars = track.rating() / 20;
-        var baseDays: number = getBaseDays(stars);
-        if (playedCountGroup >= 2) baseDays += 30;
-        if (playedCountGroup >= 3) baseDays += 20;
-        if (playedCountGroup >= 4) baseDays += 10;
 
+        var baseDays: number = getBaseDays(stars);
+        baseDays += (playedCountGroup - 1) * WAIT_DAY_INCREASE_PER_PLAYED_COUNT_GROUP;
         return baseDays;
 
         function getPlayedCountGroup(track: ITrack): number {
