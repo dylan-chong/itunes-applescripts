@@ -22,7 +22,7 @@ function createScript(): Script {
      * the queue. Can be set to anywhere between 0 (only allow one disc of
      * each album) and 1 (no limit).
      */
-    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.06;
+    var DURATION_LIMIT_PER_ALBUM_FRACTION = 0.05;
 
     /**
      * Similar to DURATION_LIMIT_PER_ALBUM_FRACTION, but limits how many discs
@@ -39,10 +39,12 @@ function createScript(): Script {
     var RATING_LIMITS: {[rating: string]: number} = {
       1: 0.03,
       2: 0.12,
-      3: 0.60,
-      4: 0.15,
-      5: 0.10
+      3: 0.58,
+      4: 0.16,
+      5: 0.11
     };
+
+    var WAIT_DAY_INCREASE_PER_PLAYED_COUNT_GROUP = 10;
 
     // *************************
 
@@ -185,7 +187,7 @@ function createScript(): Script {
       return albums.filter(disc => {
         var rating = disc.getTracks()[0].rating() / 20;
         var maxDuration = RATING_LIMITS[rating] * PLAYLIST_DURATION_LIMIT_SECONDS;
-        
+
         if (ratingDuration[rating] > maxDuration) return false;
 
         ratingDuration[rating] += disc.getTotalDuration();
@@ -271,11 +273,9 @@ function createScript(): Script {
         }
 
         var stars = track.rating() / 20;
-        var baseDays: number = getBaseDays(stars);
-        if (playedCountGroup >= 2) baseDays += 30;
-        if (playedCountGroup >= 3) baseDays += 20;
-        if (playedCountGroup >= 4) baseDays += 10;
 
+        var baseDays: number = getBaseDays(stars);
+        baseDays += (playedCountGroup - 1) * WAIT_DAY_INCREASE_PER_PLAYED_COUNT_GROUP;
         return baseDays;
 
         function getPlayedCountGroup(track: ITrack): number {
