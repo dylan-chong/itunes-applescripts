@@ -17,7 +17,9 @@ Feel free to use and modify yourself! Just keep them free to use.
 
 ## How to install ##
 
-Run:
+Install node 8
+
+Then run:
 ```bash
 git clone https://github.com/dylan-chong/itunes-applescripts
 cd itunes-applescripts
