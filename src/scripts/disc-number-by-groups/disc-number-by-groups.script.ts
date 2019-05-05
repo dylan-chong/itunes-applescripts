@@ -13,7 +13,7 @@ function createScript():Script {
     var INITIAL_DISC_NUMBER = 1;
 
     // The string or regex to break up the track names by
-    var DELIMITER = /[-,]/;
+    var DELIMITER = /[-,:]/;
 
     // *************************
 
