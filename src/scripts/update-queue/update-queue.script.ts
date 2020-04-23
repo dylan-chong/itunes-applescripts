@@ -39,9 +39,9 @@ function createScript(): Script {
     var RATING_LIMITS: {[rating: string]: number} = {
       1: 0.03,
       2: 0.12,
-      3: 0.58,
-      4: 0.16,
-      5: 0.11
+      3: 0.35,
+      4: 0.30,
+      5: 0.20
     };
 
     var WAIT_DAY_INCREASE_PER_PLAYED_COUNT_GROUP = 10;
