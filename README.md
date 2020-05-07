@@ -17,7 +17,7 @@ Feel free to use and modify yourself! Just keep them free to use.
 
 ## How to install ##
 
-Install node 8
+Install node using NVM, and use `nvm install -s` to install Node 8.
 
 Then run:
 ```bash
