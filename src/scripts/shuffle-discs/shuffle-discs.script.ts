@@ -20,7 +20,7 @@ function createScript():Script {
 
     // *************************
 
-    var app = Application('iTunes');
+    var app = Application('Music');
     app.includeStandardAdditions = true;
 
     // Note: An error is not always thrown if there
