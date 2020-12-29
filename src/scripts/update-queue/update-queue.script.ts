@@ -48,7 +48,7 @@ function createScript(): Script {
 
     // *************************
 
-    var app = Application('iTunes');
+    var app = Application('Music');
     app.includeStandardAdditions = true;
 
     // Process tracks

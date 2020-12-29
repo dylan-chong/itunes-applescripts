@@ -6,7 +6,7 @@ function createScript():Script {
 
   function run() {
 
-    var app = Application('iTunes');
+    var app = Application('Music');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
 
