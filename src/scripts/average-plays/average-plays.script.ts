@@ -4,6 +4,23 @@ function createScript():Script {
     run: run
   };
 
+  function getAveragePlays(tracks: ITrack[]) {
+    var totalPlays = 0;
+
+    for (var t = 0; t < tracks.length; t++) {
+      var track = tracks[t];
+      totalPlays += track.playedCount();
+    }
+
+    var average = totalPlays / tracks.length;
+    average = Math.round(average);
+    return average;
+  }
+
+  function getLastPlayedDate(tracks: ITrack[]) {
+    return tracks[0].playedDate();
+  }
+
   function run() {
     var app = Application('Music');
     app.includeStandardAdditions = true;
@@ -17,7 +34,7 @@ function createScript():Script {
 
       var minimumPlays = getMinimumPlays(disc.getTracks());
       if (minimumPlays === 0) {
-        console.log('Skipping disk with ' + disc.getTracks()[0].name());
+        console.log('Skipping disc with ' + disc.getTracks()[0].name());
         continue;
       }
 
@@ -41,23 +58,6 @@ function createScript():Script {
     }
 
     return 'Done';
-
-    function getAveragePlays(tracks: ITrack[]) {
-      var totalPlays = 0;
-
-      for (var t = 0; t < tracks.length; t++) {
-        var track = tracks[t];
-        totalPlays += track.playedCount();
-      }
-
-      var average = totalPlays / tracks.length;
-      average = Math.round(average);
-      return average;
-    }
-
-    function getLastPlayedDate(tracks: ITrack[]) {
-      return tracks[0].playedDate();
-    }
 
     function getMinimumPlays(tracks: ITrack[]) {
       if (!tracks || tracks.length === 0) throw 'No tracks to check';
