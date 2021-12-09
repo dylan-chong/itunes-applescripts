@@ -8,6 +8,20 @@ const getFilledString = require('./fill.js').getFilledString;
 const log = require('./header-log.js').log;
 const files = require('./files.js');
 
+function replacements(scriptFileToCompile) {
+  return {
+    'node_dependencies': {
+      paths: files.constants.FILES.NODE_DEPENDENCIES
+    },
+    'dependencies': {
+      path: files.constants.FILES.GLOBAL_DEPENDENCIES
+    },
+    'script': {
+      path: scriptFileToCompile
+    }
+  };
+};
+
 module.exports.buildScript = buildScript;
 
 function buildScript(scriptFileToCompile) {
@@ -31,16 +45,7 @@ function buildScript(scriptFileToCompile) {
       path: files.constants.FILES.BUILD_TEMPLATE
     };
 
-    var replacements = { // TODO make the replacements a constant at the top of the file
-      'dependencies': {
-        path: files.constants.FILES.GLOBAL_DEPENDENCIES // TODO make the fill method take an array
-      },
-      'script': {
-        path: scriptFileToCompile
-      }
-    };
-
-    var tsString = getFilledString(template, replacements);
+    var tsString = getFilledString(template, replacements(scriptFileToCompile));
     var tsArgs = ['--noImplicitAny'];
     var tsOptions = null;
 

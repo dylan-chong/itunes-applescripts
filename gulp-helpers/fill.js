@@ -14,8 +14,10 @@ function getFilledString(templateObject, replacementsDictionary) {
   return getFilledString(template, replacements);
 
   function getDataFromFileContentsObject(object) {
-    return object.contents || (object.path && 
-      getJointStringFromFiles(object.path)) || '';
+    return object.contents
+      || (object.path && getJointStringFromFiles(object.path))
+      || (object.paths && object.paths.map(getJointStringFromFiles).join(';\n'))
+      || '';
 
     // TODO LATER rename path to glob(s)
     // TODO LATER don't kill not found errors silently

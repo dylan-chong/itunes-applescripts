@@ -1,3 +1,5 @@
+/* @fill node_dependencies */
+
 /* @fill dependencies */
 
 /* @fill script */
@@ -7,4 +9,3 @@
   var script: Script = createScript();
   return script.run() || 'Error: Script not successfully run';
 })();
-
