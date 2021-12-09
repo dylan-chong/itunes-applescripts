@@ -4,23 +4,6 @@ function createScript():Script {
     run: run
   };
 
-  function getAveragePlays(tracks: ITrack[]) {
-    var totalPlays = 0;
-
-    for (var t = 0; t < tracks.length; t++) {
-      var track = tracks[t];
-      totalPlays += track.playedCount();
-    }
-
-    var average = totalPlays / tracks.length;
-    average = Math.round(average);
-    return average;
-  }
-
-  function getLastPlayedDate(tracks: ITrack[]) {
-    return tracks[0].playedDate();
-  }
-
   function run() {
     var app = Application('Music');
     app.includeStandardAdditions = true;
@@ -32,12 +15,6 @@ function createScript():Script {
     for (var d = 0; d < discs.length; d++) {
       var disc = discs[d];
 
-      var minimumPlays = getMinimumPlays(disc.getTracks());
-      if (minimumPlays === 0) {
-        console.log('Skipping disc with ' + disc.getTracks()[0].name());
-        continue;
-      }
-
       var averagePlays = getAveragePlays(disc.getTracks());
       var lastPlayedDate = getLastPlayedDate(disc.getTracks());
 
@@ -47,8 +24,10 @@ function createScript():Script {
         var track = disc.getTracks()[t];
 
         // Code that applies the changes:
-        // track.playedCount.set(averagePlays);
-        // track.playedDate.set(lastPlayedDate);
+        // if (track.playedCount() !== averagePlays)
+          // track.playedCount.set(averagePlays);
+        // if (track.playedDate() && lastPlayedDate && track.playedDate().toString() !== lastPlayedDate.toString())
+          // track.playedDate.set(lastPlayedDate);
 
         logTrackDetails(averagePlays, lastPlayedDate,
             track.name());
@@ -59,18 +38,23 @@ function createScript():Script {
 
     return 'Done';
 
-    function getMinimumPlays(tracks: ITrack[]) {
-      if (!tracks || tracks.length === 0) throw 'No tracks to check';
-      var min = 0;
+    function getAveragePlays(tracks: ITrack[]) {
+      var totalPlays = 0;
 
       for (var t = 0; t < tracks.length; t++) {
         var track = tracks[t];
-        var c = track.playedCount();
-
-        if (!min || c < min) min = c;
+        totalPlays += track.playedCount();
       }
 
-      return min;
+      var average = totalPlays / tracks.length;
+      average = Math.round(average);
+      return average;
+    }
+
+    function getLastPlayedDate(tracks: ITrack[]) {
+      return tracks
+        .map(track => track.playedDate())
+        .filter(date => !!date)[0];
     }
 
     function logTrackDetails(playCount: number,
@@ -81,6 +65,5 @@ function createScript():Script {
       log += ',\n\t\t\tName: ' + name;
       console.log(log);
     }
-
   }
 }
