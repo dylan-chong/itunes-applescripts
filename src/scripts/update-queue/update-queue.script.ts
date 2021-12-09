@@ -120,13 +120,6 @@ function createScript(): Script {
       discs.sort((discA, discB) => {
         return compareTracks(discA.getTracks()[0], discB.getTracks()[0]);
       });
-
-      // Sort each Disc's tracks by track number
-      discs.forEach(disc => {
-        disc.getTracks().sort((trackA, trackB) => {
-          return trackA.trackNumber() - trackB.trackNumber();
-        })
-      })
     }
 
     function flattenIntoDiscs(discsAsAlbums: Disc[][]): Disc[] {
@@ -306,6 +299,10 @@ function createScript(): Script {
 
         console.log(numTracks + ' tracks in this disc have been ready for '
           + days + ' days:\t' + disc.getTracks()[0].album());
+
+        disc.getTracks().forEach(t => {
+          console.log('\t- ', t.name());
+        });
 
         function formatNumber(num: number): string {
           var numStr = num + '';
