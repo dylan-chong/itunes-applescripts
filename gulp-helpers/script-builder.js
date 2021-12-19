@@ -8,7 +8,7 @@ const getFilledString = require('./fill.js').getFilledString;
 const log = require('./header-log.js').log;
 const files = require('./files.js');
 
-function replacements(scriptFileToCompile) {
+function replacements(scriptFileToCompile, scriptArgs) {
   return {
     'node_dependencies': {
       paths: files.constants.FILES.NODE_DEPENDENCIES
@@ -18,13 +18,16 @@ function replacements(scriptFileToCompile) {
     },
     'script': {
       path: scriptFileToCompile
+    },
+    'scriptOptions': {
+      contents: JSON.stringify(scriptArgs)
     }
   };
 };
 
 module.exports.buildScript = buildScript;
 
-function buildScript(scriptFileToCompile) {
+function buildScript(scriptFileToCompile, scriptArgs) {
   if (!fs.existsSync(scriptFileToCompile)) {
     scriptFileToCompile = lookForFileToBuild(scriptFileToCompile);
   }
@@ -45,7 +48,7 @@ function buildScript(scriptFileToCompile) {
       path: files.constants.FILES.BUILD_TEMPLATE
     };
 
-    var tsString = getFilledString(template, replacements(scriptFileToCompile));
+    var tsString = getFilledString(template, replacements(scriptFileToCompile, scriptArgs));
     var tsArgs = ['--noImplicitAny'];
     var tsOptions = null;
 

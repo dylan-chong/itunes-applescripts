@@ -4,7 +4,7 @@ function createScript(): Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -78,9 +78,10 @@ function createScript(): Script {
 
     logDiscs(limitedDiscs);
 
-    // Code that makes changes:
-    // clearPlaylist(queuePlaylist);
-    // duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
+    if (!options.isDryRun) {
+      clearPlaylist(queuePlaylist);
+      duplicateAllToPlaylist(queuePlaylist, limitedDiscs);
+    }
 
     return 'Done';
 

@@ -1,3 +1,7 @@
+interface ScriptOptions {
+  isDryRun?: boolean;
+}
+
 interface Script {
-  run: () => string;
+  run: (options: ScriptOptions) => string;
 }

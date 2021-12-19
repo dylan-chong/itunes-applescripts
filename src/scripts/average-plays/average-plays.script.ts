@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
     var app = Application('Music');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
@@ -23,11 +23,12 @@ function createScript():Script {
       for (var t = 0; t < disc.getTracks().length; t++) {
         var track = disc.getTracks()[t];
 
-        // Code that applies the changes:
-        // if (track.playedCount() !== averagePlays)
-          // track.playedCount.set(averagePlays);
-        // if (track.playedDate() && lastPlayedDate && track.playedDate().toString() !== lastPlayedDate.toString())
-          // track.playedDate.set(lastPlayedDate);
+        if (!options.isDryRun) {
+          if (track.playedCount() !== averagePlays)
+            track.playedCount.set(averagePlays);
+          if (track.playedDate() && lastPlayedDate && track.playedDate().toString() !== lastPlayedDate.toString())
+            track.playedDate.set(lastPlayedDate);
+        }
 
         logTrackDetails(averagePlays, lastPlayedDate,
             track.name());

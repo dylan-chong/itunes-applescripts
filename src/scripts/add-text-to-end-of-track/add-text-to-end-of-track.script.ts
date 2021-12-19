@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -58,8 +58,9 @@ function createScript():Script {
       var currentTrackName = currentTrack.name();
       var newTrackName = getNewName(currentTrackName);
 
-      // Code that applies the changes:
-      // currentTrack.name.set(newTrackName);
+      if (!options.isDryRun) {
+        currentTrack.name.set(newTrackName);
+      }
 
       console.log(newTrackName);
     }

@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
     // ******* Constants *******
 
     // An integer (whole number, positive or negative)
@@ -24,8 +24,9 @@ function createScript():Script {
       var track = selection[t];
       var newDiscNum = track.discNumber() + DISC_NUMBER_CHANGE;
 
-      // Code that applies the changes:
-      // track.discNumber.set(newDiscNum);
+      if (!options.isDryRun) {
+        track.discNumber.set(newDiscNum);
+      }
 
       console.log('Disc: ' + newDiscNum + ', Name: ' + track.name());
     }

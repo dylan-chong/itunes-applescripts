@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
     var app = Application('Music');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
@@ -23,9 +23,10 @@ function createScript():Script {
 
         // Reapply changes twice (sometimes changes don't apply properly)
         for (var i = 0; i < 2; i++) {
-          // Code that applies the changes:
-          // track.trackCount.set(count);
-          // track.trackNumber.set(num);
+          if (!options.isDryRun) {
+            track.trackCount.set(count);
+            track.trackNumber.set(num);
+          }
         }
 
         console.log('Track: ' + num + ' of ' + count +

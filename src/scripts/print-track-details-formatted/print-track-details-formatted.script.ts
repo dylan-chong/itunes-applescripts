@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     var app = Application('Music');
     app.includeStandardAdditions = true;
