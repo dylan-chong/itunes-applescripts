@@ -1,6 +1,9 @@
 {
   "name": "itunes-applescripts",
   "version": "0.1.0",
+  "scripts": {
+    "gulp": "gulp"
+  },
   "devDependencies": {
     "cli-table": "^0.3.1",
     "command-line-args": "^3.0.0",

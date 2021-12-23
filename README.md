@@ -28,21 +28,21 @@ npm install
 
 ## How to use ##
 
-1. Run `gulp ls` to see all available script names
-2. Run `gulp build-execute -s a-script-name` to build and then execute the
+1. Run `npm run gulp -- ls` to see all available script names
+2. Run `npm run gulp -- build-execute -s a-script-name` to build and then execute the
    script. Run again with `--no-dry-run` as an argument to apply side effects
 
 Or alternately:
 
-1. Run `gulp build` to build all of the scripts into `./build/`, or run `gulp
-   build -s <the-script-name>` to build a specific script (run `gulp ls` to see
+1. Run `npm run gulp -- build` to build all of the scripts into `./build/`, or run `gulp
+   build -s <the-script-name>` to build a specific script (run `npm run gulp -- ls` to see
    all available names)
-2. Call `gulp execute build/<SCRIPT-NAME-HERE>` to run a specific script
+2. Call `npm run gulp -- execute build/<SCRIPT-NAME-HERE>` to run a specific script
 
 *Note: There are plenty of TypeScript warnings because this project was
 recently moved to TypeScript, but not all scripts have been typed yet.*
 
-You can also run `gulp help` to see the list of tasks and descriptions
+You can also run `npm run gulp -- help` to see the list of tasks and descriptions
 
 ### Enabling scripts ###
 
@@ -62,7 +62,7 @@ again. This will be changed in the future, ideally with some sort of GUI.
 
 ### A more useful way to use when developing scripts ###
 
-Run `gulp watch` then edit a
+Run `npm run gulp -- watch` then edit a
 `./src/scripts/<SCRIPT-NAME>/<SCRIPT-NAME>.script.ts` script file using your
 favourite text editor / web IDE. Gulp will watch for changes, rebuild the
 changed script, **and execute it** (including when you just write the file
