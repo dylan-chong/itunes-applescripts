@@ -23,7 +23,7 @@ function createScript(): Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
     var app = Application('Music');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
@@ -46,8 +46,9 @@ function createScript(): Script {
 
         console.log('Name: ' + newName);
 
-        // Code that applies the changes:
-        // track.name.set(newName);
+        if (!options.isDryRun) {
+          track.name.set(newName);
+        }
       });
     });
 

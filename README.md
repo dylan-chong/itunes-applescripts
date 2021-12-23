@@ -30,7 +30,7 @@ npm install
 
 1. Run `gulp ls` to see all available script names
 2. Run `gulp build-execute -s a-script-name` to build and then execute the
-   script
+   script. Run again with `--no-dry-run` as an argument to apply side effects
 
 Or alternately:
 

@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -42,8 +42,9 @@ function createScript():Script {
     var recentTracks = getRecentTracksFromPlaylist(playlist);
     logTrackNames(recentTracks);
 
-    // Code that makes changes:
-    // removeTracksFromPlaylist(recentTracks, playlist);
+    if (!options.isDryRun) {
+      removeTracksFromPlaylist(recentTracks, playlist);
+    }
 
     return 'Done';
 

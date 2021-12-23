@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -36,8 +36,9 @@ function createScript():Script {
 
       previousTrackName = currentTrackName;
 
-      // Code that applies the changes:
-      // currentTrack.discNumber.set(discNumber);
+      if (!options.isDryRun) {
+        currentTrack.discNumber.set(discNumber);
+      }
 
       console.log('Disc: ' + discNumber + ', Name: ' + currentTrackName);
     }

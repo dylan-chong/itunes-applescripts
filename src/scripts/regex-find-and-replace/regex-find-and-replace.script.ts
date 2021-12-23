@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -39,8 +39,9 @@ function createScript():Script {
       console.log('New value: ' + newValue);
       console.log('\tfor Track: ' + track.name());
 
-      // Code that applies the changes:
-      // trackProperty.set(newValue);
+      if (!options.isDryRun) {
+        trackProperty.set(newValue);
+      }
     }
     return 'Done';
   }

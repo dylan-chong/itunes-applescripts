@@ -9,9 +9,7 @@ class TracksDiscifier {
     if (this.sourceTracks == null || this.sourceTracks.length == 0)
       throw 'sourceTracks is empty';
 
-    // todo sometime maybe don't assume sequential discs?
-
-    var tracks = this.sourceTracks.slice(); // copy
+    var tracks = sortTracks(this.sourceTracks);
     var discs: Disc[] = [];
 
     while (true) {

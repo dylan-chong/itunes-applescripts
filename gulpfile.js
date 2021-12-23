@@ -18,11 +18,16 @@ const osa = require('./gulp-helpers/execute-osa.js');
 
 // Command line args
 const SCRIPT_COMMAND_LINE_ARG = 'script';
+const NO_DRY_RUN_COMMAND_LINE_ARG = 'no-dry-run';
 const OPTION_DEFINITIONS = [
   { // For selecting a single script
     name: SCRIPT_COMMAND_LINE_ARG,
     alias: 's',
     type: String
+  },
+  {
+    name: NO_DRY_RUN_COMMAND_LINE_ARG,
+    type: Boolean
   }
 ];
 const OPTIONS = (function () {
@@ -101,17 +106,23 @@ createTask({
 
 function buildTask() {
   if (getScriptArgument()) {
-    buildSelectedScript(getParsedScriptArgument());
+    var isDryRun = !OPTIONS[NO_DRY_RUN_COMMAND_LINE_ARG];
+    if (isDryRun) {
+      log('Running in dry run mode. Pass --no-dry-run to run side effects', 2);
+    } else {
+      log('Running without dry run mode. Side effects will be applied', 2);
+    }
+    buildSelectedScript(getParsedScriptArgument(), { isDryRun });
     return;
   }
 
-  buildFiles(glob.sync(files.constants.FILES.SCRIPTS));
+  buildFiles(glob.sync(files.constants.FILES.SCRIPTS), scriptArgs);
 
-  function buildFiles(files) {
+  function buildFiles(files, scriptArgs) {
     var successes = 0;
     var fails = 0;
     for (var a = 0; a < files.length; a++) {
-      if (scriptBuilder.buildScript(files[a])) successes++;
+      if (scriptBuilder.buildScript(files[a], scriptArgs)) successes++;
       else fails++;
     }
 
@@ -119,8 +130,8 @@ function buildTask() {
       fails + ' failures', 1);
   }
 
-  function buildSelectedScript(userSelectedScript) {
-    buildFiles([userSelectedScript]);
+  function buildSelectedScript(userSelectedScript, scriptArgs) {
+    buildFiles([userSelectedScript], scriptArgs);
   }
 }
 
@@ -214,7 +225,7 @@ function requireSelectedScriptArgTask() {
 
   var example = 'gulp whatever-the-task-was --' + SCRIPT_COMMAND_LINE_ARG +
     ' some-script-name-or-path';
-  throw 'ERROR: No script name detected. Try again with something like:' +
+  throw 'ERROR: No script name detected. Try again with something like: ' +
   example;
 }
 

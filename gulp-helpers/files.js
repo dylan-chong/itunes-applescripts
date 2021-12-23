@@ -20,8 +20,10 @@ function getConstants() {
     SCRIPTS: C.DIRECTORIES.SCRIPTS + '*/*.script.ts',
     SCRIPT_DESCRIPTIONS: C.DIRECTORIES.SCRIPTS + '*/*.description.txt',
     BUILD_TEMPLATE: 'src/build/build-template.ts',
-    GLOBAL_DEPENDENCIES: C.DIRECTORIES.DEPENDENCIES + '**/*.ts'
-    // TODO LATER (per) SCRIPT_DEPENDENCIES
+    GLOBAL_DEPENDENCIES: C.DIRECTORIES.DEPENDENCIES + '**/*.ts',
+    NODE_DEPENDENCIES: [
+      'node_modules/lodash/lodash.min.js'
+    ]
   };
   C.BUILT_SCRIPT_EXTENSION = '.js.applescript';
   return C;

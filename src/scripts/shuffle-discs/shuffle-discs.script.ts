@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -40,8 +40,9 @@ function createScript():Script {
     var combinedDiscs = ignoredDiscs.concat(shuffledDiscs);
     logAllDiscs(combinedDiscs);
 
-    // Code that makes changes:
-    // reorderPlaylist(shuffledDiscs, playlist);
+    if (!options.isDryRun) {
+      reorderPlaylist(shuffledDiscs, playlist);
+    }
 
     return 'Done';
 

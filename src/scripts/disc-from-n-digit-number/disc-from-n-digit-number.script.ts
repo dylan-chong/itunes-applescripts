@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     var app = Application('Music');
     app.includeStandardAdditions = true;
@@ -24,8 +24,9 @@ function createScript():Script {
 
       console.log('Disc: ' + discNumber + ', Name: ' + track.name());
 
-      // Code that applies the changes:
-      // track.discNumber.set(discNumber);
+      if (!options.isDryRun) {
+        track.discNumber.set(discNumber);
+      }
     }
 
     return 'Done';

@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
 
     // ******* Constants *******
 
@@ -23,8 +23,9 @@ function createScript():Script {
       var track = selection[a];
       var disc = FIRST_DISC + a * INCREMENT;
 
-      // Code that applies the changes:
-      // track.discNumber.set(disc);
+      if (!options.isDryRun) {
+        track.discNumber.set(disc);
+      }
 
       console.log('Disc: ' + disc + ', Name: ' + track.name());
     }

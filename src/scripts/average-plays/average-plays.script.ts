@@ -4,7 +4,7 @@ function createScript():Script {
     run: run
   };
 
-  function run() {
+  function run(options: ScriptOptions) {
     var app = Application('Music');
     app.includeStandardAdditions = true;
     var window = app.windows[0];
@@ -15,12 +15,6 @@ function createScript():Script {
     for (var d = 0; d < discs.length; d++) {
       var disc = discs[d];
 
-      var minimumPlays = getMinimumPlays(disc.getTracks());
-      if (minimumPlays === 0) {
-        console.log('Skipping disk with ' + disc.getTracks()[0].name());
-        continue;
-      }
-
       var averagePlays = getAveragePlays(disc.getTracks());
       var lastPlayedDate = getLastPlayedDate(disc.getTracks());
 
@@ -29,9 +23,12 @@ function createScript():Script {
       for (var t = 0; t < disc.getTracks().length; t++) {
         var track = disc.getTracks()[t];
 
-        // Code that applies the changes:
-        // track.playedCount.set(averagePlays);
-        // track.playedDate.set(lastPlayedDate);
+        if (!options.isDryRun) {
+          if (track.playedCount() !== averagePlays)
+            track.playedCount.set(averagePlays);
+          if (track.playedDate() && lastPlayedDate && track.playedDate().toString() !== lastPlayedDate.toString())
+            track.playedDate.set(lastPlayedDate);
+        }
 
         logTrackDetails(averagePlays, lastPlayedDate,
             track.name());
@@ -56,21 +53,9 @@ function createScript():Script {
     }
 
     function getLastPlayedDate(tracks: ITrack[]) {
-      return tracks[0].playedDate();
-    }
-
-    function getMinimumPlays(tracks: ITrack[]) {
-      if (!tracks || tracks.length === 0) throw 'No tracks to check';
-      var min = 0;
-
-      for (var t = 0; t < tracks.length; t++) {
-        var track = tracks[t];
-        var c = track.playedCount();
-
-        if (!min || c < min) min = c;
-      }
-
-      return min;
+      return tracks
+        .map(track => track.playedDate())
+        .filter(date => !!date)[0];
     }
 
     function logTrackDetails(playCount: number,
@@ -81,6 +66,5 @@ function createScript():Script {
       log += ',\n\t\t\tName: ' + name;
       console.log(log);
     }
-
   }
 }
