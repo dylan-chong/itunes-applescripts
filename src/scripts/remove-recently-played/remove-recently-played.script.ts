@@ -14,7 +14,7 @@ function createScript():Script {
 
     // If the track was played within the last RECENT_DAYS
     // days, it will be removed from the playlist
-    var RECENT_DAYS = 4;
+    var RECENT_DAYS = 90;
 
     // *************************
 
